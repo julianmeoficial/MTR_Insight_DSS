@@ -1,0 +1,26 @@
+{
+  "dataset": "demo-alerts",
+  "version": "0.1.0",
+  "fuente": "synthetic-demo",
+  "nota": "Weekly demo window for alert center smoke — not a monthly business KPI substitute.",
+  "vuelos": [
+    {
+      "route": "MTR-PTY",
+      "operator": "Satena",
+      "aircraftType": "E145",
+      "weekStart": "2026-11-16",
+      "weekEnd": "2026-11-22",
+      "passengersBoarded": 30,
+      "seatsOffered": 50
+    },
+    {
+      "route": "MTR-PTY",
+      "operator": "Satena",
+      "aircraftType": "E145",
+      "weekStart": "2026-11-23",
+      "weekEnd": "2026-11-29",
+      "passengersBoarded": 31,
+      "seatsOffered": 50
+    }
+  ]
+}

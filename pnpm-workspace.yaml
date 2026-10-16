@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: true
+  sharp: false
+  unrs-resolver: false
+minimumReleaseAgeExclude:
+  - '@next/eslint-plugin-next@16.4.2'
+  - '@next/swc-darwin-arm64@16.4.2'
+  - eslint-config-next@16.4.2
+  - next@16.4.2

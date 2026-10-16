@@ -1,0 +1,29 @@
+{
+  "dataset": "demo-alerts",
+  "version": "0.1.0",
+  "fuente": "synthetic-demo",
+  "registros": [
+    {
+      "sourceId": "MANIFEST-SAT",
+      "sourceName": "Manifiestos Satena",
+      "owner": "TI",
+      "expectedCriticalRecords": 10,
+      "loadedOnTimeAndValidated": 0,
+      "unresolvedTechnicalConflict": false,
+      "loaded": false,
+      "periodStart": "2026-11-30",
+      "periodEnd": "2026-11-30"
+    },
+    {
+      "sourceId": "ARINC",
+      "sourceName": "ARINC AirDB",
+      "owner": "TI",
+      "expectedCriticalRecords": 10,
+      "loadedOnTimeAndValidated": 10,
+      "unresolvedTechnicalConflict": false,
+      "loaded": true,
+      "periodStart": "2026-11-30",
+      "periodEnd": "2026-11-30"
+    }
+  ]
+}

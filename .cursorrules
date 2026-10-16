@@ -1,0 +1,178 @@
+# MTR Insight — A-DSS (Airport Decision Support System)
+# Repository-wide project rules. Save this plain-text file as .cursorrules.
+
+## Product and boundaries
+- Short name: MTR Insight. Preserve the official product name above.
+- Build an academic MIS (SIG) with an airport decision support component for
+  Los Garzones Airport (MTR), Monteria, Colombia.
+- Turn integrated data into five strategic KPIs, alerts and explainable scenarios.
+- This is not an official Airplan product, a live airport integration, an air
+  traffic control system, or a certified operational decision engine.
+- Use synthetic or explicitly authorized aggregate data. Label demonstrations,
+  assumptions, forecasts and verified reference facts separately.
+
+## Confirmed technologies and delivery modes
+- Web application: Next.js, React and TypeScript with strict checking.
+- Full-system persistence: PostgreSQL using the Step 7 dimensional model.
+- Base prototype: versioned JSON/CSV fixtures; no database is required for it.
+- Deployment target: Vercel. Design specifications and handoff: Figma.
+- The base prototype and the complete SIG are different acceptance scopes.
+  Never present mock authentication, placeholders or static fixtures as complete.
+- Preserve the repository's package manager, lockfile, routing conventions and
+  compatible dependency versions. Do not invent version pins or upgrade silently.
+- Styling, component/chart libraries, ORM, identity provider and test runner are
+  not fixed by these rules. Reuse approved repository choices; obtain approval
+  before introducing a new dependency or making an unresolved stack decision.
+- Supabase Auth is an example in planning, not a mandatory selected provider.
+
+## Read first and source of truth
+- Inspect README, package.json, lockfile, existing code and local instructions
+  before editing. Discover real commands; never assume a script exists.
+- Read DESIGN.md before UI changes. If absent, request the approved Figma/token
+  specification rather than inventing a final design system.
+- Consult these project specifications through Notion MCP when available:
+  KPIs (Step 5): https://app.notion.com/p/a89bad1f0bce401c8912300b4fcdb7fe
+  Data/ETL (Step 7): https://app.notion.com/p/52d5618d3d564a1d88fc52a2cf5c9aba
+  Screens/DSS (Step 8): https://app.notion.com/p/8e31e8e826b946c38e11592377d422f1
+  Prototype/data (Step 9): https://app.notion.com/p/8f2d1ccb5bdf406aa97631e4faa45eea
+  Security (Step 10): https://app.notion.com/p/ca97022a8c7440389b0477df3f822a64
+  Validation (Step 11): https://app.notion.com/p/2f541471f9914a3a82ecf5a892b6114b
+- If unavailable, request approved local copies. Do not pretend to have read them.
+- Keep this root file concise. Put detailed contracts in focused documents and
+  link to them; do not duplicate entire specifications or generic coding guides.
+- Record approved implementation decisions, source conflicts and requirement-to-
+  test mappings in repository documentation. Do not change scope silently.
+
+## Architecture and coding
+- Keep presentation, application services, domain calculations and data adapters
+  separate. Reuse a single typed contract across fixture and PostgreSQL adapters.
+- Implement KPIs, alert evaluation and DSS calculations as independently testable
+  domain functions. Components consume results; they must not redefine formulas.
+- Keep database credentials, privileged clients and protected queries server-side.
+- Validate untrusted inputs at every boundary; TypeScript types are not validation.
+- Use parameterized queries, versioned migrations, reproducible seeds and explicit
+  fact-table grain. Prevent duplicate joins and accidental double counting.
+- Use explicit units, currencies, time windows and nullability. No unsafe any,
+  hidden business constants, fabricated outputs or swallowed errors.
+- Retain dataset field names or provide explicit, tested mappings. Keep code and
+  technical documentation in English; preserve approved Spanish domain/UI labels.
+- Use America/Bogota for business dates; preserve instants and source timezones.
+  Inject an as-of date for historical demos; never calculate fixtures using today.
+
+## Required functional coverage
+- P1: executive dashboard with K1-K5, trends, freshness and prioritized alerts.
+- P2: routes and occupancy by route, airline, aircraft and period.
+- P3: regulatory/contractual requirements, evidence, owners and deadlines.
+- P4: infrastructure, capacity, peak demand and verified technical references.
+- P5: route development and regional international demand capture.
+- P6: 2045 planning, scenario comparison and DSS simulators.
+- P7: data quality, source availability, ETL status and conflicts.
+- Administration is permission-controlled functionality, not a replacement for P7.
+- Apply authorized filters and export permissions consistently across all screens.
+
+## KPI and alert invariants
+- K1 = sum(boarded passengers) / sum(offered seats), not mean(flight percentages).
+  Green >=70%; yellow >=65% and <70%; red <65%.
+- K2 = requirements satisfied with valid evidence / applicable requirements.
+  A completed flag without evidence and approval date does not count as satisfied.
+  Evaluate compliance as of the selected date. Critical overdue items override
+  aggregate percentages to red; quarterly compliance <90% is also red.
+  Overdue noncritical milestones are yellow; warn at 30, 15 and 7 days.
+- K3 = rolling 12-month passengers / declared annual capacity.
+  Green <80%; yellow >=80% and <90%; red >=90%.
+  Evaluate peak-hour utilization separately with compatible time units.
+- K4 = direct international departures from MTR / international travelers from
+  the defined catchment, using matching geography and time windows.
+  Green >=20%; yellow >=10% and <20%; red <10%.
+- K5 = critical records loaded on time and validated / expected critical records.
+  Green >=98%; yellow >=95% and <98%; red <95% or unresolved technical-data
+  conflicts under the approved publication rule. Expose freshness and partial data.
+- Use raw values for threshold evaluation; round only for presentation.
+  Return an explicit no-data state for missing/zero denominators, never false green.
+- Version thresholds and policies centrally. Alerts must expose trigger, period,
+  affected entity, severity and owner; avoid duplicate events on reruns.
+- Known conflict: Step 11 CP-02 escalates PG-02 after two red weeks, while Steps
+  5 and 8 specify three. Flag this and obtain an approved decision before marking
+  that acceptance case passed. Do not silently rewrite the policy or its test.
+- Weekly fixture views must be labeled as demo windows, not substituted for the
+  monthly/quarterly business frequencies in the KPI specifications.
+
+## ETL, quality and provenance
+- Preserve the six facts: HECHO_VUELO, HECHO_REQUISITO, HECHO_CAPACIDAD,
+  HECHO_DEMANDA, HECHO_CALIDAD_DATO and HECHO_PROYECCION, with their dimensions.
+- Implement RC-01 completeness, RC-02 uniqueness, RC-03 ranges, RC-04 passenger/
+  seat consistency, RC-05 timeliness, RC-06 traceability, RC-07 evidence and
+  RC-08 single adopted technical source, with the specified failure actions.
+- Log each load's source, timestamps, rule version, accepted/rejected rows and
+  reasons. Quarantine invalid data; make reruns idempotent and failures visible.
+- Track source, verification date, dataset version and status: verified, pending,
+  conflicting or simulated. Do not turn a committee-adopted value into an official
+  fact or overwrite a disagreement without an auditable resolution.
+- Keep approved reference values configurable with provenance, not scattered in UI.
+- Distinguish business retention targets from implemented controls: raw data 90
+  days, warehouse at least 5 years and audit logs at least 12 months per project
+  specification. Document deployment limitations; do not assert legal certification.
+
+## DSS correctness and safety
+- Support aircraft-specific break-even, Satena/Copa demand allocation and capacity
+  planning to 2045. Provide editable inputs and save/compare scenarios in full SIG.
+- Reference aircraft capacities: ERJ-145 50 seats; Boeing 737 160 seats is a
+  scenario assumption, not a universal configuration or confirmed airline fact.
+- Preserve the approved airport-revenue/cost break-even model from Step 8.
+  Validate currency, cost basis and per-flight/per-passenger units before use;
+  request clarification if variable costs depend on passenger volume.
+- Do not silently replace airport economics with an airline ticket-fare model.
+  Reject invalid denominators; show break-even >100% as infeasible, not capped.
+- Use ceil() for minimum whole passengers; keep frequencies and direction explicit.
+- Project P(t) = P(base) * (1 + rate)^(t - baseYear), using explicit base year,
+  baseline provenance and low/base/high rates of 2.5%, 3.9% and 5.5%.
+- Distinguish forecasts from observations. The 3.9% global reference is not a
+  validated Monteria-specific forecast. Show assumptions and sensitivity.
+- Mark capacity triggers at 80% and 90% and report when a trigger is already met.
+- Runway length or approximate takeoff distance alone cannot certify aircraft
+  suitability. Label such comparisons illustrative and requiring specialist review.
+- Recommendations support human judgment; never execute operational decisions.
+
+## Security and privacy
+- Full SIG requires real authentication, MFA and server-side authorization.
+  A role dropdown is a demo, not a security control.
+- Deny by default; implement the approved Step 8/10 permission matrix. Protect
+  reads, writes, exports, aggregates and scenario access, not only navigation.
+- Airline accounts may see only their airline's flights. TI administration does
+  not automatically grant access to protected business/border content.
+- Enforce row restrictions in database policies where applicable and in authorized
+  server queries. Test cross-role/cross-airline access and privileged bypass risks.
+- Consume migration/manifests only as aggregates by flight/time slot. Never store
+  identifiable passenger or biometric records in fixtures, logs or source control.
+- Never commit credentials, tokens or connection strings. Use environment secrets,
+  a value-free .env.example, secure sessions and sanitized error/audit logging.
+- Audit access, exports and administrative changes. Document backup/restore and
+  incident handling; never claim MFA, encryption, isolation or compliance is done
+  without implementation evidence. No live Airplan/ARINC/Biomig connections here.
+
+## UI, accessibility and design
+- Follow approved Figma specifications, DESIGN.md and reusable UI components.
+  Use semantic design tokens; do not hardcode existing colors/spacing in features.
+- Show loading, empty, error, no-data, partial, stale and unauthorized states.
+- Provide units, period, source and last validated timestamp on analytical views.
+- Never communicate severity by color alone; add labels/icons and accessible text.
+- Target WCAG 2.1 AA: keyboard access, visible focus, contrast, labels, accessible
+  tables/chart summaries and reduced-motion support. Verify responsive layouts.
+- Compare implemented UI against approved Figma before calling it final.
+
+## Verification and definition of done
+- Make small, scoped changes. Test domain behavior before wiring presentation.
+- Run actual repository lint, typecheck, tests and production build commands.
+  Report exact results and unrun checks; never claim success without execution.
+- Check all five KPIs against independent manual calculations and Step 9's sim-1.0
+  control table. Cover boundaries, missing sources, invalid data, evidence dates,
+  conflict overrides, zero denominators, rounding and operator isolation.
+- Test alert persistence, forecast baseline/trigger years, infeasible break-even,
+  reproducible ETL and authentication/authorization including direct requests.
+- Full-system acceptance requires functional P1-P7, database-backed data, ETL,
+  K1-K5, alerts, DSS and real role protection; placeholders cannot satisfy it.
+- Update setup instructions, architecture, approved decisions, data assumptions,
+  test evidence and deployment notes. Keep demo secrets out of public README.
+- Do not add MIT or another license based on a recommendation alone. Preserve
+  the existing license or request explicit approval from the rights holders.
+- Before handoff, summarize changes, executed checks, remaining gaps and risks.
