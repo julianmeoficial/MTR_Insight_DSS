@@ -25,7 +25,7 @@ Data         (src/data/fixtures | postgres) — shared typed contracts
 | P3 Cumplimiento | ¿Qué cumple y qué falta? | K2 |
 | P4 Infraestructura | ¿Soporta el crecimiento? | K3 |
 | P5 Desarrollo de rutas | ¿Cuánta demanda regional capta MTR? | K4 |
-| P6 Planeación 2045 (DSS) | ¿Cuándo ampliar? | DSS |
+| P6 Planeación 2045 (DSS) | ¿Cuándo ampliar? | DSS — interactive break-even + 2045 projection on `/p6` |
 | P7 Calidad del dato | ¿La información es confiable? | K5 |
 
 P1, P2, and the alert center will import from `@/application` or `@/domain`.
@@ -36,6 +36,14 @@ P1, P2, and the alert center will import from `@/application` or `@/domain`.
 |--------|------|
 | `src/config/thresholds.ts` | Traffic-light cutoffs (versioned) |
 | `src/config/alert-policies.ts` | Alert streak length, owners, policy refs |
+| `src/config/aircraft.ts` | DSS aircraft catalog (MTR ops + A350 expansion) |
+| `src/config/dss-defaults.ts` | Break-even defaults and 2045 rates/capacity |
+
+## DSS domain
+
+- `src/domain/dss/break-even.ts` — airport \(LF_{eq}\)
+- `src/domain/dss/projection-2045.ts` — GMF-style scenarios and 80/90 % triggers
+- UI: `src/components/dss/*` consumes domain results only
 
 ## Time zone
 

@@ -27,3 +27,17 @@ export {
   evaluateK1RedStreak,
   evaluateSourceNotLoaded,
 } from "@/domain/alerts";
+
+export {
+  calculateBreakEven,
+  projectDemand2045,
+  sampleProjectionYears,
+} from "@/domain/dss";
+
+export type {
+  BreakEvenInput,
+  BreakEvenResult,
+  Projection2045Result,
+  ScenarioProjection,
+} from "@/domain/dss";
+

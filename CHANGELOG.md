@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Centro de alertas fed by local JSON under `data/fixtures/demo/` (≥2 active alerts via domain engine)
 - Placeholder screens P3–P7 with title and purpose (Paso 8)
 - Shell screens P1–P2 and prototype smoke tests
+- P6 DSS simulator: airport break-even by aircraft (ERJ-145, 737, A350 variants incl. A350K-ULR and A350F), editable revenue/cost/frequencies, 2045 projection (2.5/3.9/5.5 %) and capacity triggers 80/90 % (R16)
 
 ### Planned
 
