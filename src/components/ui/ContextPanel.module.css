@@ -1,0 +1,36 @@
+.panel {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--fg-subtle);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.open {
+  transform: rotate(180deg);
+}
+
+.body {
+  border-top: 1px solid var(--line);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}

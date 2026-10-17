@@ -1,0 +1,16 @@
+.figure {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  padding: 20px;
+}
+
+.caption {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--fg-muted);
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+}

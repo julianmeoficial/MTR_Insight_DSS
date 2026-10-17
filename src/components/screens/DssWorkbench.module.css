@@ -1,0 +1,174 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 4fr 8fr;
+  }
+
+  .inputs {
+    border-right: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    align-self: start;
+  }
+}
+
+.inputs {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.outputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.outputs > * + * {
+  border-top: 1px solid var(--line);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.select {
+  margin-top: 4px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--surface-3);
+  padding: 8px;
+  font-size: 14px;
+  color: var(--fg);
+}
+
+.range {
+  margin-top: 12px;
+  width: 100%;
+  accent-color: var(--accent-solid);
+}
+
+.fieldset {
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.legend {
+  margin-bottom: 8px;
+}
+
+.radio {
+  margin-right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.result {
+  position: relative;
+  padding: 20px;
+}
+
+.corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: var(--accent);
+  border-style: solid;
+}
+
+.cornerTl {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.cornerTr {
+  top: 0;
+  right: 0;
+  border-width: 1px 1px 0 0;
+}
+
+.cornerBl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1px 1px;
+}
+
+.cornerBr {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1px 1px 0;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.resultValue {
+  margin-top: 12px;
+  font-size: 24px;
+  color: var(--fg);
+}
+
+.resultLine {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--fg-muted);
+}
+
+.resultLine + .resultLine {
+  margin-top: 8px;
+}
+
+.note {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--fg-subtle);
+}
+
+.fan {
+  padding: 20px;
+}
+
+.fanGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+
+@media (min-width: 640px) {
+  .fanGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fanDt {
+  color: var(--fg-subtle);
+}
+
+.fanHint {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--fg-muted);
+}

@@ -35,9 +35,23 @@ describe("prototype smoke", () => {
   });
 
   it("app routes for screens exist as page modules", () => {
-    const appDir = path.join(process.cwd(), "src", "app");
-    for (const segment of ["p1", "p2", "p3", "p4", "p5", "p6", "p7", "alertas"]) {
-      expect(existsSync(path.join(appDir, segment, "page.tsx"))).toBe(true);
+    const sigDir = path.join(process.cwd(), "src", "app", "(sig)");
+    for (const segment of [
+      "p1",
+      "p2",
+      "p3",
+      "p4",
+      "p5",
+      "p6",
+      "p7",
+      "alertas",
+      "escenarios",
+      "decisiones",
+    ]) {
+      expect(existsSync(path.join(sigDir, segment, "page.tsx"))).toBe(true);
     }
+    expect(existsSync(path.join(process.cwd(), "src", "app", "page.tsx"))).toBe(
+      true,
+    );
   });
 });

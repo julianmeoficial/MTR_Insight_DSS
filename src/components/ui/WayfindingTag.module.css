@@ -1,0 +1,23 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: calc(var(--s-5) + var(--s-1));
+  padding-inline: var(--s-2);
+  border-radius: var(--r-2);
+  font-size: var(--t-mini);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.tag[data-variant="location"] {
+  color: var(--accent);
+  background: var(--bg);
+  box-shadow: 0 0 0 1px var(--line-2);
+}
+
+.tag[data-variant="direction"] {
+  color: var(--accent-fg);
+  background: var(--accent);
+}

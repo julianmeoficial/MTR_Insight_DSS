@@ -1,6 +1,46 @@
 import { describe, expect, it } from "vitest";
-import { calculateBreakEven, projectDemand2045 } from "@/domain/dss";
+import {
+  minPassengersForRatio,
+  projectPassengers,
+  capacityTriggerYear,
+  FORECAST_RATES,
+  REFERENCE_AIRCRAFT,
+  calculateBreakEven,
+  projectDemand2045,
+} from "@/domain/dss";
 import { dssDefaults } from "@/config/dss-defaults";
+
+describe("minPassengersForRatio", () => {
+  it("uses ceil for whole passengers", () => {
+    expect(minPassengersForRatio(50, 0.7)).toBe(35);
+    expect(minPassengersForRatio(50, 0.65)).toBe(33);
+    expect(minPassengersForRatio(160, 0.7)).toBe(112);
+  });
+
+  it("rejects invalid seats", () => {
+    expect(() => minPassengersForRatio(0, 0.7)).toThrow();
+  });
+});
+
+describe("projectPassengers", () => {
+  it("applies compound growth from base year", () => {
+    const p = projectPassengers(1_000_000, 2024, 2025, FORECAST_RATES.base);
+    expect(p).toBeCloseTo(1_000_000 * 1.039, 5);
+  });
+
+  it("reports capacity trigger year when already met", () => {
+    const y = capacityTriggerYear(1_400_000, 2024, 0.039, 1_700_000, 0.8);
+    expect(y).toBe(2024);
+  });
+});
+
+describe("REFERENCE_AIRCRAFT", () => {
+  it("marks B737 as scenario assumption", () => {
+    const b737 = REFERENCE_AIRCRAFT.find((a) => a.id === "B738");
+    expect(b737?.seats).toBe(160);
+    expect(b737?.assumption).toBe("supuesto");
+  });
+});
 
 describe("calculateBreakEven", () => {
   it("computes LF_eq = cost / (revenuePerPax × seats)", () => {
@@ -11,7 +51,6 @@ describe("calculateBreakEven", () => {
       weeklyFrequencies: 3,
       currentLoadFactor: 0.5,
     });
-    // 1_000_000 / (50_000 × 50) = 0.4
     expect(result.lfEquilibrium).toBe(0.4);
     expect(result.minPassengers).toBe(20);
     expect(result.status).toBe("feasible");
@@ -30,7 +69,6 @@ describe("calculateBreakEven", () => {
       costPerFlight: 1_000_000,
       weeklyFrequencies: 1,
     });
-    // 1e6 / (40e3 × 50) = 0.5 → 25 pax exact
     expect(result.minPassengers).toBe(25);
 
     const uneven = calculateBreakEven({
@@ -39,7 +77,6 @@ describe("calculateBreakEven", () => {
       costPerFlight: 1_000_000,
       weeklyFrequencies: 1,
     });
-    // 1e6 / (45e3 × 50) ≈ 0.444… → ceil(22.222) = 23
     expect(uneven.lfEquilibrium!).toBeCloseTo(1_000_000 / (45_000 * 50), 10);
     expect(uneven.minPassengers).toBe(23);
   });
@@ -51,7 +88,6 @@ describe("calculateBreakEven", () => {
       costPerFlight: 1_000_000,
       weeklyFrequencies: 3,
     });
-    // 1e6 / (10e3 × 50) = 2.0
     expect(result.lfEquilibrium).toBe(2);
     expect(result.status).toBe("infeasible");
   });
@@ -110,7 +146,6 @@ describe("projectDemand2045", () => {
       const exec = scenario.triggers.find((t) => t.level === 0.9)!;
       expect(plan.alreadyMet).toBe(true);
       expect(plan.year).toBeNull();
-      // ~87% baseline — 90% not yet met at base
       expect(exec.alreadyMet).toBe(false);
       expect(exec.year).toBeTypeOf("number");
     }

@@ -1,0 +1,16 @@
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--s-4) + var(--s-1));
+  height: calc(var(--s-4) + var(--s-1));
+  padding-inline: var(--s-1);
+  border-radius: var(--r-4);
+  font-family: var(--ff-mono);
+  font-size: var(--t-mini);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--fg-2);
+  background: var(--surface-3);
+  box-shadow: 0 0 0 1px var(--line-2);
+}

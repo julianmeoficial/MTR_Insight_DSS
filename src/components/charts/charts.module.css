@@ -1,0 +1,209 @@
+.figure {
+  padding: 20px;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.caption {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.toggle {
+  font-size: 12px;
+  color: var(--info);
+}
+
+.toggle:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.hint {
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+}
+
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: lineDraw 1s var(--e-out) forwards;
+}
+
+@keyframes lineDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 28rem;
+  text-align: left;
+  font-size: 14px;
+}
+
+.table th {
+  padding: 8px 12px 8px 0;
+  font-weight: 500;
+  color: var(--fg-subtle);
+  border-bottom: 1px solid var(--line);
+}
+
+.table td {
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+.panel {
+  padding: 20px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.acLabel {
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--fg);
+}
+
+.tag {
+  margin-left: 8px;
+  padding: 0 4px;
+  border: 1px solid var(--accent-solid);
+  border-radius: var(--r-xs);
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.tagMuted {
+  margin-left: 8px;
+  font-size: 10px;
+  color: var(--fg-subtle);
+}
+
+.barRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.barPct {
+  width: 40px;
+  font-size: 11px;
+  color: var(--fg-subtle);
+}
+
+.barTrack {
+  flex: 1;
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--r-xs);
+  background: var(--surface-3);
+}
+
+.barFill {
+  height: 100%;
+  background: var(--series-3);
+  transform-origin: left center;
+  animation: barGrow 0.85s var(--e-out) both;
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barFill {
+    animation: none;
+  }
+}
+
+.barVal {
+  width: 32px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--fg);
+}
+
+.note {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--fg-subtle);
+}
+
+.seatGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.seat {
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+}
+
+.seatFilled {
+  border-color: var(--series-1);
+  background: var(--series-1);
+}
+
+.chartText {
+  fill: var(--fg-subtle);
+}
+
+.chartTextFg {
+  fill: var(--fg);
+}

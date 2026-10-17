@@ -1,0 +1,56 @@
+{
+  "asOfDate": "2026-11-30",
+  "period": { "start": "2026-10-01", "end": "2026-12-31" },
+  "requisitos": [
+    {
+      "requirementId": "REQ-MIG-4003",
+      "authority": "Migración",
+      "critical": true,
+      "applicable": true,
+      "dueDate": "2026-12-31",
+      "completedFlag": true,
+      "evidenceId": "EV-MIG-1",
+      "approvalDate": "2025-11-01"
+    },
+    {
+      "requirementId": "REQ-DIAN-1639",
+      "authority": "DIAN",
+      "critical": true,
+      "applicable": true,
+      "dueDate": "2026-12-31",
+      "completedFlag": true,
+      "evidenceId": "EV-DIAN-1",
+      "approvalDate": "2026-06-01"
+    },
+    {
+      "requirementId": "REQ-ICA-DOC",
+      "authority": "ICA",
+      "critical": true,
+      "applicable": true,
+      "dueDate": "2026-12-15",
+      "completedFlag": true,
+      "evidenceId": "EV-ICA-1",
+      "approvalDate": "2026-09-20"
+    },
+    {
+      "requirementId": "REQ-BODY-SCAN",
+      "authority": "AVSEC",
+      "critical": false,
+      "applicable": true,
+      "dueDate": "2026-11-20",
+      "completedFlag": false,
+      "evidenceId": null,
+      "approvalDate": null
+    },
+    {
+      "requirementId": "REQ-COPA-PERM",
+      "authority": "Aerocivil",
+      "critical": true,
+      "applicable": true,
+      "dueDate": "2026-12-01",
+      "completedFlag": true,
+      "evidenceId": "EV-COPA-PRESS",
+      "approvalDate": "2026-10-10"
+    }
+  ]
+}

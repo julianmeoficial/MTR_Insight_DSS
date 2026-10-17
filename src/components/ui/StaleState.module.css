@@ -1,0 +1,5 @@
+.stale {
+  background: color-mix(in oklab, var(--warn) 8%, transparent);
+  border-radius: var(--r-8);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--warn) 20%, transparent);
+}

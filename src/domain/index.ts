@@ -29,7 +29,15 @@ export {
 } from "@/domain/alerts";
 
 export {
+  REFERENCE_AIRCRAFT,
+  LOAD_THRESHOLDS,
+  minPassengersForRatio,
+  breakEvenTable,
   calculateBreakEven,
+  FORECAST_RATES,
+  projectPassengers,
+  capacityTriggerYear,
+  buildFanSeries,
   projectDemand2045,
   sampleProjectionYears,
 } from "@/domain/dss";
@@ -40,4 +48,3 @@ export type {
   Projection2045Result,
   ScenarioProjection,
 } from "@/domain/dss";
-

@@ -1,0 +1,148 @@
+/* src/styles/tokens.css - sole place for raw color/space values (DESIGN.md §2a §4, §6.1) */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #08090a;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #1a1b1e;
+  --surface-4: #212226;
+  --line: rgb(255 255 255 / 0.06);
+  --line-2: rgb(255 255 255 / 0.1);
+  --line-3: rgb(255 255 255 / 0.16);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.05);
+
+  --fg: #f7f8f8;
+  --fg-2: #b4b8bf;
+  --fg-3: #8a8f98;
+  --fg-4: #62666d;
+
+  --accent: #f2c230;
+  --accent-hover: #ffd24a;
+  --accent-fg: #14110a;
+  --accent-soft: color-mix(in oklab, var(--accent) 14%, transparent);
+
+  --ok: #4cc38a;
+  --warn: #f0a93b;
+  --crit: #eb5757;
+  --info: #6fa3e0;
+  --nodata: #8a8f98;
+
+  --series-1: #6f97f0;
+  --series-2: #f2c230;
+  --series-3: #4fc1b2;
+  --series-4: #a98bea;
+  --series-5: #f0957c;
+  --series-6: #8a8f98;
+
+  --dusk: radial-gradient(
+    60% 50% at 50% 0%,
+    rgb(242 194 48 / 0.07),
+    transparent 70%
+  );
+  --focus: #f2c230;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-2: 0 8px 24px -8px rgb(0 0 0 / 0.6);
+  --shadow-3: 0 32px 80px -20px rgb(0 0 0 / 0.8), 0 0 0 1px var(--line-2);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fbfbfa;
+  --surface-1: #f5f5f4;
+  --surface-2: #ffffff;
+  --surface-3: #f0efed;
+  --surface-4: #e8e7e4;
+  --line: rgb(16 17 20 / 0.06);
+  --line-2: rgb(16 17 20 / 0.1);
+  --line-3: rgb(16 17 20 / 0.16);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.8);
+  --fg: #111214;
+  --fg-2: #3c3f45;
+  --fg-3: #6b6f76;
+  --fg-4: #9a9da3;
+  --accent-fg: #14110a;
+  --ok: #1f8a55;
+  --warn: #b76e00;
+  --crit: #c93a2e;
+  --info: #2f6fb0;
+  --series-1: #3d6fd9;
+  --series-2: #d69e00;
+  --focus: #111214;
+  --shadow-1: 0 1px 2px rgb(16 17 20 / 0.05);
+  --shadow-2: 0 8px 24px -8px rgb(16 17 20 / 0.12);
+  --shadow-3: 0 32px 80px -20px rgb(16 17 20 / 0.25), 0 0 0 1px var(--line-2);
+}
+
+:root {
+  /* next/font injects --font-inter / --font-mono on <html>; never alias with the same name */
+  --ff-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --ff-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --ff-features: "cv11", "ss01", "ss03";
+
+  --t-mini: 0.6875rem;
+  --t-xs: 0.75rem;
+  --t-sm: 0.8125rem;
+  --t-md: 0.9375rem;
+  --t-lg: 1.0625rem;
+  --t-xl: 1.25rem;
+  --t-2xl: 1.5rem;
+  --t-3xl: 2rem;
+  --t-4xl: clamp(2.25rem, 3vw + 1rem, 3.5rem);
+  --t-hero: clamp(3rem, 6vw + 1rem, 5.5rem);
+
+  --r-2: 2px;
+  --r-4: 4px;
+  --r-6: 6px;
+  --r-8: 8px;
+  --r-12: 12px;
+  --r-16: 16px;
+  --r-pill: 999px;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-24: 96px;
+  --s-32: 128px;
+
+  --d-1: 100ms;
+  --d-2: 160ms;
+  --d-3: 240ms;
+  --d-4: 400ms;
+  --d-5: 700ms;
+  --e-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --e-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --e-snap: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Legacy aliases used by screens not yet migrated */
+  --fg-muted: var(--fg-2);
+  --fg-subtle: var(--fg-3);
+  --line-strong: var(--line-2);
+  --accent-solid: var(--accent);
+  --r-xs: var(--r-2);
+  --r-sm: var(--r-4);
+  --r-md: var(--r-8);
+  --r-cockpit: var(--r-16);
+  --shadow-cockpit: var(--shadow-2);
+  --font-display: var(--ff-sans);
+  --font-sans: var(--ff-sans);
+  --dur-1: var(--d-1);
+  --dur-2: var(--d-2);
+  --dur-3: var(--d-3);
+  --dur-4: var(--d-4);
+  --dur-5: var(--d-5);
+  --ease-out: var(--e-out);
+  --ease-in-out: var(--e-in-out);
+  --ease-taxi: var(--e-snap);
+  --series-ref: color-mix(in oklab, var(--fg-3) 40%, transparent);
+}

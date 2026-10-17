@@ -1,0 +1,30 @@
+.panel {
+  padding: var(--s-4);
+  border-radius: var(--r-12);
+  background: var(--surface-2);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line);
+}
+
+.title {
+  font-size: var(--t-md);
+  font-weight: 590;
+  letter-spacing: -0.01em;
+  margin-block-end: var(--s-3);
+}
+
+.grid {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.grid dt {
+  font-size: var(--t-xs);
+  font-weight: 510;
+  color: var(--fg-3);
+}
+
+.grid dd {
+  margin-block-start: var(--s-1);
+  font-size: var(--t-sm);
+  color: var(--fg);
+}

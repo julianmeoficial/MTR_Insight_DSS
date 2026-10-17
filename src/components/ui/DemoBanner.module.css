@@ -1,0 +1,21 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  border-block-end: 1px solid var(--line);
+  background: var(--surface-1);
+  color: var(--fg-2);
+  padding-block: var(--s-2);
+  padding-inline: var(--s-4);
+  font-size: var(--t-xs);
+  font-weight: 500;
+}
+
+.tagWrap {
+  display: inline-flex;
+}
+
+.copy {
+  color: var(--fg-3);
+}

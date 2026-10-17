@@ -1,0 +1,43 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--s-2) - var(--s-1));
+}
+
+.light {
+  width: var(--r-6);
+  height: var(--r-6);
+  border-radius: var(--r-2);
+  background: color-mix(in oklab, var(--crit) 70%, var(--fg-4));
+  animation: papiCycle var(--d-5) var(--e-in-out) infinite;
+}
+
+.light[data-index="1"] {
+  animation-delay: calc(var(--d-3) * 0.25);
+}
+
+.light[data-index="2"] {
+  animation-delay: calc(var(--d-3) * 0.5);
+}
+
+.light[data-index="3"] {
+  animation-delay: calc(var(--d-3) * 0.75);
+}
+
+@keyframes papiCycle {
+  0%,
+  100% {
+    background: color-mix(in oklab, var(--crit) 65%, var(--fg-4));
+  }
+  35%,
+  65% {
+    background: color-mix(in oklab, var(--fg) 85%, var(--accent));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light {
+    animation: none;
+    background: color-mix(in oklab, var(--fg) 70%, var(--accent));
+  }
+}

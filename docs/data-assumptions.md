@@ -15,9 +15,11 @@ Treat as verified reference anchors for demos (not live feeds):
 
 ## Simulation vs observation
 
-- **sim-1.0** (Paso 9): simulated 12-week window from 26 Oct 2026 — labeled demo; not yet loaded in this repo version.
+- **dashboard-0.1** (`data/fixtures/dashboard/`): synthetic weekly windows for P1–P7 DSS UI (as-of 2026-11-30), plus infrastructure conflict, competitors and ETL log. Labeled DEMO; not a substitute for monthly/quarterly business frequencies.
+- **sim-1.0** (Paso 9): simulated 12-week window from 26 Oct 2026 — labeled demo; not yet loaded as the full control-table dump in this branch.
 - Forecasts (e.g. Airbus GMF 3.9%) are global references, not validated Montería-specific forecasts.
 - Label verified, pending, conflicting, and simulated statuses separately when fixtures arrive.
+- B737 160 seats is a scenario assumption; Jetstream 32 appears as reference capacity only.
 
 ## As-of date
 

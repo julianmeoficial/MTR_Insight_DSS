@@ -9,16 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Editorial landing at `/` (DESIGN §10.1): hero, numbered sections, GSAP reveals
+- Theme and ES/EN toggles with cookie persistence and boot script (no flash)
+- Route group `(sig)` for P1–P7/Alertas; public landing outside AppShell
+- Domain DSS (ceil occupancy helpers, airport break-even, 2045 fan and capacity triggers) and P3–P7 screens on fixtures
+- P6 DSS simulator: airport break-even by aircraft (ERJ-145, 737, A350 variants incl. A350K-ULR and A350F), 2045 projection (2.5/3.9/5.5 %) and capacity triggers 80/90 % (R16)
 - App navigation for P1–P7 and alert center
-- Centro de alertas fed by local JSON under `data/fixtures/demo/` (≥2 active alerts via domain engine)
-- Placeholder screens P3–P7 with title and purpose (Paso 8)
-- Shell screens P1–P2 and prototype smoke tests
-- P6 DSS simulator: airport break-even by aircraft (ERJ-145, 737, A350 variants incl. A350K-ULR and A350F), editable revenue/cost/frequencies, 2045 projection (2.5/3.9/5.5 %) and capacity triggers 80/90 % (R16)
+- Centro de alertas fed by local JSON under `data/fixtures/demo/`
+
+### Changed
+
+- DESIGN.md: CSS Modules stack; SIG shell
+- Global tokens + `*.module.css` only; Tailwind and `@tailwindcss/turbopack` removed
+- Dark theme default for SIG screens; AppNav replaced by AppShell
 
 ### Planned
 
 - Load sim-1.0 JSON fixtures (Paso 9)
-- Full P1–P7 UI and DSS simulators
+- Full P3–P7 UI and DSS simulators
 - PostgreSQL + ETL for full SIG
 
 

@@ -1,0 +1,39 @@
+.bone {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--surface-3) 0%,
+    color-mix(in oklab, var(--surface-4) 80%, var(--surface-3)) 50%,
+    var(--surface-3) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer var(--d-5) var(--e-in-out) infinite;
+}
+
+.bone[data-rounded="sm"] {
+  border-radius: var(--r-4);
+}
+
+.bone[data-rounded="md"] {
+  border-radius: var(--r-8);
+}
+
+.bone[data-rounded="pill"] {
+  border-radius: var(--r-pill);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bone {
+    animation: none;
+    background: var(--surface-3);
+  }
+}

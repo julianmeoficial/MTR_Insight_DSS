@@ -1,0 +1,19 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xs);
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.link:hover {
+  border-color: var(--line-strong);
+  color: var(--fg);
+}
+
+.date {
+  color: var(--fg-subtle);
+}

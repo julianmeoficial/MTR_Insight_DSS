@@ -1,0 +1,41 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--bg) 55%, transparent);
+}
+
+.panel {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: min(100%, calc(var(--s-32) * 5));
+  max-width: calc(var(--s-32) * 5);
+  padding: var(--s-6);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-3);
+  overflow-y: auto;
+  animation: drawerIn var(--d-3) var(--e-out);
+}
+
+@keyframes drawerIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}
