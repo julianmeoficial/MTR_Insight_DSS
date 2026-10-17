@@ -1,0 +1,17 @@
+{
+  "catchment": "Zona de influencia Córdoba / Sucre / Bolívar sur",
+  "period": { "start": "2026-01-01", "end": "2026-11-30" },
+  "competitors": [
+    { "airport": "BAQ", "label": "Barranquilla", "sharePct": 0.42 },
+    { "airport": "CTG", "label": "Cartagena", "sharePct": 0.31 },
+    { "airport": "MTR", "label": "Montería (directo)", "sharePct": 0.08 },
+    { "airport": "OTRO", "label": "Otros / conexión", "sharePct": 0.19 }
+  ],
+  "evidenceChecklist": [
+    { "id": "EV-CATCH", "label": "Definición geográfica de zona de influencia", "done": true },
+    { "id": "EV-OD", "label": "Matriz origen-destino agregada (sin PII)", "done": true },
+    { "id": "EV-COPA", "label": "Permiso / anuncio Copa MTR–PTY", "done": true },
+    { "id": "EV-FARE", "label": "Comparativo tarifario publicable", "done": false },
+    { "id": "EV-SLOT", "label": "Disponibilidad de franjas (ilustrativo)", "done": false }
+  ]
+}

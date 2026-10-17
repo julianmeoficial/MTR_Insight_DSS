@@ -1,0 +1,70 @@
+.page {
+  min-height: 100vh;
+  padding: var(--s-8) var(--s-6) var(--s-16);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-6);
+  margin-bottom: var(--s-8);
+}
+
+.title {
+  margin-top: var(--s-3);
+  font-size: var(--t-2xl);
+  font-weight: 590;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  margin-top: var(--s-2);
+  font-size: var(--t-sm);
+  color: var(--fg-2);
+  max-width: calc(var(--s-32) * 4);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(var(--s-32) * 2), 1fr));
+  gap: var(--s-6);
+}
+
+.cardPad {
+  padding: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.sectionTitle {
+  font-size: var(--t-md);
+  font-weight: 590;
+  color: var(--fg);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.meta {
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.skelGap {
+  margin-top: var(--s-2);
+}

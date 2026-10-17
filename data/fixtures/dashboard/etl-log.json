@@ -1,0 +1,34 @@
+{
+  "loads": [
+    {
+      "id": "LOAD-2026-11-30-ARINC",
+      "sourceId": "ARINC",
+      "startedAt": "2026-11-30T05:10:00-05:00",
+      "finishedAt": "2026-11-30T05:14:22-05:00",
+      "accepted": 99,
+      "rejected": 1,
+      "reason": "RC-03 rango fuera de umbral en 1 fila",
+      "ruleVersion": "rc-1.0"
+    },
+    {
+      "id": "LOAD-2026-11-30-SAT",
+      "sourceId": "MANIFEST-SAT",
+      "startedAt": "2026-11-30T05:20:00-05:00",
+      "finishedAt": "2026-11-30T05:21:10-05:00",
+      "accepted": 50,
+      "rejected": 0,
+      "reason": null,
+      "ruleVersion": "rc-1.0"
+    },
+    {
+      "id": "LOAD-2026-11-30-CMP",
+      "sourceId": "MANIFEST-CMP",
+      "startedAt": "2026-11-30T05:22:00-05:00",
+      "finishedAt": "2026-11-30T05:22:05-05:00",
+      "accepted": 0,
+      "rejected": 0,
+      "reason": "Fuente no cargada (RC-05)",
+      "ruleVersion": "rc-1.0"
+    }
+  ]
+}

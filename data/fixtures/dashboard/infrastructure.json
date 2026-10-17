@@ -1,0 +1,22 @@
+{
+  "asOfDate": "2026-11-30",
+  "runway": {
+    "designator": "RWY 14/32",
+    "lengthM": 2297,
+    "source": "metar-taf.com",
+    "verificationStatus": "verified",
+    "verifiedOn": "2026-10-15"
+  },
+  "runwayConflict": {
+    "lengthM": 2300,
+    "source": "Ficha técnica local (no adoptada)",
+    "verificationStatus": "conflicting",
+    "note": "Comité aún no adopta un único valor técnico (RC-08)."
+  },
+  "terminal": {
+    "declaredAnnualCapacity": 1700000,
+    "source": "Plan Maestro / declaración operacional",
+    "verificationStatus": "pending",
+    "verifiedOn": null
+  }
+}

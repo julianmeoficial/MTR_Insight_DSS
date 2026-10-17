@@ -1,0 +1,9 @@
+{
+  "dataset": "dashboard-0.1",
+  "version": "0.1.0",
+  "fuente": "synthetic-demo",
+  "asOfDate": "2026-11-30",
+  "lastValidated": "2026-10-15",
+  "verificationStatus": "simulated",
+  "nota": "Demo windows for P1/P2. Weekly views are not a substitute for monthly/quarterly business frequencies."
+}

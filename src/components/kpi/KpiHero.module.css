@@ -1,0 +1,60 @@
+.hero {
+  position: relative;
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+}
+
+.barOk {
+  background: var(--ok);
+}
+
+.barWarn {
+  background: var(--warn);
+}
+
+.barCrit {
+  background: var(--crit);
+}
+
+.barNodata {
+  background: var(--nodata);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.value {
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.meta {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--fg-muted);
+}

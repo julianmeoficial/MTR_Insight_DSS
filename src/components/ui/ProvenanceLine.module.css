@@ -1,0 +1,5 @@
+.line {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--fg-subtle);
+}

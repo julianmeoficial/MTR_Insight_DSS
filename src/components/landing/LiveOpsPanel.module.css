@@ -1,0 +1,150 @@
+.panel {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  padding: 20px;
+  box-shadow: var(--shadow-cockpit);
+}
+
+.tick {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: var(--accent);
+  border-style: solid;
+}
+
+.tl {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.tr {
+  top: 0;
+  right: 0;
+  border-width: 1px 1px 0 0;
+}
+
+.bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1px 1px;
+}
+
+.br {
+  right: 0;
+  bottom: 0;
+  border-width: 0 1px 1px 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.demo {
+  border-radius: var(--r-xs);
+  background: var(--accent-solid);
+  color: var(--accent-fg);
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.highlight {
+  background: color-mix(in srgb, var(--surface-3) 50%, transparent);
+  margin-inline: -8px;
+  padding-inline: 8px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.id {
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.name {
+  font-size: 12px;
+  color: var(--fg);
+}
+
+.value {
+  font-size: 14px;
+  color: var(--fg);
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+
+.dim {
+  opacity: 0.8;
+}
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dot {
+    animation: blink 2s ease-in-out infinite;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}

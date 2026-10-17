@@ -16,7 +16,7 @@ Mock auth, placeholders, or static fixtures must never be presented as the compl
 ## Stack
 
 - Next.js (App Router) + React + TypeScript (strict)
-- Tailwind CSS
+- CSS Modules + design tokens (`src/styles/tokens.css`); no Tailwind
 - Vitest (domain tests)
 - pnpm
 - Deploy target: Vercel (not wired in this commit)
@@ -30,7 +30,7 @@ pnpm install
 pnpm dev
 ```
 
-Other scripts: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
+Other scripts: `pnpm lint`, `pnpm lint:copy`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
 
 Copy [`.env.example`](.env.example) to `.env.local` if you need `AS_OF_DATE` for demos.
 

@@ -3,24 +3,24 @@ export type ScreenDef = {
   code: string;
   title: string;
   purpose: string;
-  kind: "shell" | "placeholder" | "alerts";
+  kind: "shell" | "placeholder" | "alerts" | "dashboard";
 };
 
-/** Paso 8 navigation map — Spanish UI labels. */
+/** Paso 8 navigation map - Spanish UI labels. */
 export const SCREENS: readonly ScreenDef[] = [
   {
     href: "/p1",
     code: "P1",
     title: "Tablero ejecutivo",
-    purpose: "Resumen de K1–K5, frescura del dato y alertas priorizadas.",
-    kind: "shell",
+    purpose: "Resumen de K1 a K5, frescura del dato y alertas priorizadas.",
+    kind: "dashboard",
   },
   {
     href: "/p2",
     code: "P2",
     title: "Rutas y ocupación",
     purpose: "Load factor por ruta, operador y aeronave frente a umbrales.",
-    kind: "shell",
+    kind: "dashboard",
   },
   {
     href: "/p3",
@@ -51,7 +51,7 @@ export const SCREENS: readonly ScreenDef[] = [
     code: "P6",
     title: "Planeación 2045 (DSS)",
     purpose:
-      "Escenarios de demanda 2,5 % / 3,9 % / 5,5 %, disparadores de ampliación y simuladores DSS.",
+      "Escenarios de demanda 2,5\u00A0% / 3,9\u00A0% / 5,5\u00A0%, disparadores de ampliación y simuladores DSS.",
     kind: "placeholder",
   },
   {
@@ -67,7 +67,7 @@ export const SCREENS: readonly ScreenDef[] = [
     code: "Alertas",
     title: "Centro de alertas",
     purpose:
-      "Eventos activos del motor de dominio (racha K1 en rojo, fuentes sin cargar, etc.).",
+      "Eventos activos con disparador, periodo, entidad y responsable.",
     kind: "alerts",
   },
 ] as const;

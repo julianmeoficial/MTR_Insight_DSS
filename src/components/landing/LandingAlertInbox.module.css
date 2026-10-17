@@ -1,0 +1,71 @@
+.inbox {
+  border-radius: var(--r-12);
+  background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.025),
+      rgb(255 255 255 / 0.01)
+    ),
+    var(--surface-2);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.title {
+  font-size: var(--t-sm);
+  font-weight: 590;
+  color: var(--fg);
+}
+
+.demoTag {
+  font-size: var(--t-mini);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-2);
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  gap: var(--s-3);
+  align-items: flex-start;
+  padding: var(--s-4) var(--s-5);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.row:last-child {
+  box-shadow: none;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.msg {
+  font-size: var(--t-sm);
+  color: var(--fg);
+  line-height: 1.45;
+}
+
+.meta {
+  margin-top: var(--s-2);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}

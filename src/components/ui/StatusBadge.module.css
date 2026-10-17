@@ -1,0 +1,37 @@
+.glyph {
+  width: var(--s-4);
+  height: var(--s-4);
+  flex-shrink: 0;
+}
+
+.glyph[data-tone="ok"] {
+  color: var(--ok);
+}
+
+.glyph[data-tone="warn"] {
+  color: var(--warn);
+}
+
+.glyph[data-tone="crit"] {
+  color: var(--crit);
+}
+
+.glyph[data-tone="nodata"] {
+  color: var(--nodata);
+}
+
+.barOk {
+  background: var(--ok);
+}
+
+.barWarn {
+  background: var(--warn);
+}
+
+.barCrit {
+  background: var(--crit);
+}
+
+.barNodata {
+  background: var(--nodata);
+}

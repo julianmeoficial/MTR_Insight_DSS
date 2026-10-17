@@ -15,6 +15,17 @@ export {
   evaluateTrafficLight,
 } from "@/domain";
 
+export {
+  buildDashboardReport,
+  getFilteredK1Hero,
+} from "@/application/dashboard";
+export type {
+  BuildDashboardOptions,
+  DashboardReport,
+  KpiTileModel,
+  LoadFactorSeriesPoint,
+} from "@/application/dashboard";
+
 export type {
   AlertEvent,
   CapacitySnapshot,

@@ -27,3 +27,14 @@ export {
   evaluateK1RedStreak,
   evaluateSourceNotLoaded,
 } from "@/domain/alerts";
+
+export {
+  REFERENCE_AIRCRAFT,
+  LOAD_THRESHOLDS,
+  minPassengersForRatio,
+  breakEvenTable,
+  FORECAST_RATES,
+  projectPassengers,
+  capacityTriggerYear,
+  buildFanSeries,
+} from "@/domain/dss";
