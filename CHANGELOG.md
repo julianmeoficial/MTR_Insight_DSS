@@ -9,20 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Editorial landing at `/` (DESIGN §10.1): hero + ApronCanvas, LIVE panel, numbered sections, GSAP reveals
+- Editorial landing at `/` (DESIGN §10.1): hero, numbered sections, GSAP reveals
 - Theme and ES/EN toggles with cookie persistence and boot script (no flash)
 - Route group `(sig)` for P1–P7/Alertas; public landing outside AppShell
-- Domain DSS (`ceil` break-even, 2045 fan projection) and real P3–P7 screens on fixtures
-- Editorial NavRail (sign codes, grouped) and Billow-style Cockpit (zero-gap cells)
-- Icon-only theme/locale toggles (Lucide Sun/Moon/Languages)
-- ADR-006/007/008: GSAP landing-only; `/` vs `(sig)` split; CSS Modules replace Tailwind
+- Domain DSS (ceil occupancy helpers, airport break-even, 2045 fan and capacity triggers) and P3–P7 screens on fixtures
+- P6 DSS simulator: airport break-even by aircraft (ERJ-145, 737, A350 variants incl. A350K-ULR and A350F), 2045 projection (2.5/3.9/5.5 %) and capacity triggers 80/90 % (R16)
+- App navigation for P1–P7 and alert center
+- Centro de alertas fed by local JSON under `data/fixtures/demo/`
 
 ### Changed
 
-- DESIGN.md v2: CSS Modules stack; Statamic landing rhythm; Billow SIG cockpit
+- DESIGN.md: CSS Modules stack; SIG shell
 - Global tokens + `*.module.css` only; Tailwind and `@tailwindcss/turbopack` removed
 - Dark theme default for SIG screens; AppNav replaced by AppShell
-- Three.js ambience moved to landing hero (visible), not a thin P1 strip
 
 ### Planned
 

@@ -53,6 +53,18 @@ Record of stack and policy choices for MTR Insight. Do not change scope silently
 - **Toggles:** Lucide `Sun`/`Moon`/`Languages` icon buttons only (no text labels).
 - **Consequences:** DESIGN.md v2 is source of truth; utility classes are banned.
 
+## ADR-009 — DSS airport break-even + 2045 projection (2026-10-16)
+
+- **Decision:** Implement P6 DSS with the Paso 8 **airport** economics model, not airline ticket fares.
+- **Editable inputs mapped from checklist:**
+  - “Tarifa media” → **ingreso medio por pasajero** \(T_{aeroportuaria} + I_{comercial}\)
+  - “Costo por vuelo” → \(C_{fijo} + C_{variable}\) agregado
+  - “Frecuencias” → vuelos/semana · sentido
+- **Formula:** \(LF_{eq} = C_{vuelo} / ((T+I) \times A_{ofrecidos})\); values &gt; 100 % are **infeasible** (not capped).
+- **Aircraft catalog:** ERJ-145 and 737 for current MTR ops; A350-900, A350-1000, A350-1000ULR (`A350K-ULR`), A350F (cargo), ACJ350 for expansion scenarios only.
+- **Projection:** \(P(t)=P(2024)\times(1+r)^{t-2024}\) with r ∈ {2.5 %, 3.9 % GMF Airbus global, 5.5 %}; capacity triggers at 80 % / 90 % (R16).
+- **Consequences:** Domain in `src/domain/dss`; UI on `/p6`; no chart library added.
+
 ## Explicitly deferred
 
 - Chart library (visx if SVG composables become insufficient)

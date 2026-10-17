@@ -51,8 +51,8 @@ export const SCREENS: readonly ScreenDef[] = [
     code: "P6",
     title: "Planeación 2045 (DSS)",
     purpose:
-      "Escenarios de demanda 2,5\u00A0% / 3,9\u00A0% / 5,5\u00A0%, disparadores de ampliación y simuladores DSS.",
-    kind: "placeholder",
+      "Equilibrio aeroportuario por aeronave, escenarios 2,5\u00A0% / 3,9\u00A0% / 5,5\u00A0% y disparadores 80/90\u00A0% (R16).",
+    kind: "dashboard",
   },
   {
     href: "/p7",
