@@ -13,6 +13,9 @@ export const metadata = {
   title: "Calidad del dato · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function P7Page() {
   const dict = getDictionary("es");
   const bundle = loadDashboardBundle();

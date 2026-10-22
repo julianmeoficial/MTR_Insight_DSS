@@ -13,10 +13,13 @@ import {
   type CommandPaletteGroup,
 } from "@/components/ui/CommandPalette";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
+import { allowedNavHrefs } from "@/domain/access";
+import type { RoleId } from "@/config/access-matrix";
 import styles from "./AppShell.module.css";
 
 type Props = {
   children: React.ReactNode;
+  role: RoleId;
   globalStatus: TrafficLight;
   lastValidated: string;
   asOfDate: string;
@@ -26,6 +29,7 @@ type Props = {
 
 export function AppShell({
   children,
+  role,
   globalStatus,
   lastValidated,
   asOfDate,
@@ -44,60 +48,39 @@ export function AppShell({
     [router],
   );
 
-  const groups = useMemo<CommandPaletteGroup[]>(
-    () => [
+  const groups = useMemo<CommandPaletteGroup[]>(() => {
+    const allowed = new Set(allowedNavHrefs(role));
+    const items = [
+      { id: "p1", href: "/p1", label: dict.nav.board, hint: "G T" },
+      { id: "p2", href: "/p2", label: dict.nav.routes, hint: "G R" },
+      { id: "p3", href: "/p3", label: dict.nav.compliance, hint: "G C" },
+      { id: "p4", href: "/p4", label: dict.nav.infrastructure, hint: "G I" },
+      { id: "p5", href: "/p5", label: dict.nav.demand, hint: "G D" },
+      { id: "p6", href: "/p6", label: dict.nav.planning, hint: "G P" },
+      { id: "p7", href: "/p7", label: dict.nav.quality, hint: "G Q" },
+      { id: "alerts", href: "/alertas", label: dict.nav.alerts, hint: "G A" },
+      { id: "scenarios", href: "/escenarios", label: dict.nav.scenarios },
+    ].filter((item) => allowed.has(item.href));
+
+    return [
       {
         id: "nav",
         label: dict.nav.views,
-        items: [
-          { id: "p1", label: dict.nav.board, hint: "G T", onSelect: () => go("/p1") },
-          { id: "p2", label: dict.nav.routes, hint: "G R", onSelect: () => go("/p2") },
-          {
-            id: "p3",
-            label: dict.nav.compliance,
-            hint: "G C",
-            onSelect: () => go("/p3"),
-          },
-          {
-            id: "p4",
-            label: dict.nav.infrastructure,
-            hint: "G I",
-            onSelect: () => go("/p4"),
-          },
-          { id: "p5", label: dict.nav.demand, hint: "G D", onSelect: () => go("/p5") },
-          {
-            id: "p6",
-            label: dict.nav.planning,
-            hint: "G P",
-            onSelect: () => go("/p6"),
-          },
-          {
-            id: "p7",
-            label: dict.nav.quality,
-            hint: "G Q",
-            onSelect: () => go("/p7"),
-          },
-          {
-            id: "alerts",
-            label: dict.nav.alerts,
-            hint: "G A",
-            onSelect: () => go("/alertas"),
-          },
-          {
-            id: "scenarios",
-            label: dict.nav.scenarios,
-            onSelect: () => go("/escenarios"),
-          },
-        ],
+        items: items.map((item) => ({
+          id: item.id,
+          label: item.label,
+          hint: "hint" in item ? item.hint : undefined,
+          onSelect: () => go(item.href),
+        })),
       },
-    ],
-    [dict, go],
-  );
+    ];
+  }, [dict, go, role]);
 
   return (
     <div className={styles.shell}>
       <DemoBanner />
       <TopBar
+        role={role}
         globalStatus={globalStatus}
         lastValidated={lastValidated}
         asOfDate={asOfDate}
@@ -106,6 +89,7 @@ export function AppShell({
       <Cockpit
         rail={
           <NavRail
+            role={role}
             alertCount={alertCount}
             onSearch={() => setPaletteOpen(true)}
           />
@@ -113,7 +97,7 @@ export function AppShell({
       >
         {children}
       </Cockpit>
-      <BottomTabs />
+      <BottomTabs role={role} />
       <CommandPalette
         groups={groups}
         placeholder={dict.shell.commandPalette}

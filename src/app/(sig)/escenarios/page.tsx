@@ -10,6 +10,9 @@ export const metadata = {
   title: "Escenarios · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function EscenariosPage() {
   const bundle = loadDashboardBundle();
   const dict = getDictionary("es");

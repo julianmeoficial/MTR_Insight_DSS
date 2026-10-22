@@ -10,6 +10,9 @@ export const metadata = {
   title: "Planeación 2045 · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function P6Page() {
   const bundle = loadDashboardBundle();
   const dict = getDictionary("es");

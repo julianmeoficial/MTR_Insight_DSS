@@ -34,6 +34,8 @@ Other scripts: `pnpm lint`, `pnpm lint:copy`, `pnpm typecheck`, `pnpm test`, `pn
 
 Copy [`.env.example`](.env.example) to `.env.local` if you need `AS_OF_DATE` for demos.
 
+Demo access: open `/login` and pick a staging account. The `mtr-demo-session` cookie only filters this prototype. It is not authentication, MFA, or the full SIG. Limits and the R14 response notes are in [docs/security.md](docs/security.md).
+
 Full setup notes: [docs/setup.md](docs/setup.md).
 
 ## Repository layout
@@ -54,6 +56,7 @@ tests/domain/       Vitest suites for KPIs and alerts
 - [Architecture](docs/architecture.md) — layers and P1–P7 map
 - [KPIs](docs/kpis.md) — K1–K5 formulas and traffic lights
 - [Decisions](docs/decisions.md) — approved stack and open conflicts
+- [Security](docs/security.md) — demo access limits and R14 response notes
 - [Data assumptions](docs/data-assumptions.md)
 - [Changelog](CHANGELOG.md)
 

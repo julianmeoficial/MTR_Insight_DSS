@@ -12,6 +12,9 @@ export const metadata = {
   title: "Infraestructura · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function P4Page() {
   const dict = getDictionary("es");
   const bundle = loadDashboardBundle();

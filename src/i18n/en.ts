@@ -82,6 +82,35 @@ export const en = {
     banner:
       "Simulated data · dashboard-0.1 · not an official Airplan product",
   },
+  access: {
+    loginTitle: "Open the board",
+    loginLead:
+      "Choose a demo account. It simulates role access and is not real authentication or MFA.",
+    accountListLabel: "Demo accounts",
+    switchAccount: "Switch account",
+    signOut: "Sign out",
+    accountTab: "Account",
+    restrictedTag: "Restricted view",
+    backToAllowed: "Back to your view",
+    sessionLabel: "Demo account",
+    exportFullSig: "CSV export: available in the full MIS.",
+    exportDenied: "This account cannot export.",
+    runwayNote:
+      "Runway compatibility at 2.297\u00A0m is illustrative and needs specialist review.",
+    roles: {
+      junta: "Board and ASUR",
+      gerencia_general: "General management",
+      gerencia_mtr: "MTR management",
+      comercial: "Commercial",
+      juridica: "Legal and regulatory",
+      infraestructura: "Infrastructure",
+      coordinacion: "International coordination",
+      ti: "IT",
+      satena: "Satena",
+      copa: "Copa",
+      ani: "ANI",
+    },
+  },
   status: {
     ok: "On target",
     warn: "Watch",
@@ -242,7 +271,7 @@ export const en = {
     explainSampleThreshold: "≥ 70 % green · ≥ 65 % yellow · < 65 % red",
     explainSampleRule: "PG-02 · v2026.1",
     govNote:
-      "We do not claim SOC 2, ISO or other certifications. Role access is documented; this prototype does not yet enforce real authentication.",
+      "We do not claim SOC 2, ISO or other certifications. Demo accounts only filter the interface. They are not real authentication or MFA.",
     pipelineSources: "Authorized sources",
     pipelineRules: "RC-01 through RC-08",
     pipelineWarehouse: "Analytical warehouse",
@@ -330,7 +359,7 @@ export const en = {
   groupData: "Data",
   unauthorizedTitle: "You do not have access to this view",
   unauthorizedBody:
-    "This screen will be role-protected in the full MIS. Return to the board or ask an administrator for access.",
+    "This demo account does not include the screen. Return to an allowed view or switch accounts.",
   backToBoard: "Back to the board",
   availableFullSig: "Available in the full MIS",
   whatDecides: "What this decides",

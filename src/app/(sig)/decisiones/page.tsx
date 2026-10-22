@@ -7,6 +7,9 @@ export const metadata = {
   title: "Decisiones · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function DecisionesPage() {
   const dict = getDictionary("es");
 

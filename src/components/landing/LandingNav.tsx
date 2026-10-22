@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
+import { useDemoSession } from "@/components/providers/DemoSessionProvider";
+import { homeForRole } from "@/domain/access";
 import { ThemeLocaleToggles } from "@/components/ui/ThemeLocaleToggles";
 import styles from "./landing.module.css";
 
@@ -16,6 +18,8 @@ const ANCHORS = [
 
 export function LandingNav() {
   const { dict } = usePreferences();
+  const { role } = useDemoSession();
+  const boardHref = role ? homeForRole(role) : "/login";
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -43,10 +47,10 @@ export function LandingNav() {
         </nav>
         <div className={styles.navActions}>
           <ThemeLocaleToggles />
-          <Link href="/p1" className={styles.ctaGhost}>
+          <Link href="/login" className={styles.ctaGhost}>
             {dict.nav.signIn}
           </Link>
-          <Link href="/p1" className={styles.cta}>
+          <Link href={boardHref} className={styles.cta}>
             {dict.nav.openDashboard}
             <span className={styles.ctaArrow} aria-hidden>
               →
