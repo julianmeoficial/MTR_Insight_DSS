@@ -14,6 +14,9 @@ export const metadata = {
   title: "Demanda regional · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function P5Page() {
   const dict = getDictionary("es");
   const bundle = loadDashboardBundle();

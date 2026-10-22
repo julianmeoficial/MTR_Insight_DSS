@@ -13,6 +13,8 @@ import { LandingNav } from "@/components/landing/LandingNav";
 import { DssMiniSimulator } from "@/components/landing/DssMiniSimulator";
 import { FanChart } from "@/components/landing/FanChart";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
+import { useDemoSession } from "@/components/providers/DemoSessionProvider";
+import { homeForRole } from "@/domain/access";
 import styles from "./landing.module.css";
 
 type Props = {
@@ -29,6 +31,8 @@ type Props = {
 
 export function LandingPage({ tiles, alerts, series, meta }: Props) {
   const { dict } = usePreferences();
+  const { role } = useDemoSession();
+  const boardHref = role ? homeForRole(role) : "/login";
   const explainTile = tiles.find((t) => t.kpiId === "K1") ?? tiles[0];
 
   return (
@@ -67,7 +71,7 @@ export function LandingPage({ tiles, alerts, series, meta }: Props) {
                 {dict.hero.subtitle}
               </p>
               <div className={styles.heroCtas}>
-                <Link href="/p1" className={styles.ctaLg} data-hero-cta>
+                <Link href={boardHref} className={styles.ctaLg} data-hero-cta>
                   {dict.hero.primary}
                   <span className={styles.ctaArrow} aria-hidden>
                     →
@@ -229,7 +233,7 @@ export function LandingPage({ tiles, alerts, series, meta }: Props) {
           <h2 id="final-cta-title" className={styles.finalTitle}>
             {dict.chapters.final.title}
           </h2>
-          <Link href="/p1" className={styles.ctaLg}>
+          <Link href={boardHref} className={styles.ctaLg}>
             {dict.chapters.final.cta}
             <span className={styles.ctaArrow} aria-hidden>
               →

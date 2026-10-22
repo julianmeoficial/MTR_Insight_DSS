@@ -50,6 +50,9 @@ const WHY: Record<
   },
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function P1Page({ searchParams }: Props) {
   const dict = getDictionary("es");
   return (

@@ -10,6 +10,8 @@ type Props = {
   selectedWeek?: string;
   selectedOperator?: string;
   selectedAircraft?: string;
+  operators?: readonly string[];
+  operatorLocked?: boolean;
 };
 
 const OPERATORS = ["Todos", "Satena", "Copa"] as const;
@@ -25,6 +27,8 @@ export function RouteFilterBar({
   selectedWeek,
   selectedOperator = "Todos",
   selectedAircraft = "Todos",
+  operators = OPERATORS,
+  operatorLocked = false,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -60,9 +64,10 @@ export function RouteFilterBar({
         <select
           className={styles.select}
           value={selectedOperator}
+          disabled={operatorLocked}
           onChange={(e) => update("operador", e.target.value)}
         >
-          {OPERATORS.map((op) => (
+          {operators.map((op) => (
             <option key={op} value={op}>
               {op}
             </option>

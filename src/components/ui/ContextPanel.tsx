@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function ContextPanel({
-  title = "Qué decide esto",
+  title = "¿Qué decide esto?",
   children,
   defaultOpen = true,
 }: Props) {

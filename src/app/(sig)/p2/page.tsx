@@ -3,6 +3,7 @@ import {
   buildDashboardReport,
   getFilteredK1Hero,
 } from "@/application/dashboard";
+import { readDemoRole } from "@/application/read-demo-session";
 import { LoadFactorChart } from "@/components/charts/LoadFactorChart";
 import { SeatUnitChart } from "@/components/charts/SeatUnitChart";
 import { BreakEvenBars } from "@/components/charts/BreakEvenBars";
@@ -14,6 +15,7 @@ import { ContextPanel } from "@/components/ui/ContextPanel";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { formatPct, formatInt } from "@/lib/format";
 import { getDictionary } from "@/i18n/dictionaries";
+import { canExport, resolveOperatorFilter, visibleOperators } from "@/domain/access";
 import type { TrafficLight } from "@/domain/types";
 import { cn } from "@/lib/cn";
 import styles from "@/components/screens/screen.module.css";
@@ -29,6 +31,9 @@ type Props = {
     aeronave?: string;
   }>;
 };
+
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
 
 export default function P2Page({ searchParams }: Props) {
   return (
@@ -51,7 +56,14 @@ export default function P2Page({ searchParams }: Props) {
 async function P2Content({ searchParams }: Props) {
   const dict = getDictionary("es");
   const params = await searchParams;
-  const operator = params.operador ?? "Todos";
+  const role = await readDemoRole();
+  const operator = role
+    ? resolveOperatorFilter(role, params.operador)
+    : (params.operador ?? "Todos");
+  const operators = role ? visibleOperators(role) : ["Todos", "Satena", "Copa"];
+  const exportNote = role && canExport(role)
+    ? dict.access.exportFullSig
+    : dict.access.exportDenied;
   const aircraft = params.aeronave ?? "Todos";
   const report = buildDashboardReport({
     weekStart: params.semana,
@@ -100,6 +112,8 @@ async function P2Content({ searchParams }: Props) {
         selectedWeek={selectedWeek}
         selectedOperator={operator}
         selectedAircraft={aircraft}
+        operators={operators}
+        operatorLocked={operators.length === 1}
       />
 
       <KpiHero
@@ -149,8 +163,7 @@ async function P2Content({ searchParams }: Props) {
           lastValidated={report.lastValidatedLabel}
         />
         <p className={styles.disclaimer}>
-          Exportación CSV: disponible en SIG completo. Compatibilidad de pista
-          2.297 m es ilustrativa y requiere revisión especializada.
+          {exportNote} {dict.access.runwayNote}
         </p>
       </footer>
     </main>

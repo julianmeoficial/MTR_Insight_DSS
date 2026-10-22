@@ -10,6 +10,9 @@ export const metadata = {
   title: "Cumplimiento · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function P3Page() {
   const dict = getDictionary("es");
   const bundle = loadDashboardBundle();

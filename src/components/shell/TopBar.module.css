@@ -53,3 +53,26 @@
   font-size: 12px;
   color: var(--fg-subtle);
 }
+
+.session {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.roleName {
+  font-size: var(--t-xs);
+  color: var(--fg-2);
+}
+
+.sessionLink {
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+  background: transparent;
+  padding: 0;
+}
+
+.sessionLink:hover {
+  color: var(--fg);
+}

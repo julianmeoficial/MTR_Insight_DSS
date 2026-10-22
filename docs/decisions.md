@@ -70,4 +70,11 @@ Record of stack and policy choices for MTR Insight. Do not change scope silently
 - Chart library (visx if SVG composables become insufficient)
 - ORM / PostgreSQL client
 - Identity provider (Supabase Auth is an example only, not selected)
-- Real auth / enforced role matrix (UnauthorizedState stub only)
+- Real MFA, server-side authorization and PostgreSQL row policies (see ADR-010 for the demo role picker)
+
+## ADR-010 — Demo role session for the base prototype (2026-10-21)
+
+- **Decision:** Staging accounts live in `src/config/access-matrix.ts` and are chosen on `/login`. The choice is stored in the `mtr-demo-session` cookie and filters navigation, direct routes and the P2 operator control.
+- **Context:** Paso 10 allows a role selector on the fixture prototype as a visual simulation. It is not authentication, MFA, or the full SIG.
+- **Rules in code:** Paso 8/10 screen matrix. `/alertas` follows P1. `/escenarios` follows P6. `/decisiones` stays closed in this prototype. Satena and Copa are separate accounts and cannot widen the operator filter. TI sees P7 only.
+- **Consequences:** Missing or unknown cookie values redirect SIG routes to `/login`. A denied route renders the restricted state. Do not describe this cookie as a protected session. Real IdP, MFA and server authorization remain deferred.

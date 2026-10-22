@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
+import { allowedNavHrefs } from "@/domain/access";
+import type { RoleId } from "@/config/access-matrix";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { WayfindingTag } from "@/components/ui/WayfindingTag";
 import { Kbd } from "@/components/ui/Kbd";
@@ -56,14 +58,19 @@ const DSS_ITEMS: NavItem[] = [
 ];
 
 type Props = {
+  role: RoleId;
   alertCount?: number;
   onSearch?: () => void;
 };
 
-export function NavRail({ alertCount = 0, onSearch }: Props) {
+export function NavRail({ role, alertCount = 0, onSearch }: Props) {
   const pathname = usePathname();
   const reduced = usePrefersReducedMotion();
   const { dict } = usePreferences();
+  const allowed = new Set(allowedNavHrefs(role));
+  const views = VIEW_ITEMS.filter((item) => allowed.has(item.href));
+  const dss = DSS_ITEMS.filter((item) => allowed.has(item.href));
+  const showAlerts = allowed.has("/alertas");
 
   function renderItem(item: NavItem) {
     const active =
@@ -110,28 +117,38 @@ export function NavRail({ alertCount = 0, onSearch }: Props) {
         <span>{dict.nav.search}</span>
         <Kbd>⌘K</Kbd>
       </button>
-      <ul className={styles.list}>
-        <li className={styles.item}>
-          <Link
-            href="/alertas"
-            className={cn(
-              styles.link,
-              (pathname === "/alertas" || pathname.startsWith("/alertas/")) &&
-                styles.active,
-            )}
-          >
-            <Bell size={16} strokeWidth={1.5} className={styles.icon} aria-hidden />
-            <span className={styles.title}>{dict.nav.alerts}</span>
-            {alertCount > 0 ? (
-              <span className={cn("num", styles.count)}>{alertCount}</span>
-            ) : null}
-          </Link>
-        </li>
-      </ul>
-      <p className={styles.groupLabel}>{dict.nav.views}</p>
-      <ul className={styles.list}>{VIEW_ITEMS.map(renderItem)}</ul>
-      <p className={styles.groupLabel}>{dict.nav.groupDss}</p>
-      <ul className={styles.list}>{DSS_ITEMS.map(renderItem)}</ul>
+      {showAlerts ? (
+        <ul className={styles.list}>
+          <li className={styles.item}>
+            <Link
+              href="/alertas"
+              className={cn(
+                styles.link,
+                (pathname === "/alertas" || pathname.startsWith("/alertas/")) &&
+                  styles.active,
+              )}
+            >
+              <Bell size={16} strokeWidth={1.5} className={styles.icon} aria-hidden />
+              <span className={styles.title}>{dict.nav.alerts}</span>
+              {alertCount > 0 ? (
+                <span className={cn("num", styles.count)}>{alertCount}</span>
+              ) : null}
+            </Link>
+          </li>
+        </ul>
+      ) : null}
+      {views.length > 0 ? (
+        <>
+          <p className={styles.groupLabel}>{dict.nav.views}</p>
+          <ul className={styles.list}>{views.map(renderItem)}</ul>
+        </>
+      ) : null}
+      {dss.length > 0 ? (
+        <>
+          <p className={styles.groupLabel}>{dict.nav.groupDss}</p>
+          <ul className={styles.list}>{dss.map(renderItem)}</ul>
+        </>
+      ) : null}
     </nav>
   );
 }

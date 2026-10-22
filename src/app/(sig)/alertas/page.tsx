@@ -9,6 +9,9 @@ export const metadata = {
   title: "Alertas · MTR Insight",
 };
 
+/** Demo session is request data, so this screen does not prerender. */
+export const instant = false;
+
 export default function AlertasPage() {
   const report = buildDashboardReport();
   const dict = getDictionary("es");

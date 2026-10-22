@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { inter, mono } from "@/app/fonts";
+import { DemoSessionProvider } from "@/components/providers/DemoSessionProvider";
 import { PreferencesProvider } from "@/components/providers/PreferencesProvider";
 import { LOCALE_COOKIE, THEME_COOKIE } from "@/i18n/cookies";
 import "./globals.css";
@@ -41,7 +42,7 @@ export default function RootLayout({
       </head>
       <body>
         <PreferencesProvider initialTheme="dark" initialLocale="es">
-          {children}
+          <DemoSessionProvider>{children}</DemoSessionProvider>
         </PreferencesProvider>
       </body>
     </html>
