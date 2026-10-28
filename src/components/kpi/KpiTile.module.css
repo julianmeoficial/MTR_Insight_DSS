@@ -45,6 +45,7 @@
 
 .value {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-3xl);
   font-weight: 400;
   letter-spacing: -0.04em;

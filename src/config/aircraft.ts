@@ -11,6 +11,9 @@ export type AircraftMode = "passenger" | "cargo";
 export type AircraftId =
   | "E145"
   | "B738"
+  | "A320"
+  | "A20N"
+  | "AT72"
   | "A359"
   | "A35K"
   | "A350K-ULR"
@@ -77,6 +80,51 @@ export const AIRCRAFT_CATALOG: readonly AircraftDefinition[] = [
     acn: 48,
     arffCategory: 7,
     note: "Escenario Copa — configuración 160 sillas no es un hecho confirmado de aerolínea.",
+  },
+  {
+    id: "A320",
+    label: "Airbus A320",
+    group: "mtr_ops",
+    mode: "passenger",
+    seats: 180,
+    approxTakeoffDistanceM: 1_900,
+    mtowKg: 78_000,
+    rangeKm: 6_100,
+    codeLetter: "C",
+    minRunwayWidthM: 30,
+    acn: 44,
+    arffCategory: 7,
+    note: "Operación nacional típica (Avianca / LATAM). Sillas ilustrativas.",
+  },
+  {
+    id: "A20N",
+    label: "Airbus A320neo",
+    group: "mtr_ops",
+    mode: "passenger",
+    seats: 186,
+    approxTakeoffDistanceM: 1_850,
+    mtowKg: 79_000,
+    rangeKm: 6_300,
+    codeLetter: "C",
+    minRunwayWidthM: 30,
+    acn: 44,
+    arffCategory: 7,
+    note: "JetSMART — 186 sillas publicadas (Alcaldía de Montería, ruta BOG).",
+  },
+  {
+    id: "AT72",
+    label: "ATR 72 (supuesto)",
+    group: "mtr_ops",
+    mode: "passenger",
+    seats: 68,
+    approxTakeoffDistanceM: 1_300,
+    mtowKg: 23_000,
+    rangeKm: 1_500,
+    codeLetter: "C",
+    minRunwayWidthM: 30,
+    acn: 18,
+    arffCategory: 5,
+    note: "Clic Air — sillas 68 son un supuesto de escenario, no un manifiesto.",
   },
   {
     id: "A359",

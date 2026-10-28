@@ -8,6 +8,7 @@ import { LoadFactorChart } from "@/components/charts/LoadFactorChart";
 import { SeatUnitChart } from "@/components/charts/SeatUnitChart";
 import { BreakEvenBars } from "@/components/charts/BreakEvenBars";
 import { RouteFilterBar } from "@/components/filters/RouteFilterBar";
+import { OpsScopeSwitch } from "@/components/filters/OpsScopeSwitch";
 import { KpiHero } from "@/components/kpi/KpiHero";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { ScreenLoading } from "@/components/ui/ScreenLoading";
@@ -16,7 +17,13 @@ import { ContextPanel } from "@/components/ui/ContextPanel";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { formatPct, formatInt } from "@/lib/format";
 import { getDictionary } from "@/i18n/dictionaries";
-import { canExport, resolveOperatorFilter, visibleOperators } from "@/domain/access";
+import { parseOpsScope } from "@/domain";
+import {
+  canExport,
+  resolveOperatorFilter,
+  visibleOperators,
+} from "@/domain/access";
+import { getAircraft } from "@/config/aircraft";
 import type { TrafficLight } from "@/domain/types";
 import { cn } from "@/lib/cn";
 import styles from "@/components/screens/screen.module.css";
@@ -31,6 +38,8 @@ type Props = {
     semana?: string;
     operador?: string;
     aeronave?: string;
+    op?: string;
+    ruta?: string;
   }>;
 };
 
@@ -40,9 +49,7 @@ export const instant = false;
 export default function P2Page({ searchParams }: Props) {
   const dict = getDictionary("es");
   return (
-    <Suspense
-      fallback={<ScreenLoading label={dict.states.loading} />}
-    >
+    <Suspense fallback={<ScreenLoading label={dict.states.loading} />}>
       <P2Content searchParams={searchParams} />
     </Suspense>
   );
@@ -50,20 +57,32 @@ export default function P2Page({ searchParams }: Props) {
 
 async function P2Content({ searchParams }: Props) {
   const dict = getDictionary("es");
+  const t = dict.screens.p2;
   const params = await searchParams;
+  const opsScope = parseOpsScope(params.op);
   const role = await readDemoRole();
   const operator = role
-    ? resolveOperatorFilter(role, params.operador)
+    ? resolveOperatorFilter(role, params.operador, opsScope)
     : (params.operador ?? "Todos");
-  const operators = role ? visibleOperators(role) : ["Todos", "Satena", "Copa"];
-  const exportNote = role && canExport(role)
-    ? dict.access.exportFullSig
-    : dict.access.exportDenied;
+  const scopeOperators =
+    opsScope === "nacional"
+      ? ["Avianca", "Satena", "LATAM", "JetSMART", "Clic"]
+      : ["Satena", "Copa"];
+  const operators = role
+    ? visibleOperators(role, opsScope)
+    : ["Todos", ...scopeOperators];
+  const exportNote =
+    role && canExport(role)
+      ? dict.access.exportFullSig
+      : dict.access.exportDenied;
   const aircraft = params.aeronave ?? "Todos";
+  const route = params.ruta ?? "Todas";
   const report = buildDashboardReport({
     weekStart: params.semana,
     operator,
     aircraftType: aircraft,
+    route,
+    opsScope,
   });
 
   const selectedWeek =
@@ -75,10 +94,23 @@ async function P2Content({ searchParams }: Props) {
     operator,
     aircraftType: aircraft,
     weekStart: selectedWeek,
+    route,
+    opsScope,
   });
   const vsBe = hero.value === null ? null : hero.value - 0.7;
 
-  const unitSeats = aircraft === "B738" ? 160 : aircraft === "J32" ? 19 : 50;
+  const unitSeats =
+    aircraft === "Todos"
+      ? 50
+      : (() => {
+          try {
+            return getAircraft(
+              aircraft as Parameters<typeof getAircraft>[0],
+            ).seats;
+          } catch {
+            return 50;
+          }
+        })();
   const unitFlights = report.series.filter(
     (s) =>
       s.weekStart === selectedWeek &&
@@ -92,6 +124,11 @@ async function P2Content({ searchParams }: Props) {
       ? Math.round((unitPax / unitSeatSum) * unitSeats)
       : Math.min(unitSeats, unitPax);
 
+  const routeOptions = report.scopeRoutes.map((r) => ({
+    id: r.id,
+    label: `${r.id} · ${r.city}`,
+  }));
+
   return (
     <main className={styles.main}>
       <div className={styles.pad}>
@@ -99,7 +136,14 @@ async function P2Content({ searchParams }: Props) {
           eyebrow={`${dict.nav.views} · P2`}
           title={dict.screens.p2.title}
           question={dict.screens.p2.question}
-        />
+        >
+          <OpsScopeSwitch
+            value={opsScope}
+            nacionalLabel={dict.screens.p1.opsNacional}
+            internacionalLabel={dict.screens.p1.opsInternacional}
+            ariaLabel={dict.screens.p1.opsScopeAria}
+          />
+        </ScreenHeader>
       </div>
 
       <RouteFilterBar
@@ -107,14 +151,18 @@ async function P2Content({ searchParams }: Props) {
         selectedWeek={selectedWeek}
         selectedOperator={operator}
         selectedAircraft={aircraft}
+        selectedRoute={route}
         operators={operators}
+        routes={routeOptions}
         operatorLocked={operators.length === 1}
+        allRoutesLabel={t.allRoutes}
+        allAircraftLabel={t.allAircraft}
       />
 
       <KpiHero
         value={hero.value}
         status={hero.status}
-        label={`K1 · ${dict.kpi.k1} · ${operator} · ${aircraft === "Todos" ? "Todas las aeronaves" : aircraft}`}
+        label={`K1 · ${dict.kpi.k1} · ${route === "Todas" ? opsScope : route} · ${operator} · ${aircraft === "Todos" ? t.allAircraft : aircraft}`}
         vsBreakEvenPp={vsBe}
       />
 

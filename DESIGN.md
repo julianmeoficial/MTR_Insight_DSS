@@ -10,12 +10,12 @@
 
 | Item | Value |
 |---|---|
-| Version | 4.2.0 (2026-10-28): aeronautical layer (aerodrome chart, split-flap, sign tags, centerline nav), expansion model RWY 2 + T2, account picker, count-up on view. Replaces 4.1.0 |
+| Version | 4.3.0 (2026-10-28): national/international ops switch on P1, official route catalog, schematic aerodrome Three.js canvas in SIG. Replaces 4.2.0 |
 | Applies to | Landing (`/`), SIG app (`/p1`–`/p7`, `/alertas`, `/situacion`, `/escenarios`, `/validador`, `/decisiones`, `/admin`) |
 | Stack | Next.js App Router, React, TypeScript strict, CSS Modules |
 | Fonts | `next/font/google`: Archivo (display, variable `wdth`), IBM Plex Sans (text and UI, variable), B612 Mono (KPIs, codes, dates) |
 | Motion | gsap ≥ 3.13 (ScrollTrigger, SplitText, DrawSVG) + @gsap/react on landing and SIG (no ScrollTrigger in SIG); motion/react for SIG layout |
-| 3D | three: landing scene + CSS 3D product tilt. Never encodes KPI data |
+| 3D | three: landing scene + CSS 3D product tilt + one schematic aerodrome canvas in P4/validator. Never encodes KPI data |
 | Icons | lucide-react, 16 px in SIG, 20 px on landing, stroke 1.5 |
 | Themes | Landing: dark only. SIG: dark default, light supported |
 
@@ -370,9 +370,14 @@ Implementation: `src/components/motion/CountUp.tsx` (GSAP) and
 
 ---
 
-## 7. 3D: "Final approach" scene
+## 7. 3D scenes
 
-- Plain three, one canvas, `dynamic(() => import(...), { ssr: false })`.
+Two allowed canvases, never concurrent on the same route. Both use plain
+three, `dynamic(() => import(...), { ssr: false })`. Never place KPI values,
+status pills or traffic lights in WebGL. No globes, neon HUD or 3D charts.
+
+### 7.1 Landing: "Final approach"
+
 - Stylized, not to scale, not a real survey of SKMR.
 - Elements: dark ground, runway plane, edge lights (InstancedMesh, warm
   white), centerline lights, green threshold bar, 4 PAPI lights left side,
@@ -382,7 +387,31 @@ Implementation: `src/components/motion/CountUp.tsx` (GSAP) and
 - Budgets: ≤ 6 draw calls, ≤ 50 k triangles, DPR ≤ 1.5, 60 fps on M1,
   < 120 KB gzip for the scene chunk. Pause via IntersectionObserver and
   `document.hidden`. Poster `webp` for reduced motion, low power, no WebGL.
-- Never place KPI values or status in the scene.
+
+### 7.2 SIG: schematic aerodrome (P4 / validator)
+
+- One orbitable canvas on `/p4` and `/validador`, built from the
+  infrastructure data (runway length and width, terminals, cargo bays).
+  Scale 1 unit = 10 m; buildings drawn 3× taller so they read. Polar angle
+  limited, no free-fly, DPR ≤ 1.5, paused offscreen and in hidden tabs.
+- Schematic, not an AIP chart or survey. Parallel runway at 1.035 m
+  (independent approaches), midfield T2.
+- Elements: runway strip, asphalt, piano keys, 12/12 centerline, edge lights
+  (threshold green, end red), PAPI; parallel taxiway with yellow centerline
+  and connectors; T1 apron with stands and parked regional jets, two-level
+  terminal with glazing; control tower; cargo terminal with one bay per
+  published warehouse, dock doors and a freighter. Projected RWY 2, taxiway
+  B and T2 with widebody stands are translucent with dashed edges.
+- Colors are read from the tokens at runtime (no hex in components) and
+  follow light/dark theme without rebuilding the scene.
+- HTML sign tags follow the camera (location sign for terminals, red
+  mandatory sign for runways). Selection draws an accent outline; numbers
+  live in the sidecar, never as meshes or sprites.
+- Camera presets: General, Planta, Terminales (GSAP, 0.9 s, power2.inOut).
+  Click selects only when the pointer did not drag.
+- Loading: PAPI loader until the first frame. Fallback: SVG
+  `AerodromeDiagram` under `prefers-reduced-motion`, when WebGL cannot start
+  or when the context is lost.
 
 ---
 
@@ -451,6 +480,12 @@ and tooltips.
 - **Optimistic UI** only for local UI state; never for domain writes.
 - **Empty states:** one line + one action + shortcut hint.
 - **Loader:** PAPI glyph for route-level loading (`ScreenLoading`); skeletons for layout.
+- **Read marks (alert center):** "Todas / Sin leer" filter, mark one or all
+  as read, unread dot on rows, sidebar count shows unread only. Per-viewer
+  UI state in the browser; it never changes the alert or its workflow.
+- **Route planner (P5):** proposed and announced routes by scope
+  (Nacionales / Internacionales) and infrastructure, evaluated with the
+  validator model, with a link to the full evaluation.
 - **Account picker (`/login`):** step 1 account type (Dirección y gerencia,
   Áreas del aeropuerto, Aerolíneas, Supervisión y TI), step 2 account cards
   with purpose, views the role can open, export and operator scope. The
@@ -469,7 +504,8 @@ Each capability supports human judgment. None executes operational actions.
 | **Cross-filter + drill** | Click a series/bar → filters page; KPI tile → P-page; point → detail drawer | Filter chips in header |
 | **What-if simulator** | Inputs panel (aircraft, frequency, load, costs, growth rate). Each input shows provenance: source default vs edited (accent dot) with reset | Step 8 break-even model only |
 | **Expansion assumptions** | Assumptions rail in `/validador`: runway length and terminal capacity (airport, apply to all scenarios) plus demand, takeoff factor, revenue, cost and frequencies (per scenario). Edited values keep the accent dot, reset per field and "Restablecer supuestos" | For airport expansion projects (new runway, terminal works). Results then describe a hypothetical project, said in the UI |
-| **Infrastructure configuration** | Toolbar: `Actual` (RWY 14/32 + T1) or `Ampliación` (adds RWY 14L/32R 4.000–4.200 m and international T2). Terminal: automatic, T1 or T2. The validator assigns the runway with the fewest failures (shortest when tied) and the terminal that fits code letter and border control | All expansion values are simulated and labeled so |
+| **Infrastructure configuration** | Toolbar: `Actual` (RWY 14/32 + T1) or `Ampliación` (adds RWY 14L/32R 4.000–4.200 m and international T2). Terminal: automatic, T1 or T2. The validator assigns the runway with the fewest failures (shortest when tied) and the terminal that fits code letter and border control. Toolbar may sit above the schematic 3D aerodrome (§7.2); numbers stay in the HTML sidecar | All expansion values are simulated and labeled so |
+| **Ops scope switch (P1)** | Segmented control `Nacional` / `Internacional` in the P1 header (`?op=`). Filters K1 flights and entity alerts; K2–K5 stay airport-wide. Default: nacional | Official route catalog; international keeps MTR–PTY |
 | **Aircraft requirements** | Per aircraft: takeoff distance, runway width, ACN vs PCN, approach category for the route segment (intercontinental asks CAT II), ARFF category, ICAO code letter vs terminal stands, range with reserve | Manufacturer references and academic policy, not certification |
 | **Route validator (Paso 14)** | Route × aircraft matrix with verdict pills, required runway per aircraft and extension needed, decision summary, checks with data gaps, tornado and 3-scenario compare | `src/domain/erpm`; never certifies performance, pavement or dispatch |
 | **Goal seek** | "¿Qué necesito para…?" solve one variable (e.g. min passengers via ceil, break-even LF) | >100 % = "Inviable", never capped |
@@ -488,7 +524,11 @@ Each capability supports human judgment. None executes operational actions.
 
 - Card is the frame; no chart borders. Horizontal gridlines `--line`.
   Axis labels 11–12 `--fg-3`, tabular. No axis lines.
-- Copa `--series-1`, Satena `--series-2`, fixed across the product.
+- Operator series map (fixed): Avianca `--series-1`, Satena `--series-2`,
+  LATAM `--series-3`, JetSMART `--series-4`, Clic `--series-5`,
+  Copa `--series-1` when only international scope is active (two-series
+  view with Satena `--series-2`). Never invent a seventh series hue.
+- Share with more than four operators: horizontal bars, never a pie.
 - Target: 1 px dashed `--fg-3` + label "Meta 70 %". Threshold bands ≤ 6 %.
 - Forecast: dashed + hatch + `Proyección` tag. Observed: solid 1.5–2 px.
 - Tooltip: crosshair, all series at x, sorted, tabular, unit + period,

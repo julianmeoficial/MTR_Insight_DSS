@@ -1,0 +1,93 @@
+{
+  "dataset": "routes-0.1",
+  "version": "0.1.0",
+  "asOfDate": "2026-10-28",
+  "source": "https://www.aeropuertomonteria.co/rutas",
+  "routes": [
+    {
+      "id": "MTR-BAQ",
+      "origin": "MTR",
+      "destination": "BAQ",
+      "city": "Barranquilla",
+      "airportName": "Ernesto Cortissoz",
+      "international": false,
+      "segment": "domestic",
+      "stage": "operating",
+      "operators": ["Satena", "Clic"],
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Nacionales",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "operatorEvidenceNote": "Empareje aerolínea–ruta es evidencia cruzada (aeropuertos.net / Google Flights), no manifiesto oficial."
+    },
+    {
+      "id": "MTR-BOG",
+      "origin": "MTR",
+      "destination": "BOG",
+      "city": "Bogotá",
+      "airportName": "El Dorado",
+      "international": false,
+      "segment": "domestic",
+      "stage": "operating",
+      "operators": ["Avianca", "LATAM", "JetSMART"],
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Nacionales",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "operatorEvidenceNote": "JetSMART 14 frecuencias/semana desde abr 2026 (Alcaldía de Montería). Avianca y LATAM: evidencia cruzada de itinerarios."
+    },
+    {
+      "id": "MTR-EOH",
+      "origin": "MTR",
+      "destination": "EOH",
+      "city": "Medellín",
+      "airportName": "Olaya Herrera",
+      "international": false,
+      "segment": "domestic",
+      "stage": "operating",
+      "operators": ["Clic"],
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Nacionales",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "operatorEvidenceNote": "Clic Air: evidencia cruzada de itinerarios."
+    },
+    {
+      "id": "MTR-MDE",
+      "origin": "MTR",
+      "destination": "MDE",
+      "city": "Rionegro",
+      "airportName": "José María Córdova",
+      "international": false,
+      "segment": "domestic",
+      "stage": "operating",
+      "operators": ["Avianca", "LATAM", "JetSMART"],
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Nacionales",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "operatorEvidenceNote": "Empareje aerolínea–ruta es evidencia cruzada, no manifiesto oficial."
+    },
+    {
+      "id": "MTR-PTY",
+      "origin": "MTR",
+      "destination": "PTY",
+      "city": "Ciudad de Panamá",
+      "airportName": "Tocumen",
+      "international": true,
+      "segment": "regional",
+      "stage": "operating",
+      "operators": ["Satena", "Copa"],
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Internacionales",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "operatorEvidenceNote": "Satena en operación desde 26 oct 2026. Copa anunciada (dic 2026); no figura aún en /aerolineas."
+    }
+  ]
+}

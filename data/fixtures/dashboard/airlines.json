@@ -1,0 +1,81 @@
+{
+  "dataset": "airlines-0.1",
+  "version": "0.1.0",
+  "asOfDate": "2026-10-28",
+  "source": "https://www.aeropuertomonteria.co/aerolineas",
+  "airlines": [
+    {
+      "id": "Avianca",
+      "label": "Avianca",
+      "stage": "operating",
+      "seriesToken": "series-1",
+      "website": "https://www.avianca.com",
+      "evidence": {
+        "source": "aeropuertomonteria.co/aerolineas",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "Satena",
+      "label": "Satena",
+      "stage": "operating",
+      "seriesToken": "series-2",
+      "website": "https://www.satena.com",
+      "evidence": {
+        "source": "aeropuertomonteria.co/aerolineas",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "LATAM",
+      "label": "LATAM",
+      "stage": "operating",
+      "seriesToken": "series-3",
+      "website": "https://www.latamairlines.com",
+      "evidence": {
+        "source": "aeropuertomonteria.co/aerolineas",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "JetSMART",
+      "label": "JetSMART",
+      "stage": "operating",
+      "seriesToken": "series-4",
+      "website": "https://www.jetsmart.com",
+      "evidence": {
+        "source": "aeropuertomonteria.co/aerolineas",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "Clic",
+      "label": "Clic Air",
+      "stage": "operating",
+      "seriesToken": "series-5",
+      "website": "https://www.clicair.co",
+      "evidence": {
+        "source": "aeropuertomonteria.co/aerolineas",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "Copa",
+      "label": "Copa",
+      "stage": "announced",
+      "seriesToken": "series-1",
+      "website": null,
+      "evidence": {
+        "source": "Prensa · permiso reportado (EV-COPA-PRESS)",
+        "date": "2026-10-10",
+        "confidence": "medium"
+      },
+      "note": "No figura en aeropuertomonteria.co/aerolineas al 28 oct 2026. Escenario internacional anunciado para diciembre."
+    }
+  ]
+}

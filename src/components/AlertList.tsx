@@ -2,7 +2,9 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, CheckCheck, Circle } from "lucide-react";
+import { useReadAlerts } from "@/hooks/useReadAlerts";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { useListKeys } from "@/hooks/useListKeys";
 import { Kbd } from "@/components/ui/Kbd";
 import type { AlertEvent } from "@/domain";
@@ -49,6 +51,13 @@ export function AlertList({ alerts, keyboard = false }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(
     alerts[0]?.id ?? null,
   );
+  const { isRead, setRead, markAll } = useReadAlerts();
+  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const unreadCount = alerts.filter((a) => !isRead(a.id)).length;
+  const visible = useMemo(
+    () => (filter === "unread" ? alerts.filter((a) => !isRead(a.id)) : alerts),
+    [alerts, filter, isRead],
+  );
 
   const selected = useMemo(
     () => alerts.find((a) => a.id === selectedId) ?? null,
@@ -56,10 +65,10 @@ export function AlertList({ alerts, keyboard = false }: Props) {
   );
 
   const grouped = useMemo(() => {
-    const red = alerts.filter((a) => a.severity === "red");
-    const yellow = alerts.filter((a) => a.severity === "yellow");
+    const red = visible.filter((a) => a.severity === "red");
+    const yellow = visible.filter((a) => a.severity === "yellow");
     return { red, yellow };
-  }, [alerts]);
+  }, [visible]);
 
   const orderedIds = useMemo(
     () => [...grouped.red, ...grouped.yellow].map((a) => a.id),
@@ -76,6 +85,29 @@ export function AlertList({ alerts, keyboard = false }: Props) {
   return (
     <div className={styles.split}>
       <div className={styles.listPane}>
+        <div className={styles.listBar}>
+          <SegmentedControl
+            ariaLabel={dict.alerts.filterAria}
+            value={filter}
+            onChange={setFilter}
+            options={[
+              { value: "all", label: `${dict.alerts.all} · ${alerts.length}` },
+              { value: "unread", label: `${dict.alerts.unread} · ${unreadCount}` },
+            ]}
+          />
+          <button
+            type="button"
+            className={styles.markAll}
+            disabled={unreadCount === 0}
+            onClick={() => markAll(alerts.map((a) => a.id))}
+          >
+            <CheckCheck size={14} strokeWidth={1.5} aria-hidden />
+            {dict.alerts.markAllRead}
+          </button>
+        </div>
+        {visible.length === 0 ? (
+          <p className={styles.allRead}>{dict.alerts.allRead}</p>
+        ) : null}
         {grouped.red.length > 0 ? (
           <section className={styles.group}>
             <h3 className={styles.groupTitle}>{dict.status.crit}</h3>
@@ -86,6 +118,7 @@ export function AlertList({ alerts, keyboard = false }: Props) {
                   alert={alert}
                   message={localizeMessage(locale, alert)}
                   active={alert.id === selectedId}
+                  read={isRead(alert.id)}
                   onSelect={() => setSelectedId(alert.id)}
                   dict={dict}
                 />
@@ -103,6 +136,7 @@ export function AlertList({ alerts, keyboard = false }: Props) {
                   alert={alert}
                   message={localizeMessage(locale, alert)}
                   active={alert.id === selectedId}
+                  read={isRead(alert.id)}
                   onSelect={() => setSelectedId(alert.id)}
                   dict={dict}
                 />
@@ -143,10 +177,25 @@ export function AlertList({ alerts, keyboard = false }: Props) {
                 </dd>
               </div>
             </dl>
-            <Link href={TRIGGER_HREF[selected.trigger]} className={styles.open}>
-              {dict.alerts.openView}
-              <ArrowRight size={16} strokeWidth={1.5} aria-hidden />
-            </Link>
+            <div className={styles.actions}>
+              <Link href={TRIGGER_HREF[selected.trigger]} className={styles.open}>
+                {dict.alerts.openView}
+                <ArrowRight size={16} strokeWidth={1.5} aria-hidden />
+              </Link>
+              <button
+                type="button"
+                className={styles.readToggle}
+                aria-pressed={isRead(selected.id)}
+                onClick={() => setRead(selected.id, !isRead(selected.id))}
+              >
+                {isRead(selected.id) ? (
+                  <Circle size={14} strokeWidth={1.5} aria-hidden />
+                ) : (
+                  <Check size={14} strokeWidth={1.5} aria-hidden />
+                )}
+                {isRead(selected.id) ? dict.alerts.markUnread : dict.alerts.markRead}
+              </button>
+            </div>
             <p className={styles.locked}>
               {dict.alerts.workflowLocked}
               {keyboard ? (
@@ -167,17 +216,20 @@ function AlertRow({
   alert,
   message,
   active,
+  read,
   onSelect,
   dict,
 }: {
   alert: AlertEvent;
   message: string;
   active: boolean;
+  read: boolean;
   onSelect: () => void;
   dict: ReturnType<typeof usePreferences>["dict"];
 }) {
   return (
-    <li>
+    <li className={styles.item} data-read={read ? "true" : undefined}>
+      {read ? null : <span className={styles.unreadDot} aria-label={dict.alerts.unread} />}
       <Row
         selected={active}
         onClick={onSelect}

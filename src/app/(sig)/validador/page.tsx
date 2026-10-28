@@ -41,13 +41,18 @@ async function ValidadorContent({ searchParams }: Props) {
   const params = await searchParams;
   const dict = getDictionary("es");
   const situation = loadSituation();
-  const { runway, terminal } = loadDashboardBundle().infrastructure;
+  const bundle = loadDashboardBundle();
+  const { runway, terminal } = bundle.infrastructure;
+  const { rolling12MonthPassengers: pax, declaredAnnualCapacity: cap } =
+    bundle.capacity;
+  const headroom80 = cap * 0.8 - pax;
+  const headroom90 = cap * 0.9 - pax;
 
   return (
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={`${dict.nav.groupDss} · ${dict.validator.step}`}
+          eyebrow={dict.nav.groupDss}
           title={dict.validator.title}
           question={dict.validator.question}
         />
@@ -60,6 +65,17 @@ async function ValidadorContent({ searchParams }: Props) {
         sources={{
           runway: `${runway.source} · ${formatDateIso(runway.verifiedOn)}`,
           capacity: terminal.source,
+        }}
+        aerodromeSidecar={{
+          utilizationRatio: cap > 0 ? pax / cap : null,
+          headroom80,
+          headroom90,
+          h1Operations: bundle.semesterH1.operations,
+          cargoOperators: bundle.cargo.operators.map((op) => ({
+            label: op.label,
+            warehouses: op.warehouses,
+          })),
+          expansionNote: dict.aerodrome.expansionNote,
         }}
         initial={{
           routeId: params.ruta,

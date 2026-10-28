@@ -1,53 +1,33 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { buildDashboardReport } from "@/application/dashboard";
+import { parseOpsScope } from "@/domain";
+import { operatorColor } from "@/config/operators";
 import { KpiTile } from "@/components/kpi/KpiTile";
 import { WhyPanel } from "@/components/kpi/WhyPanel";
 import { LoadFactorChart } from "@/components/charts/LoadFactorChart";
-import { CompareBars } from "@/components/landing/CompareBars";
+import { OperatorShareBars } from "@/components/charts/OperatorShareBars";
 import { OperatorShareChart } from "@/components/landing/OperatorShareChart";
+import { CompareBars } from "@/components/landing/CompareBars";
 import { AlertList } from "@/components/AlertList";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { ScreenLoading } from "@/components/ui/ScreenLoading";
 import { ProvenanceLine } from "@/components/ui/ProvenanceLine";
 import { WeekPicker } from "@/components/filters/WeekPicker";
-import { formatDateIso } from "@/lib/format";
+import { OpsScopeSwitch } from "@/components/filters/OpsScopeSwitch";
+import { StatusBadge } from "@/components/ui/StatusBadge";
+import { CountUp } from "@/components/motion/CountUp";
+import { formatDateIso, formatInt, formatPct } from "@/lib/format";
 import { getDictionary } from "@/i18n/dictionaries";
 import styles from "@/components/screens/screen.module.css";
+import views from "@/components/screens/views.module.css";
 
 export const metadata = {
   title: "Tablero ejecutivo · MTR Insight",
 };
 
 type Props = {
-  searchParams: Promise<{ semana?: string }>;
-};
-
-const WHY: Record<
-  string,
-  { formula: string; threshold: string; num?: string; den?: string }
-> = {
-  K1: {
-    formula: "Σ embarcados / Σ sillas ofrecidas",
-    threshold: "≥70 % meta · ≥65 % atención · <65 % crítico",
-    num: "Pasajeros embarcados",
-    den: "Sillas ofrecidas",
-  },
-  K2: {
-    formula: "Requisitos con evidencia válida / aplicables",
-    threshold: "Críticos vencidos → crítico · <90 % trimestral → crítico",
-  },
-  K3: {
-    formula: "Pasajeros 12 meses / capacidad anual declarada",
-    threshold: "<80 % meta · ≥80 % atención · ≥90 % crítico",
-  },
-  K4: {
-    formula: "Salidas internacionales MTR / viajeros zona",
-    threshold: "≥20 % meta · ≥10 % atención · <10 % crítico",
-  },
-  K5: {
-    formula: "Críticos a tiempo y validados / esperados",
-    threshold: "≥98 % meta · ≥95 % atención · <95 % crítico",
-  },
+  searchParams: Promise<{ semana?: string; op?: string }>;
 };
 
 /** Demo session is request data, so this screen does not prerender. */
@@ -56,9 +36,7 @@ export const instant = false;
 export default function P1Page({ searchParams }: Props) {
   const dict = getDictionary("es");
   return (
-    <Suspense
-      fallback={<ScreenLoading label={dict.states.loading} />}
-    >
+    <Suspense fallback={<ScreenLoading label={dict.states.loading} />}>
       <P1Content searchParams={searchParams} />
     </Suspense>
   );
@@ -66,8 +44,13 @@ export default function P1Page({ searchParams }: Props) {
 
 async function P1Content({ searchParams }: Props) {
   const params = await searchParams;
-  const report = buildDashboardReport({ weekStart: params.semana });
+  const opsScope = parseOpsScope(params.op);
+  const report = buildDashboardReport({
+    weekStart: params.semana,
+    opsScope,
+  });
   const dict = getDictionary("es");
+  const t = dict.screens.p1;
 
   return (
     <main className={styles.main}>
@@ -77,9 +60,37 @@ async function P1Content({ searchParams }: Props) {
           title={dict.screens.p1.title}
           question={dict.screens.p1.question}
         >
+          <OpsScopeSwitch
+            value={opsScope}
+            nacionalLabel={t.opsNacional}
+            internacionalLabel={t.opsInternacional}
+            ariaLabel={t.opsScopeAria}
+          />
           <WeekPicker weeks={report.weeks} selected={params.semana} />
         </ScreenHeader>
       </div>
+
+      {report.semesterH1 ? (
+        <section className={views.statStrip} aria-label={t.h1Title}>
+          <div className={views.stat}>
+            <span className={views.statLabel}>{t.h1Title}</span>
+            <span className={views.hint}>{report.semesterH1.sourceLabel}</span>
+            <span className={views.hint}>{t.h1Note}</span>
+          </div>
+          <div className={views.stat}>
+            <span className={views.statLabel}>{t.h1Pax}</span>
+            <span className={views.statValue}>
+              <CountUp value={report.semesterH1.passengers} mode="int" />
+            </span>
+          </div>
+          <div className={views.stat}>
+            <span className={views.statLabel}>{t.h1Ops}</span>
+            <span className={views.statValue}>
+              <CountUp value={report.semesterH1.operations} mode="int" />
+            </span>
+          </div>
+        </section>
+      ) : null}
 
       <section className={styles.kpiRow} aria-label={dict.kpisTitle}>
         {report.tiles.map((tile, i) => (
@@ -93,12 +104,61 @@ async function P1Content({ searchParams }: Props) {
         ))}
       </section>
 
+      {opsScope === "nacional" ? (
+        <p className={views.hint} style={{ paddingInline: "var(--s-4)" }}>
+          {t.k4ContextNote}
+        </p>
+      ) : null}
+
       <div className={styles.split}>
         <div className={styles.splitPrimary}>
           <LoadFactorChart
             series={report.series}
             title={dict.landing.lfChartTitle}
+            hint={
+              opsScope === "nacional" ? t.lfHintNacional : t.lfHintInternacional
+            }
           />
+          {opsScope === "nacional" && report.routeRows.length > 0 ? (
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitleSm}>{t.routeTableTitle}</h2>
+              <div className={styles.tableWrap}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>{t.routeCol}</th>
+                      <th>{t.cityCol}</th>
+                      <th>{t.lfCol}</th>
+                      <th>{t.paxCol}</th>
+                      <th>{t.seatsCol}</th>
+                      <th>{t.statusCol}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {report.routeRows.map((row) => (
+                      <tr key={row.route}>
+                        <td>
+                          <Link
+                            href={`/p2?op=nacional&ruta=${encodeURIComponent(row.route)}`}
+                            className={styles.tableLink}
+                          >
+                            {row.route}
+                          </Link>
+                        </td>
+                        <td>{row.city}</td>
+                        <td className="num">{formatPct(row.value)}</td>
+                        <td className="num">{formatInt(row.passengers)}</td>
+                        <td className="num">{formatInt(row.seats)}</td>
+                        <td>
+                          <StatusBadge status={row.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
         </div>
         <div className={styles.splitSecondary}>
           <P1SideAnalytics
@@ -106,23 +166,26 @@ async function P1Content({ searchParams }: Props) {
             series={report.series}
             shareTitle={dict.landing.shareTitle}
             compareTitle={dict.landing.compareTitle}
+            useBars={opsScope === "nacional"}
           />
-          {report.tiles[0] && WHY.K1 ? (
+          {report.tiles[0] ? (
             <WhyPanel
               tile={report.tiles[0]}
-              formula={WHY.K1.formula}
-              numerator={WHY.K1.num}
-              denominator={WHY.K1.den}
-              thresholdBand={WHY.K1.threshold}
+              formula={t.whyFormula}
+              numerator={t.whyNum}
+              denominator={t.whyDen}
+              thresholdBand={t.whyThreshold}
               ruleVersion="thresholds-1.0"
               source={report.meta.fuente}
               validated={report.lastValidatedLabel}
             />
           ) : null}
-          <RequirementsPanel
-            items={report.criticalRequirements}
-            copaNote={report.copaPermitStatus}
-          />
+          {opsScope === "internacional" ? (
+            <RequirementsPanel
+              items={report.criticalRequirements}
+              copaNote={report.copaPermitStatus}
+            />
+          ) : null}
         </div>
       </div>
 
@@ -149,21 +212,23 @@ function P1SideAnalytics({
   series,
   shareTitle,
   compareTitle,
+  useBars,
 }: {
   tiles: ReturnType<typeof buildDashboardReport>["tiles"];
   series: ReturnType<typeof buildDashboardReport>["series"];
   shareTitle: string;
   compareTitle: string;
+  useBars: boolean;
 }) {
   const paxByOp = new Map<string, number>();
   for (const row of series) {
     paxByOp.set(row.operator, (paxByOp.get(row.operator) ?? 0) + row.passengers);
   }
-  const slices = [...paxByOp.entries()].map(([label, value], i) => ({
+  const slices = [...paxByOp.entries()].map(([label, value]) => ({
     id: label,
     label,
     value,
-    color: i === 0 ? "var(--series-1)" : "var(--series-2)",
+    color: operatorColor(label),
   }));
   const compareRows = tiles.slice(0, 4).map((tile, i) => ({
     id: tile.kpiId,
@@ -176,7 +241,11 @@ function P1SideAnalytics({
   return (
     <div className={styles.analyticsStack}>
       {slices.length > 0 ? (
-        <OperatorShareChart slices={slices} title={shareTitle} />
+        useBars || slices.length > 4 ? (
+          <OperatorShareBars bars={slices} title={shareTitle} />
+        ) : (
+          <OperatorShareChart slices={slices} title={shareTitle} />
+        )
       ) : null}
       <CompareBars title={compareTitle} rows={compareRows} />
     </div>
@@ -194,7 +263,7 @@ function RequirementsPanel({
     critical: boolean;
     satisfied: boolean;
   }[];
-  copaNote: string;
+  copaNote: string | null;
 }) {
   const dict = getDictionary("es");
   const upcoming = [...items]
@@ -221,7 +290,7 @@ function RequirementsPanel({
           </li>
         ))}
       </ul>
-      <p className={styles.disclaimer}>{copaNote}</p>
+      {copaNote ? <p className={styles.disclaimer}>{copaNote}</p> : null}
     </div>
   );
 }

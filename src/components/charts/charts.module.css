@@ -30,7 +30,30 @@
 .hint {
   margin-bottom: 12px;
   font-size: 12px;
-  color: var(--fg-muted);
+  color: var(--fg-3);
+}
+
+.legendInline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--fg-2);
+}
+
+.legendInline li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendSwatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
 }
 
 .svg {

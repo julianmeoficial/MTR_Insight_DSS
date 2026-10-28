@@ -18,7 +18,7 @@ export default function AdminPage() {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={`${dict.nav.groupGov} · ${dict.admin.step}`}
+          eyebrow={dict.nav.groupGov}
           title={dict.admin.title}
           question={dict.admin.question}
         />

@@ -216,6 +216,7 @@
 .headlineCell dd {
   margin-block-start: var(--s-2);
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-xl);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -381,6 +382,7 @@
 
 .summaryValue {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-2xl);
   font-weight: 400;
   letter-spacing: -0.03em;

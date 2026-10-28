@@ -77,7 +77,7 @@ export function BreakEvenSimulator() {
           Equilibrio por aeronave
         </h2>
         <p className="text-sm text-zinc-600">
-          Modelo aeroportuario Paso 8: LF<sub>eq</sub> = costo por vuelo ÷
+          Modelo aeroportuario: LF<sub>eq</sub> = costo por vuelo ÷
           (ingreso medio por pax × sillas). No usa tarifa de boleto de aerolínea.
         </p>
       </header>

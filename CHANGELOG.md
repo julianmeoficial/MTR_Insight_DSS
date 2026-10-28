@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Aerodrome 3D rebuilt: to-scale runways, aprons, stands, cargo docks, tower, lights, sign tags, camera presets, loading and fallback states
+- P5 future route planner (national/international, current/expansion), P2 national/international switch, alert read marks
+- Weekly national demo data with seasonality; 2045 planning with the full aircraft catalog
 - Expansion model: runway 14L/32R and Terminal 2 (simulated), infrastructure and terminal selectors in `/validador`, A350 requirements (width, ACN/PCN, CAT, ARFF, code letter), CDG/NRT/ICN routes
 - Aerodrome chart, split-flap codes, PAPI route loaders, centerline nav indicator and grouped account picker
 - P6/Escenarios trigger years for T1 vs T1 + T2
@@ -27,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Fixed: sections shrinking inside the scroll column (Situación actual list overlapping the next section), page-level scroll from screen-reader helpers, separator tightening applied to non-monospace figures
 - P4, P5 and P7 rebuilt on shared token-only view styles (no inline styles); KPI headline component
 - Screen titles follow DESIGN.md §3 (24/600) with sentence-case breadcrumbs instead of uppercase eyebrows
 - Removed count-up animation everywhere (DESIGN.md §1.3) and the colored bar on the P2 KPI hero

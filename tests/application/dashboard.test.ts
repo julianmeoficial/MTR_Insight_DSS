@@ -39,6 +39,18 @@ describe("buildDashboardReport", () => {
     expect(report.weeks.length).toBeGreaterThanOrEqual(8);
     expect(report.meta.version).toBe("0.1.0");
   });
+
+  it("scopes national vs international without mixing routes", () => {
+    const national = buildDashboardReport({ opsScope: "nacional" });
+    const intl = buildDashboardReport({ opsScope: "internacional" });
+    expect(national.opsScope).toBe("nacional");
+    expect(national.semesterH1?.passengers).toBe(801_353);
+    expect(national.scopeRoutes.every((r) => r.id !== "MTR-PTY")).toBe(true);
+    expect(national.series.every((s) => s.operator !== "Copa")).toBe(true);
+    expect(intl.semesterH1).toBeNull();
+    expect(intl.scopeRoutes.map((r) => r.id)).toEqual(["MTR-PTY"]);
+    expect(intl.copaPermitStatus).toBeTruthy();
+  });
 });
 
 describe("getFilteredK1Hero", () => {

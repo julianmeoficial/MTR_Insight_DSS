@@ -7,6 +7,11 @@
   min-height: 100%;
 }
 
+/* The content column scrolls; sections keep their own height. */
+.main > * {
+  flex-shrink: 0;
+}
+
 .lockedPanel {
   margin-block-start: var(--s-6);
   max-inline-size: 480px;
@@ -271,6 +276,17 @@
 
 .crit {
   color: var(--crit);
+}
+
+.tableLink {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-color: var(--line-strong, var(--line));
+}
+
+.tableLink:hover {
+  color: var(--accent);
 }
 
 .tableWrap {

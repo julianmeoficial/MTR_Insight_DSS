@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { CountUp } from "@/components/motion/CountUp";
 import {
-  REFERENCE_AIRCRAFT,
   FORECAST_RATES,
   minPassengersForRatio,
   projectPassengers,
@@ -11,6 +10,7 @@ import {
   buildFanSeries,
 } from "@/domain/dss";
 import { formatInt } from "@/lib/format";
+import { AIRCRAFT_CATALOG, type AircraftId } from "@/config/aircraft";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
 import styles from "./DssWorkbench.module.css";
@@ -26,6 +26,9 @@ type Props = {
 
 type CapacityMode = "t1" | "t1t2";
 
+/** Passenger aircraft only; the freighter has no per-passenger threshold. */
+const PASSENGER = AIRCRAFT_CATALOG.filter((a) => a.mode === "passenger");
+
 export function DssWorkbench({
   baselinePassengers,
   baseYear,
@@ -37,10 +40,10 @@ export function DssWorkbench({
   const [mode, setMode] = useState<CapacityMode>("t1");
   const capacity =
     mode === "t1t2" && expansionCapacity ? t1Capacity + expansionCapacity : t1Capacity;
-  const [aircraftIdx, setAircraftIdx] = useState(0);
+  const [aircraftId, setAircraftId] = useState<AircraftId>("E145");
   const [ratio, setRatio] = useState(0.7);
   const [band, setBand] = useState<"low" | "base" | "high">("base");
-  const aircraft = REFERENCE_AIRCRAFT[aircraftIdx]!;
+  const aircraft = PASSENGER.find((a) => a.id === aircraftId) ?? PASSENGER[0]!;
   const rate = FORECAST_RATES[band];
 
   const minPax = useMemo(
@@ -97,14 +100,17 @@ export function DssWorkbench({
           Aeronave
           <select
             className={styles.select}
-            value={aircraftIdx}
-            onChange={(e) => setAircraftIdx(Number(e.target.value))}
+            value={aircraftId}
+            onChange={(e) => setAircraftId(e.target.value as AircraftId)}
           >
-            {REFERENCE_AIRCRAFT.map((ac, i) => (
-              <option key={ac.id} value={i}>
-                {ac.label} ({ac.seats}
-                {ac.assumption ? ` · ${ac.assumption}` : ""})
-              </option>
+            {(["mtr_ops", "expansion"] as const).map((group) => (
+              <optgroup key={group} label={tc.groups[group]}>
+                {PASSENGER.filter((a) => a.group === group).map((ac) => (
+                  <option key={ac.id} value={ac.id}>
+                    {ac.label} · {ac.seats}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </label>
@@ -134,26 +140,19 @@ export function DssWorkbench({
             />
           </div>
         ) : null}
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>Escenario de crecimiento</legend>
-          {(
-            [
-              ["low", "2,5 %"],
-              ["base", "3,9 %"],
-              ["high", "5,5 %"],
-            ] as const
-          ).map(([id, label]) => (
-            <label key={id} className={styles.radio}>
-              <input
-                type="radio"
-                name="band"
-                checked={band === id}
-                onChange={() => setBand(id)}
-              />
-              {label}
-            </label>
-          ))}
-        </fieldset>
+        <div className={styles.label}>
+          {tc.growth}
+          <SegmentedControl<"low" | "base" | "high">
+            ariaLabel={tc.growth}
+            value={band}
+            onChange={setBand}
+            options={[
+              { value: "low", label: "2,5\u00A0%" },
+              { value: "base", label: "3,9\u00A0%" },
+              { value: "high", label: "5,5\u00A0%" },
+            ]}
+          />
+        </div>
       </div>
 
       <div className={styles.outputs}>
@@ -182,6 +181,36 @@ export function DssWorkbench({
             Montería. Capacidad <span className="num">{formatInt(capacity)}</span>
             .
           </p>
+        </div>
+
+        <div className={styles.fan}>
+          <h3 className={styles.title}>{tc.fleetTitle}</h3>
+          <table className={styles.triggerTable}>
+            <thead>
+              <tr>
+                <th scope="col">{tc.aircraft}</th>
+                <th scope="col">{tc.seats}</th>
+                <th scope="col">{tc.minPax}</th>
+                <th scope="col">{tc.weeklyPax}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PASSENGER.map((ac) => (
+                <tr
+                  key={ac.id}
+                  data-active={ac.id === aircraft.id ? "true" : undefined}
+                  onClick={() => setAircraftId(ac.id)}
+                  className={styles.clickRow}
+                >
+                  <th scope="row">{ac.label}</th>
+                  <td>{formatInt(ac.seats)}</td>
+                  <td>{formatInt(minPassengersForRatio(ac.seats, ratio))}</td>
+                  <td>{formatInt(minPassengersForRatio(ac.seats, ratio) * 3)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className={styles.fanHint}>{tc.fleetNote}</p>
         </div>
 
         <div className={styles.fan}>

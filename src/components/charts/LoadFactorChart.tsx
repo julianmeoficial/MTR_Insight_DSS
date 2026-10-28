@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { LoadFactorSeriesPoint } from "@/application/dashboard";
+import { operatorColor } from "@/config/operators";
 import { formatPct } from "@/lib/format";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import styles from "./charts.module.css";
@@ -10,12 +11,14 @@ type Props = {
   series: LoadFactorSeriesPoint[];
   breakEvenRatio?: number;
   title?: string;
+  hint?: string;
 };
 
 export function LoadFactorChart({
   series,
   breakEvenRatio = 0.7,
   title = "Load factor semanal por operador",
+  hint,
 }: Props) {
   const [showTable, setShowTable] = useState(false);
 
@@ -28,15 +31,22 @@ export function LoadFactorChart({
   }, [series]);
 
   const byOp = useMemo(() => {
-    const ops = ["Satena", "Copa"] as const;
+    const ops = [...new Set(series.map((s) => s.operator))].sort();
     return ops.map((op) => ({
       op,
-      color: op === "Satena" ? "var(--series-2)" : "var(--series-1)",
+      color: operatorColor(op),
       points: weeks.map((w) => {
-        const row = series.find(
+        const rows = series.filter(
           (s) => s.weekStart === w.weekStart && s.operator === op,
         );
-        return row?.value ?? null;
+        if (rows.length === 0) return null;
+        let pax = 0;
+        let seats = 0;
+        for (const r of rows) {
+          pax += r.passengers;
+          seats += r.seats;
+        }
+        return seats > 0 ? pax / seats : null;
       }),
     }));
   }, [series, weeks]);
@@ -76,10 +86,19 @@ export function LoadFactorChart({
           {showTable ? "Ocultar tabla" : "Ver tabla"}
         </button>
       </div>
-      <p className={styles.hint}>
-        Satena (ocre) y Copa (azul) frente a la meta 70 %. Ventana semanal de
-        demostración.
-      </p>
+      {hint ? <p className={styles.hint}>{hint}</p> : null}
+      <ul className={styles.legendInline} aria-label="Operadores">
+        {byOp.map((s) => (
+          <li key={s.op}>
+            <span
+              className={styles.legendSwatch}
+              style={{ background: s.color }}
+              aria-hidden
+            />
+            {s.op}
+          </li>
+        ))}
+      </ul>
 
       {!showTable ? (
         <svg
@@ -113,8 +132,9 @@ export function LoadFactorChart({
             x2={w - pad.r}
             y1={yAt(breakEvenRatio)}
             y2={yAt(breakEvenRatio)}
-            stroke="var(--fg-muted)"
+            stroke="var(--fg-3)"
             strokeWidth="1.5"
+            strokeDasharray="4 4"
           />
           <text
             x={pad.l}

@@ -78,6 +78,72 @@ export type EtlLogFixture = {
   }[];
 };
 
+export type RouteCatalogFixture = {
+  dataset: string;
+  version: string;
+  asOfDate: string;
+  source: string;
+  routes: {
+    id: string;
+    origin: string;
+    destination: string;
+    city: string;
+    airportName: string;
+    international: boolean;
+    segment: string;
+    stage: string;
+    operators: string[];
+    evidence: { source: string; date: string | null; confidence: string };
+    operatorEvidenceNote?: string;
+  }[];
+};
+
+export type AirlineCatalogFixture = {
+  dataset: string;
+  version: string;
+  asOfDate: string;
+  source: string;
+  airlines: {
+    id: string;
+    label: string;
+    stage: string;
+    seriesToken: string;
+    website: string | null;
+    evidence: { source: string; date: string | null; confidence: string };
+    note?: string;
+  }[];
+};
+
+export type CargoFixture = {
+  dataset: string;
+  version: string;
+  asOfDate: string;
+  source: string;
+  note: string;
+  operators: {
+    id: string;
+    label: string;
+    warehouses: string[];
+    website: string;
+    evidence: { source: string; date: string | null; confidence: string };
+  }[];
+};
+
+export type SemesterH1Fixture = {
+  dataset: string;
+  version: string;
+  periodStart: string;
+  periodEnd: string;
+  publishedOn: string;
+  passengers: number;
+  operations: number;
+  passengerScope: string;
+  verificationStatus: string;
+  source: string;
+  sourceLabel: string;
+  note: string;
+};
+
 export type DashboardBundle = {
   meta: DashboardMeta;
   flights: FlightRecord[];
@@ -90,6 +156,10 @@ export type DashboardBundle = {
   infrastructure: InfrastructureFixture;
   competitors: CompetitorsFixture;
   etlLog: EtlLogFixture;
+  routes: RouteCatalogFixture;
+  airlines: AirlineCatalogFixture;
+  cargo: CargoFixture;
+  semesterH1: SemesterH1Fixture;
 };
 
 export function loadDashboardBundle(): DashboardBundle {
@@ -106,6 +176,10 @@ export function loadDashboardBundle(): DashboardBundle {
   const infrastructure = readJson<InfrastructureFixture>("infrastructure.json");
   const competitors = readJson<CompetitorsFixture>("competitors.json");
   const etlLog = readJson<EtlLogFixture>("etl-log.json");
+  const routes = readJson<RouteCatalogFixture>("routes.json");
+  const airlines = readJson<AirlineCatalogFixture>("airlines.json");
+  const cargo = readJson<CargoFixture>("cargo.json");
+  const semesterH1 = readJson<SemesterH1Fixture>("semester-h1-2026.json");
 
   return {
     meta,
@@ -119,6 +193,10 @@ export function loadDashboardBundle(): DashboardBundle {
     infrastructure,
     competitors,
     etlLog,
+    routes,
+    airlines,
+    cargo,
+    semesterH1,
   };
 }
 

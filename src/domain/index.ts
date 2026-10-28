@@ -48,3 +48,10 @@ export type {
   Projection2045Result,
   ScenarioProjection,
 } from "@/domain/dss";
+
+export {
+  flightsForScope,
+  parseOpsScope,
+  routeIdsForScope,
+} from "@/domain/ops-scope";
+export type { RouteCatalogEntry } from "@/domain/ops-scope";

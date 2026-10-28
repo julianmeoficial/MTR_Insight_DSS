@@ -5,30 +5,44 @@ import styles from "./filters.module.css";
 
 type Week = { weekStart: string; label: string };
 
+type RouteOption = { id: string; label: string };
+type AircraftOption = { id: string; label: string };
+
 type Props = {
   weeks: Week[];
   selectedWeek?: string;
   selectedOperator?: string;
   selectedAircraft?: string;
+  selectedRoute?: string;
   operators?: readonly string[];
+  routes?: readonly RouteOption[];
+  aircraft?: readonly AircraftOption[];
   operatorLocked?: boolean;
+  allRoutesLabel?: string;
+  allAircraftLabel?: string;
 };
 
-const OPERATORS = ["Todos", "Satena", "Copa"] as const;
-const AIRCRAFT = [
+const DEFAULT_AIRCRAFT: readonly AircraftOption[] = [
   { id: "Todos", label: "Todas" },
   { id: "E145", label: "ERJ-145" },
   { id: "B738", label: "B737 (supuesto)" },
-  { id: "J32", label: "J32 (referencia)" },
-] as const;
+  { id: "A320", label: "A320" },
+  { id: "A20N", label: "A320neo" },
+  { id: "AT72", label: "ATR 72 (supuesto)" },
+];
 
 export function RouteFilterBar({
   weeks,
   selectedWeek,
   selectedOperator = "Todos",
   selectedAircraft = "Todos",
-  operators = OPERATORS,
+  selectedRoute = "Todas",
+  operators = ["Todos", "Satena", "Copa"],
+  routes,
+  aircraft = DEFAULT_AIRCRAFT,
   operatorLocked = false,
+  allRoutesLabel = "Todas",
+  allAircraftLabel = "Todas",
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -36,12 +50,28 @@ export function RouteFilterBar({
 
   function update(key: string, value: string) {
     const next = new URLSearchParams(searchParams.toString());
-    if (value === "Todos" || !value) next.delete(key);
-    else next.set(key, value);
+    if (
+      value === "Todos" ||
+      value === "Todas" ||
+      value === allRoutesLabel ||
+      value === allAircraftLabel ||
+      !value
+    ) {
+      next.delete(key);
+    } else {
+      next.set(key, value);
+    }
     router.push(`${pathname}?${next.toString()}`);
   }
 
   const weekValue = selectedWeek ?? weeks[weeks.length - 1]?.weekStart ?? "";
+  const aircraftOptions =
+    aircraft[0]?.id === "Todos"
+      ? [
+          { id: "Todos", label: allAircraftLabel },
+          ...aircraft.slice(1),
+        ]
+      : [{ id: "Todos", label: allAircraftLabel }, ...aircraft];
 
   return (
     <div className={styles.bar} role="group" aria-label="Filtros de ruta">
@@ -59,6 +89,23 @@ export function RouteFilterBar({
           ))}
         </select>
       </label>
+      {routes && routes.length > 0 ? (
+        <label className={styles.label}>
+          Ruta
+          <select
+            className={styles.select}
+            value={selectedRoute}
+            onChange={(e) => update("ruta", e.target.value)}
+          >
+            <option value="Todas">{allRoutesLabel}</option>
+            {routes.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
       <label className={styles.label}>
         Operador
         <select
@@ -81,7 +128,7 @@ export function RouteFilterBar({
           value={selectedAircraft}
           onChange={(e) => update("aeronave", e.target.value)}
         >
-          {AIRCRAFT.map((ac) => (
+          {aircraftOptions.map((ac) => (
             <option key={ac.id} value={ac.id}>
               {ac.label}
             </option>

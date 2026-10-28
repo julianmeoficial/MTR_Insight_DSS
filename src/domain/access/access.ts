@@ -6,6 +6,11 @@ import {
   type OperatorScope,
   type RoleId,
 } from "@/config/access-matrix";
+import {
+  INTERNATIONAL_OPERATORS,
+  NATIONAL_OPERATORS,
+  type OpsScope,
+} from "@/config/operators";
 
 export const SCREEN_PATH: Record<MatrixScreen, string> = {
   P1: "/p1",
@@ -19,8 +24,14 @@ export const SCREEN_PATH: Record<MatrixScreen, string> = {
 
 const HOME_ORDER: readonly MatrixScreen[] = MATRIX_SCREENS;
 
-const OPERATOR_FILTERS = ["Todos", "Satena", "Copa"] as const;
-export type OperatorFilter = (typeof OPERATOR_FILTERS)[number];
+/** "Todos" plus any airline id present in fixtures. */
+export type OperatorFilter = string;
+
+const DEFAULT_FILTERS: readonly string[] = [
+  "Todos",
+  ...NATIONAL_OPERATORS,
+  "Copa",
+];
 
 export function isRoleId(value: string): value is RoleId {
   return (ROLE_IDS as readonly string[]).includes(value);
@@ -89,19 +100,30 @@ export function canExport(role: RoleId): boolean {
   return ACCESS_MATRIX[role].canExport;
 }
 
-export function visibleOperators(role: RoleId): readonly OperatorFilter[] {
+export function visibleOperators(
+  role: RoleId,
+  opsScope: OpsScope = "nacional",
+): readonly OperatorFilter[] {
   const scope = operatorScope(role);
   if (scope) return [scope];
-  return OPERATOR_FILTERS;
+  const ops =
+    opsScope === "nacional" ? NATIONAL_OPERATORS : INTERNATIONAL_OPERATORS;
+  return ["Todos", ...ops];
 }
 
 /** Query value used on P2. Airline accounts cannot widen the operator filter. */
 export function resolveOperatorFilter(
   role: RoleId,
   requested: string | undefined,
+  opsScope: OpsScope = "nacional",
 ): OperatorFilter {
   const scope = operatorScope(role);
   if (scope) return scope;
-  if (requested === "Satena" || requested === "Copa") return requested;
+  const allowed = visibleOperators(role, opsScope);
+  if (requested && allowed.includes(requested)) return requested;
   return "Todos";
+}
+
+export function defaultOperatorFilters(): readonly string[] {
+  return DEFAULT_FILTERS;
 }
