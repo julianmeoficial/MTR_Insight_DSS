@@ -8,8 +8,9 @@ import {
   StatusPill,
   trafficLightToTone,
 } from "@/components/ui/StatusPill";
-import { CountUp } from "@/components/motion/CountUp";
 import { formatPct, formatPp } from "@/lib/format";
+import { CountUp } from "@/components/motion/CountUp";
+import { SettleReveal } from "@/components/motion/SettleReveal";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { cn } from "@/lib/cn";
 import styles from "./KpiTile.module.css";
@@ -20,6 +21,8 @@ type Props = {
   featured?: boolean;
   /** Source and validation line (fixture provenance). */
   provenanceMeta?: string;
+  /** Extra seconds before counting (for example while a hero frame lands). */
+  countDelay?: number;
 };
 
 function statusCopy(
@@ -38,6 +41,7 @@ export function KpiTile({
   index = 0,
   featured = false,
   provenanceMeta,
+  countDelay = 0,
 }: Props) {
   const reduced = usePrefersReducedMotion();
   const { dict } = usePreferences();
@@ -66,13 +70,16 @@ export function KpiTile({
     <>
       <div className={styles.head}>
         <p className={styles.label}>{tile.title}</p>
-        <StatusPill tone={trafficLightToTone(tile.status)} label={statusLabel} />
+        <SettleReveal delay={countDelay + index * 0.04}>
+          <StatusPill tone={trafficLightToTone(tile.status)} label={statusLabel} />
+        </SettleReveal>
       </div>
       <p className={cn("num", styles.valueRow, featured && styles.valueFeatured)}>
         {hasValue ? (
           <CountUp
             value={tile.value}
             mode="pctCore"
+            delay={countDelay + index * 0.04}
             className={styles.value}
           />
         ) : (

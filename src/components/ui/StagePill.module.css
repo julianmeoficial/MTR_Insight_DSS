@@ -1,0 +1,37 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  min-height: var(--s-5);
+  padding-inline: var(--s-2);
+  border-radius: var(--r-pill);
+  font-size: var(--t-xs);
+  font-weight: 510;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--fg-2);
+  background: var(--surface-3);
+}
+
+.pill[data-stage="operating"],
+.pill[data-stage="confirmed"] {
+  color: var(--ok);
+  background: color-mix(in oklab, var(--ok) 14%, transparent);
+}
+
+.pill[data-stage="announced"],
+.pill[data-stage="negotiating"] {
+  color: var(--info);
+  background: color-mix(in oklab, var(--info) 14%, transparent);
+}
+
+.pill[data-stage="to_verify"] {
+  color: var(--warn);
+  background: color-mix(in oklab, var(--warn) 14%, transparent);
+}
+
+.icon {
+  inline-size: var(--s-4);
+  block-size: var(--s-4);
+  flex-shrink: 0;
+}

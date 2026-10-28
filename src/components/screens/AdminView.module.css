@@ -1,0 +1,87 @@
+.version {
+  font-size: var(--t-md);
+}
+
+.center {
+  text-align: center;
+}
+
+.center svg {
+  display: inline-block;
+}
+
+.on {
+  color: var(--fg);
+}
+
+.off {
+  color: var(--fg-4);
+}
+
+.twoUp {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .twoUp {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .twoUp > :first-child {
+    box-shadow: inset -1px 0 0 var(--line);
+  }
+}
+
+.policies {
+  display: flex;
+  flex-direction: column;
+}
+
+.policy {
+  padding-block: var(--s-3);
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.policy dt {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+}
+
+.policy dd {
+  margin-block-start: var(--s-1);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.conflict {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  padding: var(--s-4);
+  border-radius: var(--r-8);
+  background: var(--surface-2);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line);
+}
+
+.rules {
+  display: flex;
+  flex-direction: column;
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: var(--s-12) 1fr;
+  align-items: baseline;
+  gap: var(--s-3);
+  min-block-size: var(--s-8);
+  padding-block: var(--s-2);
+  color: var(--fg-2);
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.rule:last-child {
+  box-shadow: none;
+}

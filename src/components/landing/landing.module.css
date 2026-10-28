@@ -82,7 +82,8 @@
 }
 
 .wordmark {
-  font-family: var(--ff-sans);
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-normal);
   font-size: var(--t-md);
   font-weight: 590;
   letter-spacing: -0.01em;
@@ -267,10 +268,11 @@
 .heroTitle {
   margin-top: var(--s-4);
   max-width: 12em;
-  font-family: var(--ff-sans);
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-normal);
   font-size: var(--t-hero);
   font-weight: 590;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.035em;
   line-height: 1.02;
   color: var(--fg);
   overflow: visible;
@@ -389,9 +391,19 @@
 
 .factValue {
   margin-top: var(--s-2);
+  font-family: var(--ff-mono);
   font-size: var(--t-3xl);
-  font-weight: 590;
-  letter-spacing: -0.025em;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.factUnit {
+  margin-inline-start: 0.25em;
+  font-family: var(--ff-sans);
+  font-size: 0.5em;
+  font-weight: 510;
+  letter-spacing: 0;
+  color: var(--fg-3);
 }
 
 .factMeta {
@@ -452,10 +464,11 @@
 
 .chapterTitle {
   margin-top: var(--s-4);
-  font-family: var(--ff-sans);
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-wide);
   font-size: var(--t-4xl);
   font-weight: 590;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
   line-height: 1.05;
   background: linear-gradient(
     180deg,
@@ -727,4 +740,51 @@
 .footerMeta {
   font-size: var(--t-mini);
   color: var(--fg-3);
+}
+
+/* Hero copy entrance (DESIGN.md §6.3), CSS so it does not wait for JS */
+@media (prefers-reduced-motion: no-preference) {
+  .wayfindingLoc[data-hero-tag],
+  .heroTitle[data-h1],
+  .heroSub[data-hero-sub],
+  .ctaLg[data-hero-cta],
+  .ctaGhost[data-hero-cta] {
+    animation: heroRise var(--d-5) var(--e-out) both;
+  }
+
+  .wayfindingLoc[data-hero-tag] {
+    animation-duration: 500ms;
+    animation-delay: 100ms;
+  }
+
+  .heroTitle[data-h1] {
+    animation-duration: 900ms;
+    animation-delay: 160ms;
+  }
+
+  .heroSub[data-hero-sub] {
+    animation-duration: 600ms;
+    animation-delay: 420ms;
+  }
+
+  .ctaLg[data-hero-cta] {
+    animation-duration: 600ms;
+    animation-delay: 480ms;
+  }
+
+  .ctaGhost[data-hero-cta] {
+    animation-duration: 600ms;
+    animation-delay: 540ms;
+  }
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--s-3));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

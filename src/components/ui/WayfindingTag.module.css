@@ -4,9 +4,11 @@
   min-height: calc(var(--s-5) + var(--s-1));
   padding-inline: var(--s-2);
   border-radius: var(--r-2);
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-condensed);
   font-size: var(--t-mini);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1;
 }

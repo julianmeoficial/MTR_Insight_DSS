@@ -17,11 +17,12 @@
   Figma for specs and handoff.
 - Styling: CSS Modules + global tokens only. Tailwind, CSS-in-JS, utility
   classes and UI kits (shadcn, MUI, Chakra, etc.) are banned.
-- Fonts: next/font/google, Inter (variable, opsz, features cv11 ss01 ss03)
-  + JetBrains Mono for codes and kbd (DESIGN.md §3).
+- Fonts: next/font/google. Archivo (titles, wdth axis), IBM Plex Sans (text
+  and UI), B612 Mono (KPIs, codes, dates) per Notion design philosophy
+  (DESIGN.md §3).
 - Motion: gsap >= 3.13 (ScrollTrigger, SplitText, DrawSVG are included and
-  free) + @gsap/react; motion/react for SIG layout; three for the landing
-  scene only. Icons: lucide-react. Confirm in package.json; ask before installing.
+  free) + @gsap/react on landing and SIG (ScrollTrigger landing only);
+  motion/react for SIG layout; three for the landing scene only. Icons: lucide-react. Confirm in package.json; ask before installing.
 - Landing is dark-only. SIG is dark by default with light support.
 - DSS features marked as needing approval in DESIGN.md §9 require explicit
   approval before implementation.
@@ -159,6 +160,10 @@
 - Numbers: tabular-nums, locale formatting via Intl, unit visually smaller.
 - Animate transform/opacity only. GSAP via useGSAP with scope and cleanup;
   gsap.matchMedia for reduced motion. ScrollTrigger only on the landing.
+- Count-up is allowed per DESIGN.md §6.4: final value in HTML and for
+  screen readers, status shown only once the number settles, no loops.
+- No purple or violet anywhere (series included); no glassmorphism outside
+  the nav blur.
 - Three.js: single lazy canvas (dynamic import, ssr:false), paused offscreen,
   DPR <= 1.5, static poster fallback. Never encode KPI data in 3D.
 - States for every data view: loading (skeleton), empty, error, no-data,
@@ -168,8 +173,9 @@
   alternatives, prefers-reduced-motion.
 
 ## UI quality gate (required before calling UI done)
-- Verify rendered fonts in DevTools (Computed > Rendered Fonts). If any text
-  renders in Times/serif, the task is not done.
+- Verify rendered fonts in DevTools (Computed > Rendered Fonts): Archivo,
+  IBM Plex Sans, B612 Mono. If any text renders in Times/serif, the task is
+  not done.
 - Check light and dark at 1440, 1024 and 390 px. No horizontal scroll.
 - No mixed-language strings on a screen. No Next.js dev overlay errors.
 - Compare against DESIGN.md §14 checklist and approved Figma.

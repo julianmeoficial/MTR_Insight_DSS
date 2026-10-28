@@ -7,6 +7,18 @@ import type {
   QualityRecord,
   RequirementRecord,
 } from "@/domain/types";
+import type {
+  AirportConstraints,
+  AirportRef,
+  ErpmDataItem,
+  EvidenceStage,
+  Modernization,
+  RouteOpportunity,
+  RunwayRef,
+  SourceRef,
+  TerminalRef,
+} from "@/domain/erpm";
+import { AIRCRAFT_CATALOG } from "@/config/aircraft";
 
 const DIR = path.join(process.cwd(), "data", "fixtures", "dashboard");
 
@@ -107,5 +119,66 @@ export function loadDashboardBundle(): DashboardBundle {
     infrastructure,
     competitors,
     etlLog,
+  };
+}
+
+export type SituationBundle = {
+  dataset: string;
+  version: string;
+  cutoffDate: string;
+  origin: AirportRef;
+  airports: AirportRef[];
+  routes: RouteOpportunity[];
+  modernizations: Modernization[];
+  erpmData: ErpmDataItem[];
+  infrastructure: {
+    elevationM: number | null;
+    arffCategory: AirportConstraints["arffCategory"];
+    arffEvidence: SourceRef;
+    runways: RunwayRef[];
+    terminals: TerminalRef[];
+  };
+  constraints: AirportConstraints;
+};
+
+const STAGES: readonly EvidenceStage[] = [
+  "operating",
+  "confirmed",
+  "announced",
+  "negotiating",
+  "proposed",
+  "to_verify",
+];
+
+/** Paso 13 baseline + airport constraints for the Paso 14 validator. */
+export function loadSituation(): SituationBundle {
+  const file = readJson<Omit<SituationBundle, "constraints">>("situation.json");
+  const known = new Set(AIRCRAFT_CATALOG.map((a) => a.id));
+  const iatas = new Set(file.airports.map((a) => a.iata));
+  for (const route of file.routes) {
+    if (!STAGES.includes(route.stage)) {
+      throw new Error(`situation.json: unknown stage on ${route.id}`);
+    }
+    if (route.aircraftId !== null && !known.has(route.aircraftId)) {
+      throw new Error(`situation.json: unknown aircraft on ${route.id}`);
+    }
+    if (!iatas.has(route.destination)) {
+      throw new Error(`situation.json: unknown airport on ${route.id}`);
+    }
+  }
+  const bundle = loadDashboardBundle();
+  const rwy1 = file.infrastructure.runways.find((r) => r.id === "RWY1");
+  if (!rwy1 || rwy1.lengthM !== bundle.infrastructure.runway.lengthM) {
+    throw new Error("situation.json: RWY1 must match the verified runway length");
+  }
+  return {
+    ...file,
+    constraints: {
+      runways: file.infrastructure.runways,
+      terminals: file.infrastructure.terminals,
+      arffCategory: file.infrastructure.arffCategory,
+      elevationM: file.infrastructure.elevationM,
+      rolling12MonthPassengers: bundle.capacity.rolling12MonthPassengers,
+    },
   };
 }

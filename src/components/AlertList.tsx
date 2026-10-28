@@ -1,6 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { useListKeys } from "@/hooks/useListKeys";
+import { Kbd } from "@/components/ui/Kbd";
 import type { AlertEvent } from "@/domain";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -12,6 +16,14 @@ import styles from "./AlertList.module.css";
 
 type Props = {
   alerts: readonly AlertEvent[];
+  /** Enable J / K row navigation (only one list per screen). */
+  keyboard?: boolean;
+};
+
+/** Screen that explains each trigger; codes stay out of navigation. */
+const TRIGGER_HREF: Record<AlertEvent["trigger"], string> = {
+  K1_RED_STREAK: "/p2",
+  SOURCE_NOT_LOADED: "/p7",
 };
 
 function localizeMessage(
@@ -32,7 +44,7 @@ function localizeMessage(
   return alert.message;
 }
 
-export function AlertList({ alerts }: Props) {
+export function AlertList({ alerts, keyboard = false }: Props) {
   const { dict, locale } = usePreferences();
   const [selectedId, setSelectedId] = useState<string | null>(
     alerts[0]?.id ?? null,
@@ -48,6 +60,12 @@ export function AlertList({ alerts }: Props) {
     const yellow = alerts.filter((a) => a.severity === "yellow");
     return { red, yellow };
   }, [alerts]);
+
+  const orderedIds = useMemo(
+    () => [...grouped.red, ...grouped.yellow].map((a) => a.id),
+    [grouped],
+  );
+  useListKeys(orderedIds, selectedId, setSelectedId, keyboard);
 
   if (alerts.length === 0) {
     return (
@@ -125,7 +143,19 @@ export function AlertList({ alerts }: Props) {
                 </dd>
               </div>
             </dl>
-            <p className={styles.locked}>{dict.alerts.workflowLocked}</p>
+            <Link href={TRIGGER_HREF[selected.trigger]} className={styles.open}>
+              {dict.alerts.openView}
+              <ArrowRight size={16} strokeWidth={1.5} aria-hidden />
+            </Link>
+            <p className={styles.locked}>
+              {dict.alerts.workflowLocked}
+              {keyboard ? (
+                <span className={styles.keys}>
+                  <Kbd>J</Kbd>
+                  <Kbd>K</Kbd>
+                </span>
+              ) : null}
+            </p>
           </>
         ) : null}
       </aside>

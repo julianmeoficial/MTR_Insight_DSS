@@ -49,6 +49,11 @@ function SigFrame({
       lastValidated={report.lastValidatedLabel}
       asOfDate={report.asOfLabel}
       alertCount={report.alerts.length}
+      dataset={{
+        source: report.meta.fuente,
+        version: report.meta.version,
+        verificationStatus: report.meta.verificationStatus,
+      }}
     >
       <AccessGate role={role}>{children}</AccessGate>
     </AppShell>

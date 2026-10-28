@@ -1,4 +1,4 @@
-# DESIGN.md — MTR Insight (v4.0.0 · "Final Approach")
+# DESIGN.md — MTR Insight (v4.2.0 · "Final Approach")
 
 > A-DSS for Los Garzones Airport (MTR), Montería, Colombia.
 > Visual, motion and interaction source of truth. Read before any UI change.
@@ -10,11 +10,11 @@
 
 | Item | Value |
 |---|---|
-| Version | 4.0.0 (2026-10-16), replaces v3 |
-| Applies to | Landing (`/`), SIG app (`/p1`–`/p7`, `/alertas`, `/escenarios`, `/decisiones`) |
+| Version | 4.2.0 (2026-10-28): aeronautical layer (aerodrome chart, split-flap, sign tags, centerline nav), expansion model RWY 2 + T2, account picker, count-up on view. Replaces 4.1.0 |
+| Applies to | Landing (`/`), SIG app (`/p1`–`/p7`, `/alertas`, `/situacion`, `/escenarios`, `/validador`, `/decisiones`, `/admin`) |
 | Stack | Next.js App Router, React, TypeScript strict, CSS Modules |
-| Fonts | `next/font/google`: Inter (variable, `opsz`), JetBrains Mono |
-| Motion | gsap ≥ 3.13 (ScrollTrigger, SplitText, DrawSVG) + @gsap/react; motion/react in SIG |
+| Fonts | `next/font/google`: Archivo (display, variable `wdth`), IBM Plex Sans (text and UI, variable), B612 Mono (KPIs, codes, dates) |
+| Motion | gsap ≥ 3.13 (ScrollTrigger, SplitText, DrawSVG) + @gsap/react on landing and SIG (no ScrollTrigger in SIG); motion/react for SIG layout |
 | 3D | three: landing scene + CSS 3D product tilt. Never encodes KPI data |
 | Icons | lucide-react, 16 px in SIG, 20 px on landing, stroke 1.5 |
 | Themes | Landing: dark only. SIG: dark default, light supported |
@@ -38,11 +38,21 @@ Linear-grade craft: dark, precise, fast, keyboard-first, product UI as hero.
 2. **PAPI.** Four 6 px lights. Used as loader (lights shift red → white in
    sequence) and as brand detail. Decorative only; never a data encoding.
 3. **Wayfinding tags.** Airport sign style: yellow on black (location)
-   `MTR · SKMR`, black on yellow (direction) `1.0 Medir →`. Radius 2 px,
-   Inter 600, uppercase allowed only here.
+   `MTR · SKMR`, black on yellow (direction) `1.0 Medir →`, white on red
+   (mandatory) only for runway designators such as `RWY 14L/32R`. Radius
+   2 px, Archivo condensed 600, uppercase allowed only here. Every SIG page
+   header opens with a `SKMR` location tag.
 4. **Glidepath 3°.** The hero camera descends on a 3° path; diagonal
    accents on the landing use 3°. Resting product tilt = `rotateX(24deg)`.
 5. **Dusk light.** One warm radial light from the horizon. Never multicolor.
+6. **Aerodrome chart.** Schematic runways to scale in length, threshold
+   piano keys, 12/12 dashed centerline, terminals and aprons as blocks.
+   Projected assets use the forecast style (dashed outline + hatch). The
+   runway and terminal the DSS assigns are outlined in accent. Never claims
+   to be an AIP chart or a survey.
+7. **Split-flap codes.** IATA/ICAO codes flip once, left to right, when
+   they enter the viewport (≈ 0.3–0.5 s). Codes only, never sentences or KPI
+   values; static under reduced motion.
 
 ### 1.2 Linear: take / don't
 
@@ -57,18 +67,25 @@ Linear-grade craft: dark, precise, fast, keyboard-first, product UI as hero.
 
 ### 1.3 Banned ("AI flop" tells)
 
-- Any text in Times/serif fallback. Default untuned Inter.
+- Any text in Times/serif fallback. Untuned system fonts instead of the three faces in §3.
 - UPPERCASE letter-spaced eyebrows (except wayfinding tags).
 - Decorative codes in nav (`P1`, `AL`). Codes live in breadcrumbs/tooltips.
 - Colored left borders, outlined red status boxes, full-width banners.
-- Aurora/purple gradients, glassmorphism (except the nav blur), neon glow,
-  3D globes, emoji, sparkles, "AI-powered", pulsing LIVE dots on demo data.
-- Count-up on numbers. Mixed languages. Lorem ipsum. Fake logos.
+- Aurora/purple gradients, purple or violet hues anywhere (chart series
+  included), glassmorphism (except the nav blur), neon glow, 3D globes,
+  emoji, sparkles, "AI-powered", chat boxes, pulsing LIVE dots on demo data.
+- Count-up that breaks §6.4 (status shown next to a midway number, looping,
+  or replaying on every render). Mixed languages. Lorem ipsum. Fake logos.
 - Stretched single KPI with dead space. Equal-weight everything.
 
 ---
 
 ## 2. Color
+
+Direction "Apron at dusk" (Notion · Filosofía de diseño): taxiway yellow
+`#F2C230` is the only brand accent; green, amber and red come from runway
+lights and are used only for KPI states; the rest is warm graphite, paper
+tones and Sinú ochre. No sci-fi neon.
 
 ```css
 /* src/styles/tokens.css */
@@ -98,7 +115,7 @@ Linear-grade craft: dark, precise, fast, keyboard-first, product UI as hero.
 
   --series-1: #6F97F0; /* Copa */
   --series-2: #F2C230; /* Satena */
-  --series-3: #4FC1B2; --series-4: #A98BEA; --series-5: #F0957C; --series-6: #8A8F98;
+  --series-3: #4FC1B2; --series-4: #C8894B; /* Sinú ochre */ --series-5: #F0957C; --series-6: #8A8F98;
 
   --dusk: radial-gradient(60% 50% at 50% 0%, rgb(242 194 48 / .07), transparent 70%);
   --focus: #F2C230;
@@ -132,24 +149,31 @@ Tints only via `color-mix`. No new hex outside this file.
 
 ## 3. Typography
 
+Source: Notion "MTR Insight · Filosofía de diseño". Three faces, each with
+one job.
+
+| Face | Job | Notes |
+|---|---|---|
+| **Archivo** (variable `wght`, `wdth`) | Titles: SIG page and section titles, landing hero and chapters, wordmark, wayfinding tags | Width axis: condensed (82 %) recalls terminal signage (tags), normal (100 %) in SIG, wide (112 %) on landing |
+| **IBM Plex Sans** (variable) | Body text and interface: lists, tables, inputs, menus | Tabular figures in tables |
+| **B612 Mono** (400 / 700) | KPI values, codes (`MTR`, `PTY`, `ERJ-145`, `RC-03`), dates in meta, assumption inputs | Airbus cockpit-display face. Use weight 400; 700 only for emphasis inside codes |
+
 ```ts
 // src/app/fonts.ts
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Archivo, B612_Mono, IBM_Plex_Sans } from 'next/font/google';
 
-export const inter = Inter({
-  subsets: ['latin'], axes: ['opsz'], variable: '--font-inter', display: 'swap',
-});
-export const mono = JetBrains_Mono({
-  subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono', display: 'swap',
-});
+export const display = Archivo({ subsets: ['latin'], axes: ['wdth'], variable: '--font-archivo', display: 'swap' });
+export const sans = IBM_Plex_Sans({ subsets: ['latin'], axes: ['wdth'], variable: '--font-plex', display: 'swap' });
+export const mono = B612_Mono({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-b612', display: 'swap' });
 ```
 
 ```css
 :root {
-  --ff-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --ff-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
-  /* tuned Inter: single-storey a, open digits, round quotes */
-  --ff-features: "cv11", "ss01", "ss03";
+  --ff-display: var(--font-archivo), var(--font-plex), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ff-sans: var(--font-plex), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ff-mono: var(--font-b612), ui-monospace, "SF Mono", Menlo, monospace;
+  --ff-features: normal;
+  --wdth-condensed: 82%; --wdth-normal: 100%; --wdth-wide: 112%;
 
   --t-mini: 0.6875rem; /* 11 kbd, tags */
   --t-xs: 0.75rem;     /* 12 meta */
@@ -168,22 +192,26 @@ body { font: 400 var(--t-sm)/1.5 var(--ff-sans); font-feature-settings: var(--ff
 .num { font-variant-numeric: tabular-nums; }
 ```
 
-| Role | Size / weight | Tracking | Line |
+| Role | Face · size / weight | Tracking | Line |
 |---|---|---|---|
-| Hero | hero / 590 | -0.045em | 1.0 |
-| Chapter title | 4xl / 590 | -0.035em | 1.05 |
-| SIG page title | 24 / 600 | -0.02em | 1.2 |
-| Card / section title | 15–17 / 590 | -0.01em | 1.3 |
-| Body landing | 17 / 400, `--fg-2` | -0.005em | 1.6 |
-| Body SIG | 13 / 400–500 | 0 | 1.5 |
-| KPI value | 32 / 590, tabular | -0.025em | 1 |
-| Meta | 12 / 500, `--fg-3` | 0 | 1.4 |
-| Codes, kbd | Mono 11–12 / 500 | 0 | 1 |
+| Hero | Archivo wide · hero / 590 | -0.035em | 1.0 |
+| Chapter title | Archivo wide · 4xl / 590 | -0.025em | 1.05 |
+| SIG page title | Archivo · 24 / 600 | -0.02em | 1.2 |
+| Card / section title | Archivo · 15–17 / 590 | -0.01em | 1.3 |
+| Body landing | Plex · 17 / 400, `--fg-2` | -0.005em | 1.6 |
+| Body SIG | Plex · 13 / 400–510 | 0 | 1.5 |
+| KPI value | B612 Mono · 32–48 / 400 | -0.04em | 1 |
+| Stat value | B612 Mono · 24 / 400 | -0.02em | 1 |
+| Meta | Plex · 12 / 500, `--fg-3` | 0 | 1.4 |
+| Codes, kbd | B612 Mono · 11–12 / 400 | 0 | 1 |
+| Wayfinding tag | Archivo condensed · 11 / 600 uppercase | 0.06em | 1 |
 
 - Display titles: neutral gradient only.
   `background: linear-gradient(180deg, var(--fg) 30%, color-mix(in oklab, var(--fg) 55%, transparent)); background-clip: text; color: transparent;`
-- Sentence case everywhere. Units at 0.55em, `--fg-3`.
-- Weights: 400 / 510 / 590 (variable). Never 700+ in SIG.
+- Sentence case everywhere. Units at 0.55em in Plex, `--fg-3`, after the mono value.
+- Weights: 400 / 510 / 590 / 600 (variable faces). Never 700+ in SIG text.
+- Monospace dots and commas take a full cell: keep KPI values short (one
+  decimal for ratios, whole numbers for pax and metres).
 
 ---
 
@@ -271,6 +299,9 @@ GSAP: `expo.out` (entrances), `power2.inOut` (transitions), `none` (scrub).
 - `useGSAP({ scope })` always; `gsap.matchMedia()` for reduced motion and
   ≥ 768 px; plugins registered once in `src/lib/gsap.ts`.
 - ScrollTrigger only on the landing. Kill on unmount (handled by useGSAP).
+- GSAP in the SIG is allowed for count-up (§6.4), one reveal per chart
+  (tornado bars, matrix stagger ≤ 400 ms total) and value tweens when an
+  input changes. Layout, list and selection motion stays in motion/react.
 - Reduced motion: no scrub, no pin, no 3D; opacity 200 ms or instant.
 
 ### 6.3 Hero timeline
@@ -319,6 +350,24 @@ useGSAP(() => {
 Centerline: one SVG `path` behind the page, `stroke-dasharray: 12 12`,
 revealed with a mask driven by DrawSVG + ScrollTrigger (`scrub: true`).
 
+### 6.4 Count-up
+
+Numbers may count up. It is part of the "instrument settles" feel, with
+these rules:
+
+| Rule | Value |
+|---|---|
+| Where | KPI values, stat strips, DSS outputs (break-even, utilization, required runway, verdict counts) |
+| First reveal | From 0 when the figure first shows a visible pixel (landing chapters, long pages), `expo.out`, 700 ms (`COUNT_REVEAL_S`), optional stagger 40 ms per tile. Until then the final figure is shown. Hero tiles wait for the product frame to land (0.9 s) |
+| Updates | From the previous value to the new one, `power2.inOut`, 320 ms (`COUNT_UPDATE_S`). This is how a filter, scenario or assumption change answers "what changed" |
+| Status | A status pill next to a counting number appears only when the number settles (`SettleReveal`), so the screen never shows a midway value beside its traffic light |
+| Truth | The final figure is in the server HTML and in a screen-reader copy; the animated text is `aria-hidden` |
+| Never | Loops, replay on every render, count-up on tables or on more than one figure per row |
+| Reduced motion | Final figure, no tween |
+
+Implementation: `src/components/motion/CountUp.tsx` (GSAP) and
+`src/components/motion/SettleReveal.tsx`.
+
 ---
 
 ## 7. 3D: "Final approach" scene
@@ -354,17 +403,29 @@ revealed with a mask driven by DrawSVG + ScrollTrigger (`scrub: true`).
 │  ◎ Demanda         │                                                                   │
 │  ↗ Planeación 2045 │                                                                   │
 │  ◇ Calidad         │                                                                   │
+│ Contexto           │                                                                   │
+│  ◌ Situación actual│                                                                   │
 │ DSS                │                                                                   │
 │  ⚖ Escenarios      │                                                                   │
-│  ✎ Decisiones      │                                                                   │
-└────────────────────┴───────────────────────────────────────────────────────────────────┘
+│  ⇢ Validador       │                                                                   │
+│  ✎ Decisiones 🔒   │                                                                   │
+│ Gobierno           │                                                                   │
+│  ⛨ Administración  │                                                                   │
+├────────────────────┴───────────────────────────────────────────────────────────────────┤
+│ Status bar 28: source · dataset · rule versions · as-of · TZ · role · ? atajos          │
+└────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 - Sidebar: `--surface-1`, items 28 px, `--r-6`, 13/510, icon 16 `--fg-3`.
-  Active: `--surface-3` + `--fg`. Counts right-aligned mono 11.
+  Active: `--surface-3` + `--fg` + dashed accent centerline on the left edge
+  (the only centerline in the SIG). Counts right-aligned mono 11.
 - Section labels 12/510 `--fg-3`, sentence case.
 - DEMO tag in header: wayfinding style, tooltip with disclaimer.
 - Density: lists rows 36 px; dashboards padding 24.
+- Status bar (≥ 768 px): mono 11 values, static facts only (source, dataset,
+  rule versions, as-of, time zone, role). It never claims a live connection.
+- The shell fills the viewport; the content column is the scroller, so rails
+  and toolbars stay put like a desktop ERP.
 
 ### 8.2 Keyboard
 
@@ -389,7 +450,11 @@ and tooltips.
 - **Context menu** on rows (right click / `⋯`).
 - **Optimistic UI** only for local UI state; never for domain writes.
 - **Empty states:** one line + one action + shortcut hint.
-- **Loader:** PAPI glyph; skeletons for layout.
+- **Loader:** PAPI glyph for route-level loading (`ScreenLoading`); skeletons for layout.
+- **Account picker (`/login`):** step 1 account type (Dirección y gerencia,
+  Áreas del aeropuerto, Aerolíneas, Supervisión y TI), step 2 account cards
+  with purpose, views the role can open, export and operator scope. The
+  current session is outlined in accent. Still a demo selector, not auth.
 
 ---
 
@@ -403,6 +468,10 @@ Each capability supports human judgment. None executes operational actions.
 | **As-of time travel** | Header date scrubber; all views recompute; persistent chip "Viendo al 30 nov 2026" | Injected as-of, never "today" in demos |
 | **Cross-filter + drill** | Click a series/bar → filters page; KPI tile → P-page; point → detail drawer | Filter chips in header |
 | **What-if simulator** | Inputs panel (aircraft, frequency, load, costs, growth rate). Each input shows provenance: source default vs edited (accent dot) with reset | Step 8 break-even model only |
+| **Expansion assumptions** | Assumptions rail in `/validador`: runway length and terminal capacity (airport, apply to all scenarios) plus demand, takeoff factor, revenue, cost and frequencies (per scenario). Edited values keep the accent dot, reset per field and "Restablecer supuestos" | For airport expansion projects (new runway, terminal works). Results then describe a hypothetical project, said in the UI |
+| **Infrastructure configuration** | Toolbar: `Actual` (RWY 14/32 + T1) or `Ampliación` (adds RWY 14L/32R 4.000–4.200 m and international T2). Terminal: automatic, T1 or T2. The validator assigns the runway with the fewest failures (shortest when tied) and the terminal that fits code letter and border control | All expansion values are simulated and labeled so |
+| **Aircraft requirements** | Per aircraft: takeoff distance, runway width, ACN vs PCN, approach category for the route segment (intercontinental asks CAT II), ARFF category, ICAO code letter vs terminal stands, range with reserve | Manufacturer references and academic policy, not certification |
+| **Route validator (Paso 14)** | Route × aircraft matrix with verdict pills, required runway per aircraft and extension needed, decision summary, checks with data gaps, tornado and 3-scenario compare | `src/domain/erpm`; never certifies performance, pavement or dispatch |
 | **Goal seek** | "¿Qué necesito para…?" solve one variable (e.g. min passengers via ceil, break-even LF) | >100 % = "Inviable", never capped |
 | **Sensitivity (tornado)** | ±10 % per input on outcome, sorted by impact | Mandatory next to any recommendation |
 | **Scenario compare** | Up to 3 columns, baseline pinned, deltas highlighted, author/date/version | Save/compare in full SIG only |
@@ -492,7 +561,8 @@ src/
 
 ## 15. QA checklist
 
-- [ ] Rendered font is Inter with features on; no serif anywhere.
+- [ ] Rendered fonts are Archivo (titles), IBM Plex Sans (UI) and B612 Mono (KPIs, codes); no serif anywhere.
+- [ ] Count-up follows §6.4: no status next to a midway number; reduced motion shows final values.
 - [ ] Landing at 1440 / 1024 / 390; SIG dark + light.
 - [ ] Hero timeline matches §6.3; reduced motion verified.
 - [ ] Scene: ≤ 6 draw calls, 60 fps, pauses offscreen, poster fallback.

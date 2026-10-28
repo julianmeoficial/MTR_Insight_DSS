@@ -39,7 +39,7 @@ export default function P3Page() {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={dict.demo.tag}
+          eyebrow={`${dict.nav.views} · P3`}
           title={dict.screens.p3.title}
           question={dict.screens.p3.question}
         />

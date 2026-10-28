@@ -1,24 +1,22 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--line);
+  gap: var(--s-2);
 }
 
 .eyebrow {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-xs);
+  font-weight: 510;
+  color: var(--fg-3);
 }
 
 .row {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--s-4);
 }
 
 @media (min-width: 1024px) {
@@ -30,23 +28,25 @@
 }
 
 .title {
-  font-family: var(--font-display);
-  font-size: 32px;
-  line-height: 1.05;
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-normal);
+  font-size: var(--t-2xl);
+  line-height: 1.2;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--fg);
 }
 
 .question {
-  margin-top: 4px;
-  max-width: 40rem;
-  font-size: 14px;
-  color: var(--fg-muted);
+  margin-block-start: var(--s-1);
+  max-inline-size: 60ch;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--fg-2);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--s-2);
 }

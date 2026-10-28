@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CountUp } from "@/components/motion/CountUp";
 import {
   REFERENCE_AIRCRAFT,
   FORECAST_RATES,
@@ -10,20 +11,32 @@ import {
   buildFanSeries,
 } from "@/domain/dss";
 import { formatInt } from "@/lib/format";
-import { CountUp } from "@/components/motion/CountUp";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { usePreferences } from "@/components/providers/PreferencesProvider";
 import styles from "./DssWorkbench.module.css";
 
 type Props = {
   baselinePassengers: number;
   baseYear: number;
+  /** Terminal 1 declared capacity (current) */
   capacity: number;
+  /** Terminal 2 capacity from the simulated expansion plan */
+  expansionCapacity?: number;
 };
+
+type CapacityMode = "t1" | "t1t2";
 
 export function DssWorkbench({
   baselinePassengers,
   baseYear,
-  capacity,
+  capacity: t1Capacity,
+  expansionCapacity,
 }: Props) {
+  const { dict } = usePreferences();
+  const tc = dict.planning;
+  const [mode, setMode] = useState<CapacityMode>("t1");
+  const capacity =
+    mode === "t1t2" && expansionCapacity ? t1Capacity + expansionCapacity : t1Capacity;
   const [aircraftIdx, setAircraftIdx] = useState(0);
   const [ratio, setRatio] = useState(0.7);
   const [band, setBand] = useState<"low" | "base" | "high">("base");
@@ -61,6 +74,18 @@ export function DssWorkbench({
     [baselinePassengers, baseYear, rate, capacity],
   );
 
+  const triggerRows = (["t1", "t1t2"] as const)
+    .filter((m) => m === "t1" || expansionCapacity)
+    .map((m) => {
+      const cap = m === "t1" ? t1Capacity : t1Capacity + (expansionCapacity ?? 0);
+      return {
+        mode: m,
+        cap,
+        y80: capacityTriggerYear(baselinePassengers, baseYear, rate, cap, 0.8),
+        y90: capacityTriggerYear(baselinePassengers, baseYear, rate, cap, 0.9),
+      };
+    });
+
   const fan = buildFanSeries(baselinePassengers, baseYear, 2045);
   const last = fan[fan.length - 1]!;
 
@@ -95,6 +120,20 @@ export function DssWorkbench({
             className={styles.range}
           />
         </label>
+        {expansionCapacity ? (
+          <div className={styles.label}>
+            {tc.capacityMode}
+            <SegmentedControl<CapacityMode>
+              ariaLabel={tc.capacityMode}
+              value={mode}
+              onChange={setMode}
+              options={[
+                { value: "t1", label: tc.t1 },
+                { value: "t1t2", label: tc.t1t2 },
+              ]}
+            />
+          </div>
+        ) : null}
         <fieldset className={styles.fieldset}>
           <legend className={styles.legend}>Escenario de crecimiento</legend>
           {(
@@ -174,6 +213,33 @@ export function DssWorkbench({
             </span>
           </p>
         </div>
+
+        {expansionCapacity ? (
+          <div className={styles.fan}>
+            <h3 className={styles.title}>{tc.triggersTitle}</h3>
+            <table className={styles.triggerTable}>
+              <thead>
+                <tr>
+                  <th scope="col">{tc.config}</th>
+                  <th scope="col">{tc.capacity}</th>
+                  <th scope="col">{"80\u00A0%"}</th>
+                  <th scope="col">{"90\u00A0%"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {triggerRows.map((row) => (
+                  <tr key={row.mode} data-active={row.mode === mode ? "true" : undefined}>
+                    <th scope="row">{row.mode === "t1" ? tc.t1 : tc.t1t2}</th>
+                    <td className="num">{formatInt(row.cap)}</td>
+                    <td className="num">{row.y80 ?? tc.after2045}</td>
+                    <td className="num">{row.y90 ?? tc.after2045}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className={styles.fanHint}>{tc.note}</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );

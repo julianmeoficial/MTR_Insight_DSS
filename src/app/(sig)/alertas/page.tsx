@@ -20,7 +20,7 @@ export default function AlertasPage() {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={dict.demo.tag}
+          eyebrow={dict.nav.alerts}
           title={dict.screens.alerts.title}
           question={dict.screens.alerts.purpose}
         />
@@ -30,7 +30,7 @@ export default function AlertasPage() {
           {report.meta.version}
         </p>
       </div>
-      <AlertList alerts={report.alerts} />
+      <AlertList alerts={report.alerts} keyboard />
       <footer className={styles.footer}>
         <ProvenanceLine
           source={report.meta.fuente}

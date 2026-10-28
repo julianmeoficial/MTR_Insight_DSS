@@ -7,8 +7,8 @@ import { CompareBars } from "@/components/landing/CompareBars";
 import { OperatorShareChart } from "@/components/landing/OperatorShareChart";
 import { AlertList } from "@/components/AlertList";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
+import { ScreenLoading } from "@/components/ui/ScreenLoading";
 import { ProvenanceLine } from "@/components/ui/ProvenanceLine";
-import { Skeleton } from "@/components/ui/Skeleton";
 import { WeekPicker } from "@/components/filters/WeekPicker";
 import { formatDateIso } from "@/lib/format";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -57,14 +57,7 @@ export default function P1Page({ searchParams }: Props) {
   const dict = getDictionary("es");
   return (
     <Suspense
-      fallback={
-        <main className={styles.main}>
-          <div className={styles.pad}>
-            <Skeleton height="24px" />
-            <p className="sr-only">{dict.states.loading}</p>
-          </div>
-        </main>
-      }
+      fallback={<ScreenLoading label={dict.states.loading} />}
     >
       <P1Content searchParams={searchParams} />
     </Suspense>
@@ -80,7 +73,7 @@ async function P1Content({ searchParams }: Props) {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={dict.hero.tag}
+          eyebrow={`${dict.nav.views} · P1`}
           title={dict.screens.p1.title}
           question={dict.screens.p1.question}
         >
