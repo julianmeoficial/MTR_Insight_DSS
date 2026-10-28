@@ -17,7 +17,7 @@ export default function DecisionesPage() {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={dict.demo.tag}
+          eyebrow={dict.nav.groupDss}
           title={dict.screens.decisions.title}
           question={dict.screens.decisions.purpose}
         />

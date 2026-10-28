@@ -1,0 +1,548 @@
+{
+  "dataset": "situation-0.1",
+  "version": "0.1.0",
+  "cutoffDate": "2026-10-15",
+  "nota": "Paso 13 baseline plus the simulated expansion master plan (RWY 2 and Terminal 2). Each item keeps its evidence stage, source and date. Demand figures marked as assumptions are academic scenario inputs, not airline data. Runway width, PCN, approach category, ARFF and Terminal 2 values are simulated.",
+  "origin": {
+    "iata": "MTR",
+    "icao": "SKMR",
+    "city": "Montería",
+    "country": "Colombia",
+    "position": {
+      "lat": 8.8237,
+      "lon": -75.8258
+    }
+  },
+  "airports": [
+    {
+      "iata": "PTY",
+      "icao": "MPTO",
+      "city": "Ciudad de Panamá",
+      "country": "Panamá",
+      "position": {
+        "lat": 9.0714,
+        "lon": -79.3835
+      }
+    },
+    {
+      "iata": "BOG",
+      "icao": "SKBO",
+      "city": "Bogotá",
+      "country": "Colombia",
+      "position": {
+        "lat": 4.7016,
+        "lon": -74.1469
+      }
+    },
+    {
+      "iata": "MDE",
+      "icao": "SKRG",
+      "city": "Rionegro (Medellín)",
+      "country": "Colombia",
+      "position": {
+        "lat": 6.1645,
+        "lon": -75.4231
+      }
+    },
+    {
+      "iata": "MIA",
+      "icao": "KMIA",
+      "city": "Miami",
+      "country": "Estados Unidos",
+      "position": {
+        "lat": 25.7959,
+        "lon": -80.287
+      }
+    },
+    {
+      "iata": "MAD",
+      "icao": "LEMD",
+      "city": "Madrid",
+      "country": "España",
+      "position": {
+        "lat": 40.4719,
+        "lon": -3.5626
+      }
+    },
+    {
+      "iata": "CDG",
+      "icao": "LFPG",
+      "city": "París",
+      "country": "Francia",
+      "position": {
+        "lat": 49.0097,
+        "lon": 2.5479
+      }
+    },
+    {
+      "iata": "NRT",
+      "icao": "RJAA",
+      "city": "Tokio (Narita)",
+      "country": "Japón",
+      "position": {
+        "lat": 35.772,
+        "lon": 140.3929
+      }
+    },
+    {
+      "iata": "ICN",
+      "icao": "RKSI",
+      "city": "Seúl (Incheon)",
+      "country": "Corea del Sur",
+      "position": {
+        "lat": 37.4602,
+        "lon": 126.4407
+      }
+    }
+  ],
+  "routes": [
+    {
+      "id": "RT-PTY-SAT",
+      "destination": "PTY",
+      "international": true,
+      "segment": "regional",
+      "stage": "operating",
+      "airline": "Satena",
+      "aircraftId": "E145",
+      "weeklyFrequencies": 3,
+      "start": "2026-10-26",
+      "weeklyDemandPax": 130,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Prensa: inauguración 3 oct 2026, operación lunes, miércoles y viernes",
+        "date": "2026-10-15",
+        "confidence": "medium"
+      },
+      "note": "Primer vuelo el 26 oct 2026 con ERJ-145 de 50 sillas. La demanda semanal es un supuesto cercano a lo observado en la ventana demo."
+    },
+    {
+      "id": "RT-PTY-CMP",
+      "destination": "PTY",
+      "international": true,
+      "segment": "regional",
+      "stage": "announced",
+      "airline": "Copa",
+      "aircraftId": "B738",
+      "weeklyFrequencies": 2,
+      "start": "2026-12",
+      "weeklyDemandPax": 200,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Prensa · permiso reportado (EV-COPA-PRESS)",
+        "date": "2026-10-10",
+        "confidence": "medium"
+      },
+      "note": "Inicio previsto en diciembre sin confirmación oficial. 160 sillas y dos frecuencias son supuestos de escenario."
+    },
+    {
+      "id": "RT-BOG",
+      "destination": "BOG",
+      "international": false,
+      "segment": "domestic",
+      "stage": "to_verify",
+      "airline": null,
+      "aircraftId": null,
+      "weeklyFrequencies": null,
+      "start": null,
+      "weeklyDemandPax": null,
+      "demandIsAssumption": false,
+      "evidence": {
+        "source": "Pendiente de consulta a Aerocivil",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta nacional de referencia. Operadores, frecuencias y equipos por verificar."
+    },
+    {
+      "id": "RT-MDE",
+      "destination": "MDE",
+      "international": false,
+      "segment": "domestic",
+      "stage": "to_verify",
+      "airline": null,
+      "aircraftId": null,
+      "weeklyFrequencies": null,
+      "start": null,
+      "weeklyDemandPax": null,
+      "demandIsAssumption": false,
+      "evidence": {
+        "source": "Pendiente de consulta a Aerocivil",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta nacional de referencia. Operadores, frecuencias y equipos por verificar."
+    },
+    {
+      "id": "RT-MIA",
+      "destination": "MIA",
+      "international": true,
+      "segment": "regional",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "B738",
+      "weeklyFrequencies": 2,
+      "start": null,
+      "weeklyDemandPax": 140,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico del TCC",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Sin aerolínea ni negociación conocida. Sirve para comparar alcance y demanda frente a PTY."
+    },
+    {
+      "id": "RT-MAD",
+      "destination": "MAD",
+      "international": true,
+      "segment": "intercontinental",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "A359",
+      "weeklyFrequencies": 2,
+      "start": null,
+      "weeklyDemandPax": 300,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico del TCC",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta europea de largo radio. Con la infraestructura actual no cabe; con la Pista 2 y la Terminal 2 se evalúa completa."
+    },
+    {
+      "id": "RT-CDG",
+      "destination": "CDG",
+      "international": true,
+      "segment": "intercontinental",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "A359",
+      "weeklyFrequencies": 2,
+      "start": null,
+      "weeklyDemandPax": 260,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · plan de ampliación simulado",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta europea por la Terminal 2 y la Pista 2 del plan simulado."
+    },
+    {
+      "id": "RT-NRT",
+      "destination": "NRT",
+      "international": true,
+      "segment": "intercontinental",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "A35K",
+      "weeklyFrequencies": 2,
+      "start": null,
+      "weeklyDemandPax": 200,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · plan de ampliación simulado",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta transpacífica sin escalas. Pone a prueba el alcance con reserva."
+    },
+    {
+      "id": "RT-ICN",
+      "destination": "ICN",
+      "international": true,
+      "segment": "intercontinental",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "A35K",
+      "weeklyFrequencies": 2,
+      "start": null,
+      "weeklyDemandPax": 180,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · plan de ampliación simulado",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta a Asia de ultra largo radio (unos 14.400 km). El A350-900 no llega con reserva; el A350-1000 sí en el escenario base, no en el restrictivo."
+    }
+  ],
+  "modernizations": [
+    {
+      "id": "MOD-MIG",
+      "title": "Filtro migratorio internacional",
+      "stage": "confirmed",
+      "area": "border",
+      "expectedEffect": "Habilita la operación internacional MTR–PTY.",
+      "evidence": {
+        "source": "REQ-MIG-4003 · evidencia EV-MIG-1",
+        "date": "2025-11-01",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "MOD-DIAN",
+      "title": "Control aduanero DIAN",
+      "stage": "confirmed",
+      "area": "border",
+      "expectedEffect": "Despacho de equipaje y carga internacional.",
+      "evidence": {
+        "source": "REQ-DIAN-1639 · evidencia EV-DIAN-1",
+        "date": "2026-06-01",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "MOD-AVSEC",
+      "title": "Escáner corporal AVSEC",
+      "stage": "to_verify",
+      "area": "security",
+      "expectedEffect": "Reduce el tiempo del filtro de seguridad en hora pico.",
+      "evidence": {
+        "source": "REQ-BODY-SCAN · sin evidencia cargada",
+        "date": null,
+        "confidence": "low"
+      }
+    },
+    {
+      "id": "MOD-TERM",
+      "title": "Ampliación de la terminal (Plan Maestro)",
+      "stage": "to_verify",
+      "area": "terminal",
+      "expectedEffect": "Aumentaría la capacidad declarada. No hay cronograma verificable.",
+      "evidence": {
+        "source": "Plan Maestro / declaración operacional",
+        "date": null,
+        "confidence": "low"
+      }
+    },
+    {
+      "id": "MOD-RWY2",
+      "title": "Segunda pista 14L/32R (4.000 a 4.200 m, CAT II)",
+      "stage": "proposed",
+      "area": "airside",
+      "expectedEffect": "Habilita A350-900/1000 por longitud, ancho, pavimento y aproximación de precisión.",
+      "evidence": {
+        "source": "Plan de ampliación simulado",
+        "date": null,
+        "confidence": "low"
+      }
+    },
+    {
+      "id": "MOD-T2",
+      "title": "Terminal 2 internacional (código E)",
+      "stage": "proposed",
+      "area": "terminal",
+      "expectedEffect": "Suma 2.500.000 pax/año y 4 posiciones para fuselaje ancho.",
+      "evidence": {
+        "source": "Plan de ampliación simulado",
+        "date": null,
+        "confidence": "low"
+      }
+    },
+    {
+      "id": "MOD-SEI",
+      "title": "Salvamento y extinción categoría 9",
+      "stage": "proposed",
+      "area": "airside",
+      "expectedEffect": "Requisito para operar A350.",
+      "evidence": {
+        "source": "Simulado",
+        "date": null,
+        "confidence": "low"
+      }
+    }
+  ],
+  "erpmData": [
+    {
+      "id": "ERPM-RWY",
+      "variable": "Longitud de pista",
+      "unit": "m",
+      "value": "2.297",
+      "evidence": {
+        "source": "metar-taf.com · conflicto 2.300 m no adoptado (RC-08)",
+        "date": "2026-10-15",
+        "confidence": "high"
+      },
+      "owner": "Dirección de infraestructura",
+      "usedFor": "Pista frente a distancia de despegue"
+    },
+    {
+      "id": "ERPM-PCN",
+      "variable": "Resistencia del pavimento (PCN)",
+      "unit": "PCN",
+      "value": "50 · 90 (sim.)",
+      "evidence": {
+        "source": "Simulado: RWY1 50, RWY2 90; por consultar en AIP",
+        "date": null,
+        "confidence": "low"
+      },
+      "owner": "Dirección de infraestructura",
+      "usedFor": "MTOW frente al pavimento"
+    },
+    {
+      "id": "ERPM-ELEV",
+      "variable": "Elevación y temperatura de referencia",
+      "unit": "m · °C",
+      "value": null,
+      "evidence": {
+        "source": "AIP Colombia, por consultar",
+        "date": null,
+        "confidence": "low"
+      },
+      "owner": "Dirección de infraestructura",
+      "usedFor": "Corrección de la distancia de despegue"
+    },
+    {
+      "id": "ERPM-MTOW",
+      "variable": "MTOW por aeronave",
+      "unit": "kg",
+      "value": "Catálogo",
+      "evidence": {
+        "source": "Referencia de fabricante, no valor de despacho",
+        "date": null,
+        "confidence": "medium"
+      },
+      "owner": "Coordinación internacional",
+      "usedFor": "Pavimento y restricciones de peso"
+    },
+    {
+      "id": "ERPM-RANGE",
+      "variable": "Alcance nominal por aeronave",
+      "unit": "km",
+      "value": "Catálogo",
+      "evidence": {
+        "source": "Referencia de fabricante, no estudio de ruta",
+        "date": null,
+        "confidence": "medium"
+      },
+      "owner": "Coordinación internacional",
+      "usedFor": "Alcance frente a distancia con reserva"
+    },
+    {
+      "id": "ERPM-DIST",
+      "variable": "Distancia de ruta",
+      "unit": "km",
+      "value": "Calculada",
+      "evidence": {
+        "source": "Distancia ortodrómica entre coordenadas de aeródromo",
+        "date": null,
+        "confidence": "high"
+      },
+      "owner": "TI",
+      "usedFor": "Alcance"
+    },
+    {
+      "id": "ERPM-DEM",
+      "variable": "Demanda semanal por ruta",
+      "unit": "pax / semana · sentido",
+      "value": "Supuesto",
+      "evidence": {
+        "source": "Escenario académico; sin matriz O-D validada",
+        "date": null,
+        "confidence": "low"
+      },
+      "owner": "Dirección comercial",
+      "usedFor": "Load factor proyectado y equilibrio"
+    },
+    {
+      "id": "ERPM-CAP",
+      "variable": "Capacidad anual de la terminal",
+      "unit": "pax / año",
+      "value": "1.700.000",
+      "evidence": {
+        "source": "Plan Maestro / declaración operacional (pendiente)",
+        "date": null,
+        "confidence": "low"
+      },
+      "owner": "Dirección de infraestructura",
+      "usedFor": "Utilización de la terminal (K3)"
+    },
+    {
+      "id": "ERPM-SLOT",
+      "variable": "Franjas disponibles",
+      "unit": "franjas / día",
+      "value": null,
+      "evidence": {
+        "source": "Sin fuente autorizada",
+        "date": null,
+        "confidence": "low"
+      },
+      "owner": "Gerencia MTR",
+      "usedFor": "Frecuencias posibles por ruta"
+    }
+  ],
+  "infrastructure": {
+    "elevationM": null,
+    "arffCategory": {
+      "current": 7,
+      "expansion": 9
+    },
+    "arffEvidence": {
+      "source": "Simulado · categoría SEI por verificar con Aerocivil",
+      "date": null,
+      "confidence": "low"
+    },
+    "runways": [
+      {
+        "id": "RWY1",
+        "designator": "14/32",
+        "status": "existing",
+        "lengthM": 2297,
+        "widthM": 40,
+        "pcn": 50,
+        "approach": "CAT_I",
+        "evidence": {
+          "source": "Longitud: metar-taf.com (verificado). Ancho, PCN y CAT: simulados",
+          "date": "2026-10-15",
+          "confidence": "medium"
+        }
+      },
+      {
+        "id": "RWY2",
+        "designator": "14L/32R",
+        "status": "projected",
+        "lengthM": 4100,
+        "widthM": 60,
+        "pcn": 90,
+        "approach": "CAT_II",
+        "evidence": {
+          "source": "Plan de ampliación simulado (4.000 a 4.200 m)",
+          "date": null,
+          "confidence": "low"
+        }
+      }
+    ],
+    "terminals": [
+      {
+        "id": "T1",
+        "name": "Terminal 1",
+        "status": "existing",
+        "annualCapacity": 1700000,
+        "international": true,
+        "maxCodeLetter": "C",
+        "widebodyStands": 0,
+        "evidence": {
+          "source": "Plan Maestro / declaración operacional (pendiente)",
+          "date": null,
+          "confidence": "low"
+        }
+      },
+      {
+        "id": "T2",
+        "name": "Terminal 2 internacional",
+        "status": "projected",
+        "annualCapacity": 2500000,
+        "international": true,
+        "maxCodeLetter": "E",
+        "widebodyStands": 4,
+        "evidence": {
+          "source": "Plan de ampliación simulado",
+          "date": null,
+          "confidence": "low"
+        }
+      }
+    ]
+  }
+}

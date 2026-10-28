@@ -15,6 +15,9 @@ import { FanChart } from "@/components/landing/FanChart";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
 import { useDemoSession } from "@/components/providers/DemoSessionProvider";
 import { homeForRole } from "@/domain/access";
+import { RUNWAY_LENGTH_M } from "@/config/aircraft";
+import { dssDefaults } from "@/config/dss-defaults";
+import { CountUp } from "@/components/motion/CountUp";
 import styles from "./landing.module.css";
 
 type Props = {
@@ -120,12 +123,14 @@ export function LandingPage({ tiles, alerts, series, meta }: Props) {
               <Fact
                 label={dict.landing.factRunway}
                 value={dict.landing.factRunwayValue}
+                count={{ value: RUNWAY_LENGTH_M, unit: "m" }}
                 source={dict.landing.factRunwaySource}
                 verified={dict.landing.verified}
               />
               <Fact
                 label={dict.landing.factPax}
                 value={dict.landing.factPaxValue}
+                count={{ value: dssDefaults.projection.baselinePassengers }}
                 source={dict.landing.factPaxSource}
                 verified={dict.landing.verified}
               />
@@ -361,16 +366,28 @@ function Fact({
   value,
   source,
   verified,
+  count,
 }: {
   label: string;
   value: string;
   source: string;
   verified: string;
+  /** Verified figure from config; counts up when the strip enters view */
+  count?: { value: number; unit?: string };
 }) {
   return (
     <div className={styles.fact}>
       <dt className={styles.factLabel}>{label}</dt>
-      <dd className={`num ${styles.factValue}`}>{value}</dd>
+      <dd className={`num ${styles.factValue}`}>
+        {count ? (
+          <>
+            <CountUp value={count.value} mode="int" />
+            {count.unit ? <span className={styles.factUnit}>{count.unit}</span> : null}
+          </>
+        ) : (
+          value
+        )}
+      </dd>
       <p className={styles.factMeta}>
         <span className={styles.factOk}>{verified}</span> · {source}
       </p>

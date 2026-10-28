@@ -1,14 +1,17 @@
+import Link from "next/link";
+import { ArrowRight, CircleCheck, CircleDashed } from "lucide-react";
 import { calculateK4 } from "@/domain";
 import { loadDashboardBundle } from "@/data/fixtures/load-dashboard";
+import { readDemoRole } from "@/application/read-demo-session";
+import { canAccessRoute } from "@/domain/access";
+import { KpiHeadline } from "@/components/kpi/KpiHeadline";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { ProvenanceLine } from "@/components/ui/ProvenanceLine";
-import { StatusBadge } from "@/components/ui/StatusBadge";
-import { getDictionary } from "@/i18n/dictionaries";
-import { CountUp } from "@/components/motion/CountUp";
-import { formatPct, formatDateIso } from "@/lib/format";
-import { cn } from "@/lib/cn";
+import { fillTemplate, getDictionary } from "@/i18n/dictionaries";
+import { formatPct, formatDateIso, formatInt } from "@/lib/format";
 import styles from "@/components/screens/screen.module.css";
-import chartStyles from "@/components/charts/charts.module.css";
+import views from "@/components/screens/views.module.css";
+import p5 from "./p5.module.css";
 
 export const metadata = {
   title: "Demanda regional · MTR Insight",
@@ -17,142 +20,131 @@ export const metadata = {
 /** Demo session is request data, so this screen does not prerender. */
 export const instant = false;
 
-export default function P5Page() {
+export default async function P5Page() {
   const dict = getDictionary("es");
+  const t = dict.screenBody.p5;
+  const role = await readDemoRole();
   const bundle = loadDashboardBundle();
   const k4 = calculateK4(bundle.demand);
-  const { competitors, evidenceChecklist, catchment } = bundle.competitors;
+  const { competitors, evidenceChecklist, catchment, period } = bundle.competitors;
+  const doneCount = evidenceChecklist.filter((e) => e.done).length;
+  const maxShare = Math.max(...competitors.map((c) => c.sharePct));
 
   return (
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={dict.demo.tag}
+          eyebrow={`${dict.nav.views} · P5`}
           title={dict.screens.p5.title}
           question={dict.screens.p5.question}
         />
       </div>
 
-      <section className={styles.hero}>
-        <p className={styles.heroEyebrow}>K4 · Captura regional</p>
-        <div className={styles.heroRow}>
-          <p className={`num ${styles.heroValue}`}>
-            <CountUp value={k4.value} mode="pct" />
-          </p>
-          <StatusBadge status={k4.status} />
+      <KpiHeadline code="K4" label={t.kpiLabel} value={k4.value} status={k4.status}>
+        {fillTemplate(t.meta, {
+          dep: formatInt(bundle.demand.directInternationalDeparturesFromMtr),
+          trav: formatInt(bundle.demand.catchmentInternationalTravelers),
+        })}
+      </KpiHeadline>
+
+      <section className={views.statStrip}>
+        <div className={views.stat}>
+          <span className={views.statLabel}>{t.catchment}</span>
+          <span className={p5.statText}>{catchment}</span>
         </div>
-        <p className={styles.heroMeta}>Meta ≥ 20 %. Zona: {catchment}.</p>
+        <div className={views.stat}>
+          <span className={views.statLabel}>{t.period}</span>
+          <span className={`num ${p5.statText}`}>
+            {formatDateIso(period.start)} · {formatDateIso(period.end)}
+          </span>
+        </div>
       </section>
 
       <div className={styles.dual}>
-        <figure className={styles.cell}>
-          <figcaption className={styles.cellTitle}>
-            Diagrama MTR → PTY
-          </figcaption>
+        <figure className={views.section}>
+          <figcaption className={views.sectionTitle}>{t.mapTitle}</figcaption>
           <svg
-            viewBox="0 0 320 160"
-            className={styles.svgChart}
-            style={{ marginTop: 16 }}
+            viewBox="0 0 320 150"
+            className={p5.map}
             role="img"
-            aria-label="Arco de ruta MTR a PTY en mapa plano"
+            aria-label={t.mapAria}
           >
-            <circle cx="48" cy="100" r="6" fill="var(--series-1)" />
-            <text
-              x="48"
-              y="124"
-              textAnchor="middle"
-              className={`num ${chartStyles.chartTextFg}`}
-              fontSize="11"
-            >
+            <path
+              d="M58 104 C 140 24, 200 22, 262 54"
+              className={p5.arc}
+              pathLength={1}
+            />
+            <circle cx="58" cy="104" r="5" className={p5.nodeOrigin} />
+            <circle cx="262" cy="54" r="5" className={p5.nodeDest} />
+            <text x="58" y="128" textAnchor="middle" className={p5.label}>
               MTR
             </text>
-            <circle cx="272" cy="56" r="6" fill="var(--series-2)" />
-            <text
-              x="272"
-              y="44"
-              textAnchor="middle"
-              className={`num ${chartStyles.chartTextFg}`}
-              fontSize="11"
-            >
+            <text x="262" y="38" textAnchor="middle" className={p5.label}>
               PTY
             </text>
-            <path
-              d="M54 96 C 140 20, 200 20, 266 58"
-              fill="none"
-              stroke="var(--fg-muted)"
-              strokeWidth="1"
-            />
-            <text
-              x="160"
-              y="148"
-              textAnchor="middle"
-              className={chartStyles.chartText}
-              fontSize="10"
-            >
-              Mapa plano · sin proyección · ilustrativo
-            </text>
           </svg>
+          <p className={views.hint}>{t.mapNote}</p>
         </figure>
 
-        <div className={styles.cell}>
-          <h2 className={styles.cellTitle}>
-            Competidores (participación ilustrativa)
-          </h2>
-          <ul style={{ marginTop: 16 }}>
+        <section className={views.section}>
+          <div>
+            <h2 className={views.sectionTitle}>{t.competitorsTitle}</h2>
+            <p className={views.hint}>{t.competitorsHint}</p>
+          </div>
+          <ul className={p5.bars}>
             {competitors.map((c) => (
-              <li key={c.airport} style={{ marginBottom: 12 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: 12,
-                    marginBottom: 4,
-                  }}
-                >
+              <li key={c.airport} className={p5.bar}>
+                <div className={p5.barHead}>
                   <span>
-                    {c.label}{" "}
-                    <span className="num" style={{ color: "var(--fg-subtle)" }}>
-                      {c.airport}
-                    </span>
+                    {c.label} <span className={views.codeMuted}>{c.airport}</span>
                   </span>
                   <span className="num">{formatPct(c.sharePct)}</span>
                 </div>
-                <div className={styles.barTrack}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${c.sharePct * 100}%` }}
+                <div className={p5.track} aria-hidden>
+                  <span
+                    className={p5.fill}
+                    data-self={c.airport === "MTR" ? "true" : undefined}
+                    style={{ inlineSize: `${(c.sharePct / maxShare) * 100}%` }}
                   />
                 </div>
               </li>
             ))}
           </ul>
-        </div>
+        </section>
       </div>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitleSm}>Paquete de evidencia</h2>
-        <ul className={styles.evidenceList}>
+      <section className={views.section}>
+        <div className={views.sectionHead}>
+          <h2 className={views.sectionTitle}>{t.evidenceTitle}</h2>
+          <span className={views.chip}>
+            {fillTemplate(t.evidenceDone, {
+              done: doneCount,
+              total: evidenceChecklist.length,
+            })}
+          </span>
+        </div>
+        <ul className={p5.evidence}>
           {evidenceChecklist.map((item) => (
-            <li key={item.id} className={styles.evidenceItem}>
-              <span
-                className={cn(styles.check, item.done && styles.checkDone)}
-                aria-hidden
-              />
-              <span>
-                <span
-                  className="num"
-                  style={{ fontSize: 12, color: "var(--fg-subtle)" }}
-                >
-                  {item.id}
-                </span>
-                <span style={{ marginLeft: 8 }}>{item.label}</span>
-              </span>
+            <li key={item.id} className={p5.evidenceItem} data-done={item.done ? "true" : undefined}>
+              {item.done ? (
+                <CircleCheck size={16} strokeWidth={1.5} aria-label={t.done} />
+              ) : (
+                <CircleDashed size={16} strokeWidth={1.5} aria-label={t.pending} />
+              )}
+              <span className={views.codeMuted}>{item.id}</span>
+              <span>{item.label}</span>
             </li>
           ))}
         </ul>
+        {role && canAccessRoute(role, "/situacion") ? (
+          <Link href="/situacion" className={views.inlineLink}>
+            {t.toSituation}
+            <ArrowRight size={16} strokeWidth={1.5} aria-hidden />
+          </Link>
+        ) : null}
       </section>
 
-      <footer className={styles.footer}>
+      <footer className={views.footer}>
         <ProvenanceLine
           source={bundle.meta.fuente}
           datasetVersion={bundle.meta.version}

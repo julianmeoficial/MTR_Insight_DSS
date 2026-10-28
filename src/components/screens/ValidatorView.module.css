@@ -1,0 +1,456 @@
+/* Paso 14 validator: route × aircraft matrix + evaluation + compare */
+
+.matrix {
+  inline-size: 100%;
+  min-inline-size: 52rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--t-sm);
+}
+
+.matrix th,
+.matrix td {
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.matrix tbody tr:last-child th,
+.matrix tbody tr:last-child td {
+  box-shadow: none;
+}
+
+.routeHead,
+.aircraftHead {
+  padding: var(--s-2);
+  font-size: var(--t-xs);
+  font-weight: 510;
+  text-align: start;
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.aircraftHead {
+  text-align: center;
+}
+
+.aircraftHead > * {
+  display: block;
+}
+
+.seats {
+  margin-block-start: calc(var(--s-1) / 2);
+  font-size: var(--t-mini);
+  color: var(--fg-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.routeCell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-inline-size: 15rem;
+  padding: var(--s-2);
+  font-weight: 400;
+  text-align: start;
+}
+
+.routeName {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--s-1) / 2);
+}
+
+.routeAirline {
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.cellTd {
+  padding: var(--s-1);
+  text-align: center;
+}
+
+.cell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-block-size: var(--s-10);
+  padding-inline: var(--s-2);
+  border-radius: var(--r-8);
+  transition:
+    background var(--d-2) var(--e-out),
+    transform var(--d-1) var(--e-snap);
+}
+
+.cell:hover {
+  background: var(--surface-2);
+}
+
+.cell:active {
+  transform: scale(0.98);
+}
+
+.cellRing {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-8);
+  background: var(--surface-3);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line-3);
+}
+
+.cellBody {
+  position: relative;
+  display: inline-flex;
+}
+
+.candidate,
+.changed {
+  position: absolute;
+  inline-size: calc(var(--s-1) * 1.5);
+  block-size: calc(var(--s-1) * 1.5);
+  border-radius: var(--r-pill);
+}
+
+.candidate {
+  inset-block-start: var(--s-1);
+  inset-inline-start: var(--s-1);
+  background: var(--fg-2);
+}
+
+.changed {
+  inset-block-start: var(--s-1);
+  inset-inline-end: var(--s-1);
+  box-shadow: 0 0 0 1.5px var(--fg-2);
+}
+
+.candidate[data-static="true"],
+.changed[data-static="true"] {
+  position: static;
+  display: inline-block;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+/* Detail: evaluation + compare side by side on wide screens */
+
+.detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-block-end: 1px solid var(--line);
+}
+
+@container (min-width: 1000px) {
+  .detail {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .detail > :first-child {
+    box-shadow: inset -1px 0 0 var(--line);
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  min-inline-size: 0;
+  padding: var(--s-6) var(--s-4);
+}
+
+@media (min-width: 640px) {
+  .panel {
+    padding-inline: var(--s-6);
+  }
+}
+
+.detail > .panel:first-child {
+  background: var(--surface-1);
+}
+
+.titleAircraft {
+  margin-inline-start: var(--s-2);
+  font-size: var(--t-sm);
+  font-weight: 510;
+  letter-spacing: 0;
+  color: var(--fg-2);
+}
+
+.headline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-radius: var(--r-12);
+  background: var(--surface-2);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line);
+}
+
+.headlineCell {
+  padding: var(--s-4);
+  box-shadow: inset -1px 0 0 var(--line);
+}
+
+.headlineCell:last-child {
+  box-shadow: none;
+}
+
+.headlineCell dt {
+  font-size: var(--t-xs);
+  font-weight: 510;
+  line-height: 1.3;
+  color: var(--fg-3);
+}
+
+.headlineCell dd {
+  margin-block-start: var(--s-2);
+  font-family: var(--ff-mono);
+  font-size: var(--t-xl);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-block: var(--s-3);
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.check:last-child {
+  box-shadow: none;
+}
+
+.checkBody {
+  min-inline-size: 0;
+}
+
+.checkLabel {
+  font-weight: 510;
+  color: var(--fg);
+}
+
+.checkDetail {
+  margin-block-start: calc(var(--s-1) / 2);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.gaps {
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-8);
+  background: var(--surface-3);
+}
+
+.gapsTitle {
+  font-size: var(--t-xs);
+  font-weight: 510;
+  color: var(--fg-2);
+}
+
+.compare {
+  inline-size: 100%;
+  min-inline-size: 28rem;
+  font-size: var(--t-sm);
+}
+
+.compare th,
+.compare td {
+  padding: var(--s-3) var(--s-2);
+  text-align: start;
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.compare thead th {
+  font-size: var(--t-xs);
+  font-weight: 510;
+  color: var(--fg-3);
+}
+
+.compare tbody th {
+  font-weight: 400;
+  color: var(--fg-2);
+}
+
+.compare [data-active="true"] {
+  background: var(--surface-2);
+}
+
+.compare thead [data-active="true"] {
+  color: var(--fg);
+  border-start-start-radius: var(--r-8);
+  border-start-end-radius: var(--r-8);
+}
+
+.differs {
+  color: var(--fg);
+  font-weight: 510;
+}
+
+.deltaMark {
+  margin-inline-start: var(--s-1);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.versionLine {
+  padding: var(--s-4) var(--s-4) 0;
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+@media (min-width: 640px) {
+  .versionLine {
+    padding-inline: var(--s-6);
+  }
+}
+
+/* Workbench: assumptions rail + analysis column */
+
+.workbench {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-block-end: 1px solid var(--line);
+}
+
+@media (min-width: 1180px) {
+  .workbench {
+    grid-template-columns: calc(var(--s-32) * 2.4) minmax(0, 1fr);
+  }
+}
+
+.main {
+  min-inline-size: 0;
+  container-type: inline-size;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-block-end: 1px solid var(--line);
+}
+
+@media (min-width: 900px) {
+  .summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.6fr);
+  }
+}
+
+.summaryCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-5);
+  box-shadow: inset -1px 0 0 var(--line), inset 0 -1px 0 var(--line);
+}
+
+.summaryCell[data-wide="true"] {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 900px) {
+  .summaryCell {
+    box-shadow: inset -1px 0 0 var(--line);
+  }
+
+  .summaryCell[data-wide="true"] {
+    grid-column: auto;
+    box-shadow: none;
+  }
+}
+
+.summaryValue {
+  font-family: var(--ff-mono);
+  font-size: var(--t-2xl);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.runwayHint {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--s-1) / 2);
+  margin-block-start: var(--s-1);
+  font-size: var(--t-mini);
+  font-weight: 500;
+  color: var(--fg-3);
+}
+
+.runwayHint[data-short="true"] > :last-child {
+  color: var(--crit);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.side > * + * {
+  box-shadow: inset 0 1px 0 var(--line);
+}
+
+/* Assignment: airport sign tags (DESIGN.md §1.1 wayfinding) */
+
+.assignment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  margin-block-start: var(--s-3);
+}
+
+.assignmentLabel {
+  font-size: var(--t-xs);
+  font-weight: 510;
+  color: var(--fg-3);
+}
+
+.signTag {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: calc(var(--s-5) + var(--s-1));
+  padding-inline: var(--s-2);
+  border-radius: var(--r-2);
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-condensed);
+  font-size: var(--t-mini);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Runway designation: white on red mandatory sign; terminal: location sign */
+.signTag[data-kind="runway"] {
+  color: var(--fg);
+  background: color-mix(in oklab, var(--crit) 78%, var(--bg));
+}
+
+.signTag[data-kind="terminal"] {
+  color: var(--accent);
+  background: var(--bg);
+  box-shadow: 0 0 0 1px var(--line-2);
+}

@@ -14,6 +14,9 @@ import {
   Scale,
   PenLine,
   Search,
+  Compass,
+  Route,
+  ShieldCheck,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
@@ -37,7 +40,10 @@ type NavItem = {
     | "quality"
     | "alerts"
     | "scenarios"
-    | "decisions";
+    | "decisions"
+    | "situation"
+    | "validator"
+    | "admin";
   icon: typeof LayoutDashboard;
   count?: number;
 };
@@ -52,9 +58,18 @@ const VIEW_ITEMS: NavItem[] = [
   { href: "/p7", labelKey: "quality", icon: Database },
 ];
 
+const CONTEXT_ITEMS: NavItem[] = [
+  { href: "/situacion", labelKey: "situation", icon: Compass },
+];
+
 const DSS_ITEMS: NavItem[] = [
   { href: "/escenarios", labelKey: "scenarios", icon: Scale },
+  { href: "/validador", labelKey: "validator", icon: Route },
   { href: "/decisiones", labelKey: "decisions", icon: PenLine },
+];
+
+const GOV_ITEMS: NavItem[] = [
+  { href: "/admin", labelKey: "admin", icon: ShieldCheck },
 ];
 
 type Props = {
@@ -69,7 +84,9 @@ export function NavRail({ role, alertCount = 0, onSearch }: Props) {
   const { dict } = usePreferences();
   const allowed = new Set(allowedNavHrefs(role));
   const views = VIEW_ITEMS.filter((item) => allowed.has(item.href));
+  const context = CONTEXT_ITEMS.filter((item) => allowed.has(item.href));
   const dss = DSS_ITEMS.filter((item) => allowed.has(item.href));
+  const gov = GOV_ITEMS.filter((item) => allowed.has(item.href));
   const showAlerts = allowed.has("/alertas");
 
   function renderItem(item: NavItem) {
@@ -143,10 +160,22 @@ export function NavRail({ role, alertCount = 0, onSearch }: Props) {
           <ul className={styles.list}>{views.map(renderItem)}</ul>
         </>
       ) : null}
+      {context.length > 0 ? (
+        <>
+          <p className={styles.groupLabel}>{dict.nav.groupContext}</p>
+          <ul className={styles.list}>{context.map(renderItem)}</ul>
+        </>
+      ) : null}
       {dss.length > 0 ? (
         <>
           <p className={styles.groupLabel}>{dict.nav.groupDss}</p>
           <ul className={styles.list}>{dss.map(renderItem)}</ul>
+        </>
+      ) : null}
+      {gov.length > 0 ? (
+        <>
+          <p className={styles.groupLabel}>{dict.nav.groupGov}</p>
+          <ul className={styles.list}>{gov.map(renderItem)}</ul>
         </>
       ) : null}
     </nav>

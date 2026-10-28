@@ -3,7 +3,7 @@
 import type { TrafficLight } from "@/domain/types";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { CountUp } from "@/components/motion/CountUp";
-import { cn } from "@/lib/cn";
+import { SettleReveal } from "@/components/motion/SettleReveal";
 import styles from "./KpiHero.module.css";
 
 type Props = {
@@ -13,23 +13,17 @@ type Props = {
   vsBreakEvenPp: number | null;
 };
 
-function barClass(status: TrafficLight): string {
-  if (status === "green") return styles.barOk!;
-  if (status === "yellow") return styles.barWarn!;
-  if (status === "red") return styles.barCrit!;
-  return styles.barNodata!;
-}
-
 export function KpiHero({ value, status, label, vsBreakEvenPp }: Props) {
   return (
     <section className={styles.hero}>
-      <span className={cn(styles.bar, barClass(status))} aria-hidden />
       <p className={styles.label}>{label}</p>
       <div className={styles.row}>
         <p className={`num ${styles.value}`}>
           <CountUp value={value} mode="pct" />
         </p>
-        <StatusBadge status={status} />
+        <SettleReveal>
+          <StatusBadge status={status} />
+        </SettleReveal>
       </div>
       <p className={styles.meta}>
         Frente a equilibrio 70 %:{" "}

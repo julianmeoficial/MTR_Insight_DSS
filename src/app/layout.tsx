@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { inter, mono } from "@/app/fonts";
+import { display, mono, sans } from "@/app/fonts";
 import { DemoSessionProvider } from "@/components/providers/DemoSessionProvider";
 import { PreferencesProvider } from "@/components/providers/PreferencesProvider";
 import { LOCALE_COOKIE, THEME_COOKIE } from "@/i18n/cookies";
@@ -34,7 +34,7 @@ export default function RootLayout({
     <html
       lang="es"
       data-theme="dark"
-      className={`${inter.variable} ${mono.variable}`}
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
       suppressHydrationWarning
     >
       <head>

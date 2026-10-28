@@ -44,9 +44,10 @@
 }
 
 .value {
+  font-family: var(--ff-mono);
   font-size: var(--t-3xl);
-  font-weight: 590;
-  letter-spacing: -0.025em;
+  font-weight: 400;
+  letter-spacing: -0.04em;
   line-height: 1;
   color: var(--fg);
 }

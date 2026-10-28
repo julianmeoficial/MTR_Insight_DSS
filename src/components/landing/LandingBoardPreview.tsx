@@ -12,6 +12,9 @@ import { usePreferences } from "@/components/providers/PreferencesProvider";
 import { ProvenanceLine } from "@/components/ui/ProvenanceLine";
 import styles from "./LandingBoardPreview.module.css";
 
+/** Matches the hero frame entrance in LandingMotion (delay 0.55 + settle). */
+const HERO_FRAME_LANDS_S = 0.9;
+
 type Props = {
   tiles: KpiTileModel[];
   series: LoadFactorSeriesPoint[];
@@ -66,6 +69,7 @@ export function LandingBoardPreview({
             <KpiTile
               tile={tile}
               index={index}
+              countDelay={compact ? HERO_FRAME_LANDS_S : 0}
               provenanceMeta={`${tile.subtitle} · ${dict.kpi.validated} ${meta.lastValidated}`}
             />
           </li>

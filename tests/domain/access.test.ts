@@ -49,6 +49,8 @@ describe("demo access matrix", () => {
       "/p6",
       "/alertas",
       "/escenarios",
+      "/situacion",
+      "/validador",
     ]);
     expect(allowedNavHrefs("comercial")).toContain("/alertas");
     expect(allowedNavHrefs("comercial")).not.toContain("/escenarios");
@@ -56,11 +58,24 @@ describe("demo access matrix", () => {
       "/p4",
       "/p6",
       "/escenarios",
+      "/validador",
     ]);
-    expect(allowedNavHrefs("ti")).toEqual(["/p7"]);
+    expect(allowedNavHrefs("ti")).toEqual(["/p7", "/admin"]);
     for (const href of ["/p1", "/p2", "/p3", "/p4", "/p5", "/p6"]) {
       expect(allowedNavHrefs("ti")).not.toContain(href);
     }
+  });
+
+  it("opens situacion with P1 or P5, validador with P5 or P6, admin by grant", () => {
+    expect(canAccessRoute("juridica", "/situacion")).toBe(true);
+    expect(canAccessRoute("comercial", "/validador")).toBe(true);
+    expect(canAccessRoute("juridica", "/validador")).toBe(false);
+    expect(canAccessRoute("satena", "/situacion")).toBe(false);
+    expect(canAccessRoute("satena", "/validador")).toBe(false);
+    expect(canAccessRoute("ti", "/admin")).toBe(true);
+    expect(canAccessRoute("gerencia_general", "/admin")).toBe(true);
+    expect(canAccessRoute("gerencia_mtr", "/admin")).toBe(false);
+    expect(canAccessRoute("ti", "/situacion")).toBe(false);
   });
 
   it("sends each role to its first granted screen", () => {

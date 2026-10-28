@@ -1,0 +1,12 @@
+.root {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-3);
+  min-block-size: 50vh;
+}
+
+.label {
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}

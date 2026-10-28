@@ -17,55 +17,9 @@ export function LandingMotion({ children }: { children: React.ReactNode }) {
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const frame = root.querySelector<HTMLElement>("[data-frame]");
         const heroStage = root.querySelector<HTMLElement>("[data-hero-stage]");
-        const h1 = root.querySelector<HTMLElement>("[data-h1]");
 
-        gsap.fromTo(
-          "[data-hero-tag]",
-          { y: 8, autoAlpha: 0 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.5,
-            delay: 0.1,
-            ease: "expo.out",
-            clearProps: "transform,opacity,visibility",
-          },
-        );
-
-        if (h1) {
-          gsap.fromTo(
-            h1,
-            { y: 16, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.95,
-              delay: 0.16,
-              ease: "expo.out",
-              overwrite: "auto",
-              onComplete: () => {
-                gsap.set(h1, { clearProps: "transform,opacity,visibility" });
-              },
-            },
-          );
-          gsap.delayedCall(1.8, () => {
-            gsap.set(h1, { clearProps: "transform,opacity,visibility" });
-          });
-        }
-
-        gsap.fromTo(
-          "[data-hero-sub], [data-hero-cta]",
-          { y: 12, autoAlpha: 0 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.6,
-            stagger: 0.06,
-            delay: 0.42,
-            ease: "expo.out",
-            clearProps: "transform,opacity,visibility",
-          },
-        );
+        // Hero copy enters with CSS (landing.module.css) so it plays on first
+        // paint instead of waiting for hydration; GSAP owns the frame and scroll.
 
         const wide = window.matchMedia("(min-width: 768px)").matches;
         if (frame && heroStage && wide) {

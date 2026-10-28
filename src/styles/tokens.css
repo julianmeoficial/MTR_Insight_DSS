@@ -32,7 +32,7 @@
   --series-1: #6f97f0;
   --series-2: #f2c230;
   --series-3: #4fc1b2;
-  --series-4: #a98bea;
+  --series-4: #c8894b;
   --series-5: #f0957c;
   --series-6: #8a8f98;
 
@@ -77,11 +77,17 @@
 }
 
 :root {
-  /* next/font injects --font-inter / --font-mono on <html>; never alias with the same name */
-  --ff-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  /* next/font injects --font-archivo / --font-plex / --font-b612 on <html>; never alias with the same name */
+  --ff-display: var(--font-archivo), var(--font-plex), ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --ff-sans: var(--font-plex), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
-  --ff-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
-  --ff-features: "cv11", "ss01", "ss03";
+  --ff-mono: var(--font-b612), ui-monospace, "SF Mono", Menlo, monospace;
+  --ff-features: normal;
+  /* Archivo width axis (DESIGN.md §3): condensed signage, normal UI, wide landing */
+  --wdth-condensed: 82%;
+  --wdth-normal: 100%;
+  --wdth-wide: 112%;
 
   --t-mini: 0.6875rem;
   --t-xs: 0.75rem;
@@ -134,7 +140,7 @@
   --r-md: var(--r-8);
   --r-cockpit: var(--r-16);
   --shadow-cockpit: var(--shadow-2);
-  --font-display: var(--ff-sans);
+  --font-display: var(--ff-display);
   --font-sans: var(--ff-sans);
   --dur-1: var(--d-1);
   --dur-2: var(--d-2);

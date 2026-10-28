@@ -54,13 +54,18 @@ export function grantedScreens(role: RoleId): readonly MatrixScreen[] {
 /**
  * Nav targets for a demo role.
  * `/alertas` follows P1. `/escenarios` follows P6.
- * `/decisiones` stays out of the prototype grant.
+ * `/situacion` (Paso 13) follows P1 or P5. `/validador` (Paso 14) follows
+ * P5 or P6. `/admin` needs the admin grant. `/decisiones` stays out of the
+ * prototype grant.
  */
 export function allowedNavHrefs(role: RoleId): readonly string[] {
   const screens = grantedScreens(role);
   const hrefs = screens.map((screen) => SCREEN_PATH[screen]);
   if (screens.includes("P1")) hrefs.push("/alertas");
   if (screens.includes("P6")) hrefs.push("/escenarios");
+  if (screens.includes("P1") || screens.includes("P5")) hrefs.push("/situacion");
+  if (screens.includes("P5") || screens.includes("P6")) hrefs.push("/validador");
+  if (ACCESS_MATRIX[role]?.admin) hrefs.push("/admin");
   return hrefs;
 }
 

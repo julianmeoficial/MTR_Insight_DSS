@@ -1,0 +1,150 @@
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-inline-size: 0;
+}
+
+.svg {
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--r-12);
+  background:
+    radial-gradient(80% 60% at 50% 0%, color-mix(in oklab, var(--fg) 3%, transparent), transparent 70%),
+    var(--surface-1);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line);
+}
+
+.rwyExisting {
+  fill: color-mix(in oklab, var(--fg) 16%, var(--surface-2));
+}
+
+.rwyProjected {
+  fill: url(#hatch);
+  stroke: var(--fg-3);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.hatch {
+  stroke: color-mix(in oklab, var(--fg) 18%, transparent);
+  stroke-width: 2;
+}
+
+.marking {
+  fill: color-mix(in oklab, var(--fg) 70%, transparent);
+}
+
+.centerline {
+  stroke: var(--fg);
+  stroke-width: 1;
+  stroke-dasharray: 12 12;
+  opacity: 0.7;
+}
+
+.runway[data-active="true"] .rwyExisting,
+.runway[data-active="true"] .rwyProjected {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: none;
+}
+
+.runway[data-active="true"] .centerline {
+  stroke: var(--accent);
+  opacity: 1;
+}
+
+.designator {
+  font-family: var(--ff-mono);
+  font-size: var(--t-xs);
+  fill: var(--fg);
+}
+
+.rwyLabel {
+  font-family: var(--ff-sans);
+  font-size: var(--t-mini);
+  font-weight: 500;
+  fill: var(--fg-3);
+}
+
+.taxiway {
+  stroke: color-mix(in oklab, var(--fg) 14%, var(--surface-2));
+  stroke-width: 6;
+}
+
+.taxiwayProjected {
+  stroke: var(--fg-4);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.apron {
+  fill: color-mix(in oklab, var(--fg) 6%, var(--surface-1));
+}
+
+.bldgExisting {
+  fill: color-mix(in oklab, var(--fg) 22%, var(--surface-2));
+}
+
+.bldgProjected {
+  fill: url(#hatch);
+  stroke: var(--fg-3);
+  stroke-dasharray: 3 2;
+}
+
+.termLabel {
+  font-family: var(--ff-mono);
+  font-size: calc(var(--t-mini) * 0.85);
+  fill: var(--fg);
+}
+
+.terminal[data-active="true"] .apron {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.scale line {
+  stroke: var(--fg-3);
+  stroke-width: 1;
+}
+
+.scale text {
+  font-family: var(--ff-mono);
+  font-size: calc(var(--t-mini) * 0.85);
+  fill: var(--fg-3);
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: var(--s-4);
+  block-size: var(--s-2);
+  border-radius: var(--r-2);
+}
+
+.swatch[data-kind="existing"] {
+  background: color-mix(in oklab, var(--fg) 16%, var(--surface-2));
+}
+
+.swatch[data-kind="projected"] {
+  background: repeating-linear-gradient(
+    45deg,
+    color-mix(in oklab, var(--fg) 22%, transparent) 0 2px,
+    transparent 2px 5px
+  );
+  box-shadow: inset 0 0 0 1px var(--fg-3);
+}

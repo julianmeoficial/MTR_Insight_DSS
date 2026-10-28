@@ -82,6 +82,12 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Thousands/decimal separator inside monospace figures (CountUp) */
+  .numSep {
+    display: inline-block;
+    margin-inline: -0.2em;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;

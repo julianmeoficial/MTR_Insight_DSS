@@ -23,7 +23,7 @@
 }
 
 .wordmark {
-  font-family: var(--ff-sans);
+  font-family: var(--ff-display);
   font-size: var(--t-lg);
   font-weight: 590;
   letter-spacing: -0.01em;

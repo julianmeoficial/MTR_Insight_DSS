@@ -10,6 +10,7 @@ import { BreakEvenBars } from "@/components/charts/BreakEvenBars";
 import { RouteFilterBar } from "@/components/filters/RouteFilterBar";
 import { KpiHero } from "@/components/kpi/KpiHero";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
+import { ScreenLoading } from "@/components/ui/ScreenLoading";
 import { ProvenanceLine } from "@/components/ui/ProvenanceLine";
 import { ContextPanel } from "@/components/ui/ContextPanel";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -19,6 +20,7 @@ import { canExport, resolveOperatorFilter, visibleOperators } from "@/domain/acc
 import type { TrafficLight } from "@/domain/types";
 import { cn } from "@/lib/cn";
 import styles from "@/components/screens/screen.module.css";
+import views from "@/components/screens/views.module.css";
 
 export const metadata = {
   title: "Rutas y ocupación · MTR Insight",
@@ -36,17 +38,10 @@ type Props = {
 export const instant = false;
 
 export default function P2Page({ searchParams }: Props) {
+  const dict = getDictionary("es");
   return (
     <Suspense
-      fallback={
-        <main className={styles.main}>
-          <div className={styles.pad}>
-            <p className={styles.muted} role="status">
-              Cargando rutas…
-            </p>
-          </div>
-        </main>
-      }
+      fallback={<ScreenLoading label={dict.states.loading} />}
     >
       <P2Content searchParams={searchParams} />
     </Suspense>
@@ -101,7 +96,7 @@ async function P2Content({ searchParams }: Props) {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={dict.demo.tag}
+          eyebrow={`${dict.nav.views} · P2`}
           title={dict.screens.p2.title}
           question={dict.screens.p2.question}
         />
@@ -119,7 +114,7 @@ async function P2Content({ searchParams }: Props) {
       <KpiHero
         value={hero.value}
         status={hero.status}
-        label={`K1 · LOAD FACTOR · ${operator} · ${aircraft === "Todos" ? "Todas las aeronaves" : aircraft}`}
+        label={`K1 · ${dict.kpi.k1} · ${operator} · ${aircraft === "Todos" ? "Todas las aeronaves" : aircraft}`}
         vsBreakEvenPp={vsBe}
       />
 
@@ -189,15 +184,13 @@ function DetailTable({
   const rows = series.filter((s) => !weekStart || s.weekStart === weekStart);
 
   return (
-    <div className={styles.cell}>
-      <h3 className={styles.cellTitle}>Detalle de la semana</h3>
+    <div className={views.section}>
+      <h3 className={views.sectionTitle}>Detalle de la semana</h3>
       {rows.length === 0 ? (
-        <p className={styles.muted} style={{ marginTop: 12 }}>
-          Sin datos para el filtro.
-        </p>
+        <p className={views.hint}>Sin datos para el filtro.</p>
       ) : (
-        <div className={styles.tableWrap} style={{ marginTop: 12, border: "none" }}>
-          <table className={styles.table} style={{ minWidth: "20rem" }}>
+        <div className={views.tableWrap}>
+          <table className={views.table}>
             <thead>
               <tr>
                 <th>Operador</th>
@@ -215,9 +208,9 @@ function DetailTable({
                 >
                   <td>{row.operator}</td>
                   <td className="num">{row.aircraftType}</td>
-                  <td className="num">{formatInt(row.passengers)}</td>
-                  <td className="num">{formatInt(row.seats)}</td>
-                  <td className="num">{formatPct(row.value)}</td>
+                  <td className={views.cellNum}>{formatInt(row.passengers)}</td>
+                  <td className={views.cellNum}>{formatInt(row.seats)}</td>
+                  <td className={views.cellNum}>{formatPct(row.value)}</td>
                   <td>
                     <StatusBadge status={row.status} />
                   </td>
@@ -227,9 +220,7 @@ function DetailTable({
           </table>
         </div>
       )}
-      <p className={styles.disclaimer} style={{ marginTop: 12 }}>
-        Exportar · Disponible en SIG completo
-      </p>
+      <p className={views.disclaimer}>Exportar · Disponible en SIG completo</p>
     </div>
   );
 }
