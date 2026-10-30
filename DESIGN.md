@@ -394,14 +394,36 @@ status pills or traffic lights in WebGL. No globes, neon HUD or 3D charts.
   infrastructure data (runway length and width, terminals, cargo bays).
   Scale 1 unit = 10 m; buildings drawn 3× taller so they read. Polar angle
   limited, no free-fly, DPR ≤ 1.5, paused offscreen and in hidden tabs.
-- Schematic, not an AIP chart or survey. Parallel runway at 1.035 m
-  (independent approaches), midfield T2.
+- Schematic, not an AIP chart or survey. Expansion is a midfield master
+  plan: RWY 14L/32R parallel at 1.500 m (above the 1.035 m ICAO minimum
+  for independent approaches), T1 facing RWY 14/32, T2 facing the new
+  runway, landside between them. Nothing crosses the runways on the
+  ground: landside enters from the west, the crossfield taxiway links both
+  airsides on the east.
 - Elements: runway strip, asphalt, piano keys, 12/12 centerline, edge lights
   (threshold green, end red), PAPI; parallel taxiway with yellow centerline
   and connectors; T1 apron with stands and parked regional jets, two-level
   terminal with glazing; control tower; cargo terminal with one bay per
-  published warehouse, dock doors and a freighter. Projected RWY 2, taxiway
-  B and T2 with widebody stands are translucent with dashed edges.
+  published warehouse, dock doors and a freighter. Expansion is drawn solid
+  (it is a design concept, labeled by the dashed tags and the sidecar):
+  RWY 2 with taxiway B and rapid exits, crossfield taxiway, T2 linear pier
+  with jet bridges and widebody plus narrowbody stands, glass headhouse
+  under a floating roof, departures viaduct; landside laid out for flow:
+  dual boulevard with a planted median into a roundabout, one-way ring
+  past both curbs, taxi holding bays at T1 and T2 with pick-up canopies,
+  bus bays at the intermodal hub (green roof); a glass pedestrian
+  skybridge T1 to hub to T2 with branches to both garages and the hotel
+  and vertical cores at each curb; an elevated parcel belt from T1 cargo
+  to a T2 cargo annex (parcels move both ways) with truck yards at both
+  ends; surface lot, park and tree rows; support zone with MRO hangar,
+  fuel farm and fire and rescue station.
+- Lambert materials only and shaders compiled with `compileAsync` (with the
+  expansion included) so the first frame lands in about 0.2 s and toggling
+  Ampliación never stalls. Repeated parts (lights, marks, trees, cars,
+  pylons, tanks) are instanced. The first frame draws even offscreen.
+- Palette: sage field, darker park and trees, charcoal pavement, light
+  aprons, white roofs, steel-teal glazing (never blue-violet), terracotta
+  cargo roofs, airport yellow for taxi lines and taxis.
 - Colors are read from the tokens at runtime (no hex in components) and
   follow light/dark theme without rebuilding the scene.
 - HTML sign tags follow the camera (location sign for terminals, red

@@ -276,6 +276,18 @@
   overflow-wrap: anywhere;
 }
 
+/* Descriptive facts (concept areas): one column, reading size */
+.facts[data-prose="true"] {
+  grid-template-columns: 1fr;
+  gap: var(--s-3);
+}
+
+.facts[data-prose="true"] .fact dd {
+  font-size: var(--t-sm);
+  font-weight: 450;
+  line-height: 1.4;
+}
+
 .unit {
   margin-inline-start: var(--s-1);
   font-family: var(--ff-sans);

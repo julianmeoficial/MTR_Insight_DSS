@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Aerodrome expansion as a midfield master plan: parallel RWY 14L/32R at 1.500 m, T2 pier and headhouse facing it, intermodal hub with a pedestrian skybridge T1 to T2, roundabout and one-way ring, taxi and bus bays, an elevated parcel belt between T1 cargo and a T2 cargo annex, parking, hotel, park, MRO hangar, fuel farm and fire station; selectable hub and support zone in the sidecar
 - Aerodrome 3D rebuilt: to-scale runways, aprons, stands, cargo docks, tower, lights, sign tags, camera presets, loading and fallback states
 - P5 future route planner (national/international, current/expansion), P2 national/international switch, alert read marks
 - Weekly national demo data with seasonality; 2045 planning with the full aircraft catalog
@@ -30,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Aerodrome 3D: sage and charcoal palette, steel-teal glazing, Lambert materials with async shader compile (first frame from about 4.5 s to 0.2 s), tighter camera framing
 - Fixed: sections shrinking inside the scroll column (Situación actual list overlapping the next section), page-level scroll from screen-reader helpers, separator tightening applied to non-monospace figures
 - P4, P5 and P7 rebuilt on shared token-only view styles (no inline styles); KPI headline component
 - Screen titles follow DESIGN.md §3 (24/600) with sentence-case breadcrumbs instead of uppercase eyebrows

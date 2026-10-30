@@ -87,8 +87,10 @@ export function AerodromeScene({
       t2: "T2",
       cargo: t.cargoTag,
       tower: t.towerTag,
+      hub: t.hubTag,
+      support: t.supportTag,
     }),
-    [runways, t.cargoTag, t.towerTag],
+    [runways, t.cargoTag, t.towerTag, t.hubTag, t.supportTag],
   );
   const onStatus = useCallback((s: AerodromeStatus) => setStatus(s), []);
   const useSvg = reduced || status === "error";
@@ -96,7 +98,7 @@ export function AerodromeScene({
   const rwy = (id: "RWY1" | "RWY2") => runways.find((r) => r.id === id);
   const term = (id: "T1" | "T2") => terminals.find((x) => x.id === id);
 
-  function details(): { title: string; facts: [string, string][]; note?: string } {
+  function details(): { title: string; facts: [string, string][]; note?: string; prose?: boolean } {
     switch (selected) {
       case "rwy1":
       case "rwy2": {
@@ -136,6 +138,35 @@ export function AerodromeScene({
         };
       case "tower":
         return { title: t.towerTag, facts: [], note: t.towerNote };
+      case "hub": {
+        const f = t.hubFacts;
+        return {
+          title: t.hubTag,
+          facts: [
+            [f.link, f.linkValue],
+            [f.access, f.accessValue],
+            [f.taxis, f.taxisValue],
+            [f.parking, f.parkingValue],
+            [f.cargo, f.cargoValue],
+          ],
+          note: t.hubNote,
+          prose: true,
+        };
+      }
+      case "support": {
+        const f = t.supportFacts;
+        return {
+          title: t.supportTag,
+          facts: [
+            [f.mro, f.mroValue],
+            [f.fuel, f.fuelValue],
+            [f.arff, f.arffValue],
+            [f.link, f.linkValue],
+          ],
+          note: t.supportNote,
+          prose: true,
+        };
+      }
       default:
         break;
     }
@@ -244,7 +275,7 @@ export function AerodromeScene({
           <p className={styles.sidecarHint}>{selected ? info.note : t.selectHint}</p>
         </div>
         {info.facts.length > 0 ? (
-          <dl className={styles.facts}>
+          <dl className={styles.facts} data-prose={info.prose ? "true" : undefined}>
             {info.facts.map(([k, v]) => (
               <div key={k} className={styles.fact}>
                 <dt>{k}</dt>
