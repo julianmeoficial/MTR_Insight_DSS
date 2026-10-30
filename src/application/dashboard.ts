@@ -6,6 +6,8 @@ import {
   calculateK5,
   evaluateAlerts,
   evaluateTrafficLight,
+  flightsForScope,
+  parseOpsScope,
 } from "@/domain";
 import type {
   AlertEvent,
@@ -17,7 +19,9 @@ import type {
 import {
   loadDashboardBundle,
   type DashboardMeta,
+  type SemesterH1Fixture,
 } from "@/data/fixtures/load-dashboard";
+import type { OpsScope } from "@/config/operators";
 import { formatDateIso } from "@/lib/format";
 
 export type KpiTileModel = {
@@ -48,14 +52,27 @@ export type LoadFactorSeriesPoint = {
   seats: number;
 };
 
+export type RouteLfRow = {
+  route: string;
+  city: string;
+  passengers: number;
+  seats: number;
+  value: number | null;
+  status: TrafficLight;
+};
+
 export type DashboardReport = {
   meta: DashboardMeta;
   lastValidatedLabel: string;
   asOfLabel: string;
   globalStatus: TrafficLight;
+  opsScope: OpsScope;
   weeks: { weekStart: string; weekEnd: string; label: string }[];
   tiles: KpiTileModel[];
   series: LoadFactorSeriesPoint[];
+  routeRows: RouteLfRow[];
+  scopeRoutes: { id: string; city: string }[];
+  semesterH1: SemesterH1Fixture | null;
   alerts: AlertEvent[];
   criticalRequirements: {
     id: string;
@@ -64,7 +81,7 @@ export type DashboardReport = {
     critical: boolean;
     satisfied: boolean;
   }[];
-  copaPermitStatus: string;
+  copaPermitStatus: string | null;
 };
 
 const KPI_META: Record<
@@ -223,7 +240,18 @@ export type BuildDashboardOptions = {
   weekStart?: string;
   operator?: string;
   aircraftType?: string;
+  route?: string;
+  opsScope?: string;
 };
+
+function scopedFlights(opsScope: OpsScope): {
+  bundle: ReturnType<typeof loadDashboardBundle>;
+  flights: FlightRecord[];
+} {
+  const bundle = loadDashboardBundle();
+  const flights = flightsForScope(bundle.flights, bundle.routes.routes, opsScope);
+  return { bundle, flights };
+}
 
 /** Aggregated K1 for the current P2 filter (sum/sum, not mean of %). */
 export function getFilteredK1Hero(options: BuildDashboardOptions = {}): {
@@ -232,8 +260,12 @@ export function getFilteredK1Hero(options: BuildDashboardOptions = {}): {
   passengers: number;
   seats: number;
 } {
-  const bundle = loadDashboardBundle();
-  let flights = bundle.flights;
+  const opsScope = parseOpsScope(options.opsScope);
+  const { flights: scoped } = scopedFlights(opsScope);
+  let flights = scoped;
+  if (options.route && options.route !== "Todas") {
+    flights = flights.filter((f) => f.route === options.route);
+  }
   if (options.operator && options.operator !== "Todos") {
     flights = flights.filter((f) => f.operator === options.operator);
   }
@@ -265,11 +297,50 @@ export function getFilteredK1Hero(options: BuildDashboardOptions = {}): {
   };
 }
 
+function aggregateRoutesForWeek(
+  flights: FlightRecord[],
+  weekStart: string,
+  cityByRoute: Map<string, string>,
+): RouteLfRow[] {
+  const weekFlights = flights.filter((f) => f.weekStart === weekStart);
+  const byRoute = new Map<string, { pax: number; seats: number }>();
+  for (const f of weekFlights) {
+    const cur = byRoute.get(f.route) ?? { pax: 0, seats: 0 };
+    cur.pax += f.passengersBoarded;
+    cur.seats += f.seatsOffered;
+    byRoute.set(f.route, cur);
+  }
+  return [...byRoute.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([route, { pax, seats }]) => {
+      if (seats <= 0) {
+        return {
+          route,
+          city: cityByRoute.get(route) ?? route,
+          passengers: pax,
+          seats,
+          value: null,
+          status: "no_data" as const,
+        };
+      }
+      const value = pax / seats;
+      return {
+        route,
+        city: cityByRoute.get(route) ?? route,
+        passengers: pax,
+        seats,
+        value,
+        status: evaluateTrafficLight("K1", value),
+      };
+    });
+}
+
 export function buildDashboardReport(
   options: BuildDashboardOptions = {},
 ): DashboardReport {
-  const bundle = loadDashboardBundle();
-  const weeks = uniqueWeeks(bundle.flights);
+  const opsScope = parseOpsScope(options.opsScope);
+  const { bundle, flights: scoped } = scopedFlights(opsScope);
+  const weeks = uniqueWeeks(scoped);
   const selectedWeek =
     options.weekStart && weeks.some((w) => w.weekStart === options.weekStart)
       ? options.weekStart
@@ -280,11 +351,11 @@ export function buildDashboardReport(
       ?.weekStart;
 
   const k1Now = selectedWeek
-    ? aggregateK1ForWeek(bundle.flights, selectedWeek)
+    ? aggregateK1ForWeek(scoped, selectedWeek)
     : null;
   const k1Prev =
     prevWeek && prevWeek !== selectedWeek
-      ? aggregateK1ForWeek(bundle.flights, prevWeek)
+      ? aggregateK1ForWeek(scoped, prevWeek)
       : null;
 
   const k2 = calculateK2(
@@ -296,10 +367,15 @@ export function buildDashboardReport(
   const k4 = calculateK4(bundle.demand);
   const k5 = calculateK5(bundle.quality);
 
-  const k1ResultsAll = calculateK1(bundle.flights);
+  const k1ResultsScoped = calculateK1(scoped);
   const alerts = evaluateAlerts({
-    k1Results: k1ResultsAll,
+    k1Results: k1ResultsScoped,
     qualityRecords: bundle.quality,
+  }).filter((a) => {
+    if (a.trigger !== "K1_RED_STREAK") return true;
+    // Entity is "route|operator|aircraft"
+    const route = a.entity.split("|")[0] ?? "";
+    return scoped.some((f) => f.route === route);
   });
 
   function tileFrom(
@@ -339,6 +415,11 @@ export function buildDashboardReport(
       ? k1Now.value - k1Prev.value
       : null;
 
+  const scopeLabel =
+    opsScope === "nacional" ? "Red nacional" : "MTR-PTY";
+  const weekLabelText =
+    weeks.find((w) => w.weekStart === selectedWeek)?.label ?? "-";
+
   const tiles: KpiTileModel[] = [
     tileFrom(
       "K1",
@@ -349,9 +430,9 @@ export function buildDashboardReport(
         status: "no_data",
         period: { start: "", end: "" },
       },
-      `MTR-PTY · semana ${weeks.find((w) => w.weekStart === selectedWeek)?.label ?? "-"}`,
+      `${scopeLabel} · semana ${weekLabelText}`,
       k1Delta,
-      sparklineFromWeeks(bundle.flights, weeks),
+      sparklineFromWeeks(scoped, weeks),
     ),
     tileFrom(
       "K2",
@@ -361,11 +442,19 @@ export function buildDashboardReport(
       [],
     ),
     tileFrom("K3", k3, "Terminal · rolling 12 meses", null, []),
-    tileFrom("K4", k4, "Zona de influencia · corte demo", null, []),
+    tileFrom(
+      "K4",
+      k4,
+      opsScope === "nacional"
+        ? "Captura internacional del aeropuerto"
+        : "Zona de influencia · corte demo",
+      null,
+      [],
+    ),
     tileFrom("K5", k5, "Fuentes críticas · carga diaria", null, []),
   ];
 
-  let seriesFlights = bundle.flights;
+  let seriesFlights = scoped;
   if (options.operator && options.operator !== "Todos") {
     seriesFlights = seriesFlights.filter((f) => f.operator === options.operator);
   }
@@ -373,6 +462,9 @@ export function buildDashboardReport(
     seriesFlights = seriesFlights.filter(
       (f) => f.aircraftType === options.aircraftType,
     );
+  }
+  if (options.route && options.route !== "Todas") {
+    seriesFlights = seriesFlights.filter((f) => f.route === options.route);
   }
 
   const seriesResults = calculateK1(seriesFlights);
@@ -388,6 +480,17 @@ export function buildDashboardReport(
     passengers: r.meta?.numerator ?? 0,
     seats: r.meta?.denominator ?? 0,
   }));
+
+  const cityByRoute = new Map(
+    bundle.routes.routes.map((r) => [r.id, r.city] as const),
+  );
+  const routeRows = selectedWeek
+    ? aggregateRoutesForWeek(scoped, selectedWeek, cityByRoute)
+    : [];
+  const wantIntl = opsScope === "internacional";
+  const scopeRoutes = bundle.routes.routes
+    .filter((r) => r.international === wantIntl)
+    .map((r) => ({ id: r.id, city: r.city }));
 
   const criticalRequirements = bundle.requirements.map((req) => {
     const satisfied = Boolean(
@@ -407,11 +510,18 @@ export function buildDashboardReport(
     lastValidatedLabel: formatDateIso(bundle.meta.lastValidated),
     asOfLabel: formatDateIso(bundle.meta.asOfDate),
     globalStatus: worstStatus(tiles.map((t) => t.status)),
+    opsScope,
     weeks,
     tiles,
     series,
+    routeRows,
+    scopeRoutes,
+    semesterH1: opsScope === "nacional" ? bundle.semesterH1 : null,
     alerts,
     criticalRequirements,
-    copaPermitStatus: "Permiso Copa reportado por prensa · evidencia EV-COPA-PRESS",
+    copaPermitStatus:
+      opsScope === "internacional"
+        ? "Permiso Copa reportado por prensa · evidencia EV-COPA-PRESS"
+        : null,
   };
 }

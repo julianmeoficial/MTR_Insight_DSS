@@ -28,7 +28,7 @@ type Props = {
   lastValidated: string;
   asOfDate: string;
   breadcrumb?: string;
-  alertCount?: number;
+  alertIds?: readonly string[];
   dataset: { source: string; version: string; verificationStatus: string };
 };
 
@@ -39,7 +39,7 @@ export function AppShell({
   lastValidated,
   asOfDate,
   breadcrumb,
-  alertCount = 0,
+  alertIds = [],
   dataset,
 }: Props) {
   const { dict } = usePreferences();
@@ -141,7 +141,7 @@ export function AppShell({
         rail={
           <NavRail
             role={role}
-            alertCount={alertCount}
+            alertIds={alertIds}
             onSearch={() => setPaletteOpen(true)}
           />
         }

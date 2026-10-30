@@ -26,6 +26,7 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { WayfindingTag } from "@/components/ui/WayfindingTag";
 import { Kbd } from "@/components/ui/Kbd";
 import { cn } from "@/lib/cn";
+import { useReadAlerts } from "@/hooks/useReadAlerts";
 import styles from "./NavRail.module.css";
 
 type NavItem = {
@@ -74,11 +75,13 @@ const GOV_ITEMS: NavItem[] = [
 
 type Props = {
   role: RoleId;
-  alertCount?: number;
+  alertIds?: readonly string[];
   onSearch?: () => void;
 };
 
-export function NavRail({ role, alertCount = 0, onSearch }: Props) {
+export function NavRail({ role, alertIds = [], onSearch }: Props) {
+  const { isRead } = useReadAlerts();
+  const alertCount = alertIds.filter((id) => !isRead(id)).length;
   const pathname = usePathname();
   const reduced = usePrefersReducedMotion();
   const { dict } = usePreferences();

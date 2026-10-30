@@ -25,6 +25,7 @@
   padding: calc(var(--s-1) / 2) var(--s-1);
   border-radius: var(--r-4);
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-mini);
   font-weight: 500;
   color: var(--fg-2);
@@ -41,6 +42,7 @@
 
 .value {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: calc(var(--t-3xl) * 1.5);
   font-weight: 400;
   letter-spacing: -0.04em;

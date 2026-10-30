@@ -1,0 +1,31 @@
+{
+  "dataset": "cargo-0.1",
+  "version": "0.1.0",
+  "asOfDate": "2026-10-28",
+  "source": "https://www.aeropuertomonteria.co/terminal-de-carga",
+  "note": "Operadores y bodegas publicados. Sin toneladas oficiales: no inventar volumen ni KPI de carga.",
+  "operators": [
+    {
+      "id": "deprisa",
+      "label": "Deprisa",
+      "warehouses": ["B104", "B105"],
+      "website": "https://www.deprisa.com",
+      "evidence": {
+        "source": "aeropuertomonteria.co/terminal-de-carga",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "latam-cargo",
+      "label": "LATAM Cargo",
+      "warehouses": ["B106"],
+      "website": "http://www.latamcargo.com",
+      "evidence": {
+        "source": "aeropuertomonteria.co/terminal-de-carga",
+        "date": "2026-10-28",
+        "confidence": "high"
+      }
+    }
+  ]
+}

@@ -48,10 +48,17 @@ export function SplitFlap({ text, className, delay = 0 }: Props) {
         el.textContent = text;
       },
     });
+    // Background tabs pause the GSAP ticker; never leave a scrambled code.
+    const total = (delay + 0.32 + chars.length * 0.035) * 1000 + 250;
+    let fallback = 0;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
           tween.play();
+          fallback = window.setTimeout(() => {
+            tween.kill();
+            el.textContent = text;
+          }, total);
           observer.disconnect();
         }
       },
@@ -60,6 +67,7 @@ export function SplitFlap({ text, className, delay = 0 }: Props) {
     observer.observe(el);
     return () => {
       observer.disconnect();
+      window.clearTimeout(fallback);
       tween.kill();
       el.textContent = text;
     };

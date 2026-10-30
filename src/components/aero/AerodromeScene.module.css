@@ -1,0 +1,296 @@
+.container {
+  container-type: inline-size;
+  min-inline-size: 0;
+}
+
+.root {
+  display: grid;
+  gap: var(--s-4);
+}
+
+@container (min-width: 880px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+    align-items: stretch;
+  }
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-inline-size: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.views {
+  display: inline-flex;
+  gap: var(--s-1);
+  padding: var(--s-1);
+  border-radius: var(--r-8);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  min-block-size: calc(var(--s-8) - var(--s-1));
+  padding-inline: var(--s-3);
+  border-radius: var(--r-6);
+  font-size: var(--t-xs);
+  font-weight: 510;
+  color: var(--fg-2);
+  transition:
+    background var(--d-2) var(--e-out),
+    color var(--d-2) var(--e-out);
+}
+
+.viewBtn:hover {
+  color: var(--fg);
+}
+
+.viewBtn[aria-pressed="true"] {
+  color: var(--fg);
+  background: var(--surface-3);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line-2);
+}
+
+.viewport {
+  position: relative;
+}
+
+.canvasHost {
+  position: relative;
+  inline-size: 100%;
+  block-size: clamp(20rem, 46vw, 34rem);
+  border-radius: var(--r-12);
+  background: var(--bg);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line-2);
+  overflow: hidden;
+}
+
+.glCanvas {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+
+.glCanvas:active {
+  cursor: grabbing;
+}
+
+.tagLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Airport signs that follow the camera (DESIGN.md §1.1 wayfinding) */
+.tag {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: calc(var(--s-5) + var(--s-1));
+  padding-inline: var(--s-2);
+  border-radius: var(--r-2);
+  font-family: var(--ff-display);
+  font-stretch: var(--wdth-condensed);
+  font-size: var(--t-mini);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: auto;
+  color: var(--accent);
+  background: var(--bg);
+  box-shadow: 0 0 0 1px var(--line-2), var(--shadow-1);
+  transition: opacity var(--d-2) var(--e-out);
+  will-change: transform;
+}
+
+.tag[hidden] {
+  display: none;
+}
+
+.tag[data-kind="runway"] {
+  color: var(--fg);
+  background: color-mix(in oklab, var(--crit) 78%, var(--bg));
+}
+
+.tag[data-projected="true"] {
+  box-shadow: 0 0 0 1px var(--fg-3);
+  background: color-mix(in oklab, var(--bg) 70%, transparent);
+  color: var(--fg-2);
+}
+
+.tag[data-active="true"] {
+  box-shadow: 0 0 0 1.5px var(--accent), var(--shadow-2);
+}
+
+.loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-3);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+  background: var(--bg);
+  border-radius: var(--r-12);
+}
+
+.gesture {
+  position: absolute;
+  inset-inline-end: var(--s-3);
+  inset-block-end: var(--s-3);
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-4);
+  font-size: var(--t-mini);
+  color: var(--fg-3);
+  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  pointer-events: none;
+}
+
+.fallback {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.fallbackNote {
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.swatch {
+  inline-size: var(--s-3);
+  block-size: var(--s-3);
+  border-radius: var(--r-2);
+}
+
+.swatch[data-tone="runway"] {
+  background: color-mix(in oklab, var(--surface-4) 90%, var(--fg));
+  box-shadow: inset 0 0 0 1px var(--line-3);
+}
+
+.swatch[data-tone="apron"] {
+  background: color-mix(in oklab, var(--surface-4) 80%, var(--fg));
+}
+
+.swatch[data-tone="terminal"] {
+  background: var(--fg-3);
+}
+
+.swatch[data-tone="cargo"] {
+  background: var(--series-4);
+}
+
+.swatch[data-tone="projected"] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--fg-3);
+  outline: 1px dashed var(--fg-3);
+  outline-offset: -1px;
+}
+
+.sidecar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-5);
+  border-radius: var(--r-12);
+  background: var(--surface-1);
+  box-shadow: var(--highlight), 0 0 0 1px var(--line);
+}
+
+.sidecarTitle {
+  font-family: var(--ff-display);
+  font-size: var(--t-md);
+  font-weight: 590;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.sidecarHint {
+  margin-block-start: var(--s-1);
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--fg-3);
+}
+
+.divider {
+  block-size: 1px;
+  background: var(--line);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3) var(--s-4);
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  min-inline-size: 0;
+}
+
+.fact dt {
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}
+
+.fact dd {
+  font-size: var(--t-md);
+  font-weight: 510;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* Descriptive facts (concept areas): one column, reading size */
+.facts[data-prose="true"] {
+  grid-template-columns: 1fr;
+  gap: var(--s-3);
+}
+
+.facts[data-prose="true"] .fact dd {
+  font-size: var(--t-sm);
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+.unit {
+  margin-inline-start: var(--s-1);
+  font-family: var(--ff-sans);
+  font-size: var(--t-xs);
+  color: var(--fg-3);
+}

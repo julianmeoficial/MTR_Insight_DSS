@@ -75,6 +75,7 @@
 
 .statValue {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-2xl);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -185,6 +186,7 @@
 
 .code {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-xs);
   font-weight: 500;
   color: var(--fg);
@@ -193,6 +195,7 @@
 .codeMuted {
   white-space: nowrap;
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-mini);
   font-weight: 500;
   color: var(--fg-3);

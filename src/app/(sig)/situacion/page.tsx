@@ -43,7 +43,7 @@ async function SituacionContent({ searchParams }: Props) {
     <main className={styles.main}>
       <div className={styles.pad}>
         <ScreenHeader
-          eyebrow={`${dict.nav.groupContext} · ${dict.situation.step}`}
+          eyebrow={dict.nav.groupContext}
           title={dict.situation.title}
           question={dict.situation.question}
         />

@@ -28,11 +28,12 @@ Record of stack and policy choices for MTR Insight. Do not change scope silently
 - **Status:** Approved for this pass — informational structure from GOGO adapted to DESIGN anatomy.
 - **Consequences:** Visual pixel-match to GOGO is out of scope; accessibility and token consistency take priority.
 
-## ADR-005 — Three.js apron ambience only (2026-10-16)
+## ADR-005 — Three.js landing apron + SIG aerodrome (2026-10-16, amended 2026-10-28)
 
-- **Decision:** `three` + `@types/three` allowed solely for contained “apron at dusk” canvas behind P1 hero/header. No 3D globes, neon HUD, or KPI data in WebGL.
+- **Decision (original):** `three` + `@types/three` for a contained “apron at dusk” canvas (landing / ambience). No 3D globes, neon HUD, or KPI data in WebGL.
+- **Amendment (2026-10-28):** Also allow **one** schematic aerodrome canvas on `/p4` and `/validador` (orbitable, lengths relative-to-scale, HTML sidecar for usage). Same budgets as DESIGN.md §7. SVG `AerodromeDiagram` remains the reduced-motion / no-WebGL fallback. Still no KPI or status encoding in WebGL.
 - **Also approved:** `lucide-react`, `motion` (`motion/react`). Charts remain custom SVG/CSS; visx deferred until needed.
-- **Consequences:** `prefers-reduced-motion` disables or freezes the canvas; analytics stay in domain + SVG.
+- **Consequences:** `prefers-reduced-motion` disables or freezes canvases; analytics stay in domain + HTML/SVG.
 
 ## ADR-006 — GSAP + ScrollTrigger only on landing (2026-10-16)
 
@@ -116,3 +117,12 @@ Record of stack and policy choices for MTR Insight. Do not change scope silently
 
 - **Decision:** Add a schematic aerodrome chart (P4 and validator), split-flap code reveals, `SKMR` location tags on every SIG header, a dashed centerline as the active nav indicator, a runway mandatory sign tag, PAPI route loaders and a grouped account picker on `/login`.
 - **Boundaries:** Status colors stay for KPI states; the red runway tag follows real airport signage and carries no data. No new hex values outside `tokens.css`.
+
+## ADR-017 — Aerodrome scene, planner and read marks (2026-10-28)
+
+- **3D aerodrome:** rebuilt from the infrastructure data (runway dimensions, terminals, cargo warehouses), with aprons, parked aircraft, lights, tower and cargo docks; colors from tokens; camera presets; HTML sign tags; PAPI loading state and SVG fallback on reduced motion, WebGL failure or context loss. The WebGL scene rebuilds only when geometry changes.
+- **Weekly demo data:** national weekly aggregates now follow operator frequencies, seats from the aircraft catalog, a November low season and a Christmas peak with extra frequencies on BOG/MDE. PTY rows stay unchanged.
+- **P5 route planner:** future routes (proposed/announced) by national or international scope, with current or expansion infrastructure and a frequency what-if.
+- **Alert read marks:** per-viewer, stored in the browser (`mtr-alerts-read`). Not a domain write; the alert workflow still needs scope approval.
+- **2045 planning:** any passenger aircraft from the catalog and a fleet table of minimum passengers at the chosen threshold.
+- **UI copy:** no methodology step names or project-management references in the interface.

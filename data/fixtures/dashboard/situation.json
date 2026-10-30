@@ -45,6 +45,26 @@
       }
     },
     {
+      "iata": "EOH",
+      "icao": "SKMD",
+      "city": "Medellín",
+      "country": "Colombia",
+      "position": {
+        "lat": 6.2205,
+        "lon": -75.5906
+      }
+    },
+    {
+      "iata": "BAQ",
+      "icao": "SKBQ",
+      "city": "Barranquilla",
+      "country": "Colombia",
+      "position": {
+        "lat": 10.8896,
+        "lon": -74.7808
+      }
+    },
+    {
       "iata": "MIA",
       "icao": "KMIA",
       "city": "Miami",
@@ -93,6 +113,56 @@
         "lat": 37.4602,
         "lon": 126.4407
       }
+    },
+    {
+      "iata": "CTG",
+      "icao": "SKCG",
+      "city": "Cartagena",
+      "country": "Colombia",
+      "position": {
+        "lat": 10.4424,
+        "lon": -75.513
+      }
+    },
+    {
+      "iata": "CLO",
+      "icao": "SKCL",
+      "city": "Cali",
+      "country": "Colombia",
+      "position": {
+        "lat": 3.5432,
+        "lon": -76.3816
+      }
+    },
+    {
+      "iata": "ADZ",
+      "icao": "SKSP",
+      "city": "San Andrés",
+      "country": "Colombia",
+      "position": {
+        "lat": 12.5836,
+        "lon": -81.7112
+      }
+    },
+    {
+      "iata": "AUA",
+      "icao": "TNCA",
+      "city": "Oranjestad",
+      "country": "Aruba",
+      "position": {
+        "lat": 12.5014,
+        "lon": -70.0152
+      }
+    },
+    {
+      "iata": "SJO",
+      "icao": "MROC",
+      "city": "San José",
+      "country": "Costa Rica",
+      "position": {
+        "lat": 9.9939,
+        "lon": -84.2088
+      }
     }
   ],
   "routes": [
@@ -139,38 +209,76 @@
       "destination": "BOG",
       "international": false,
       "segment": "domestic",
-      "stage": "to_verify",
-      "airline": null,
-      "aircraftId": null,
-      "weeklyFrequencies": null,
+      "stage": "operating",
+      "airline": "Avianca",
+      "aircraftId": "A320",
+      "weeklyFrequencies": 14,
       "start": null,
       "weeklyDemandPax": null,
       "demandIsAssumption": false,
       "evidence": {
-        "source": "Pendiente de consulta a Aerocivil",
-        "date": null,
-        "confidence": "low"
+        "source": "aeropuertomonteria.co/rutas · Avianca, LATAM y JetSMART (evidencia cruzada)",
+        "date": "2026-10-28",
+        "confidence": "high"
       },
-      "note": "Ruta nacional de referencia. Operadores, frecuencias y equipos por verificar."
+      "note": "Ruta nacional oficial. Varios operadores; el validador usa Avianca/A320 como referencia. Ver routes.json."
     },
     {
       "id": "RT-MDE",
       "destination": "MDE",
       "international": false,
       "segment": "domestic",
-      "stage": "to_verify",
-      "airline": null,
-      "aircraftId": null,
-      "weeklyFrequencies": null,
+      "stage": "operating",
+      "airline": "LATAM",
+      "aircraftId": "A320",
+      "weeklyFrequencies": 10,
       "start": null,
       "weeklyDemandPax": null,
       "demandIsAssumption": false,
       "evidence": {
-        "source": "Pendiente de consulta a Aerocivil",
-        "date": null,
-        "confidence": "low"
+        "source": "aeropuertomonteria.co/rutas · Avianca, LATAM y JetSMART (evidencia cruzada)",
+        "date": "2026-10-28",
+        "confidence": "high"
       },
-      "note": "Ruta nacional de referencia. Operadores, frecuencias y equipos por verificar."
+      "note": "Ruta nacional oficial a José María Córdova. Ver routes.json."
+    },
+    {
+      "id": "RT-EOH",
+      "destination": "EOH",
+      "international": false,
+      "segment": "domestic",
+      "stage": "operating",
+      "airline": "Clic",
+      "aircraftId": "AT72",
+      "weeklyFrequencies": 14,
+      "start": null,
+      "weeklyDemandPax": null,
+      "demandIsAssumption": false,
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Clic Air (evidencia cruzada)",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "note": "Olaya Herrera. ATR 72 68 sillas es supuesto de escenario."
+    },
+    {
+      "id": "RT-BAQ",
+      "destination": "BAQ",
+      "international": false,
+      "segment": "domestic",
+      "stage": "operating",
+      "airline": "Satena",
+      "aircraftId": "E145",
+      "weeklyFrequencies": 4,
+      "start": null,
+      "weeklyDemandPax": null,
+      "demandIsAssumption": false,
+      "evidence": {
+        "source": "aeropuertomonteria.co/rutas · Satena y Clic (evidencia cruzada)",
+        "date": "2026-10-28",
+        "confidence": "high"
+      },
+      "note": "Ruta nacional oficial. Ver routes.json."
     },
     {
       "id": "RT-MIA",
@@ -266,6 +374,101 @@
         "confidence": "low"
       },
       "note": "Ruta a Asia de ultra largo radio (unos 14.400 km). El A350-900 no llega con reserva; el A350-1000 sí en el escenario base, no en el restrictivo."
+    },
+    {
+      "id": "RT-CTG",
+      "destination": "CTG",
+      "international": false,
+      "segment": "domestic",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "AT72",
+      "weeklyFrequencies": 7,
+      "start": null,
+      "weeklyDemandPax": 260,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · planeación de rutas",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Conexión turística corta por la costa Caribe. Equipo turbohélice."
+    },
+    {
+      "id": "RT-CLO",
+      "destination": "CLO",
+      "international": false,
+      "segment": "domestic",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "A320",
+      "weeklyFrequencies": 7,
+      "start": null,
+      "weeklyDemandPax": 700,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · planeación de rutas",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta troncal al suroccidente sin pasar por Bogotá."
+    },
+    {
+      "id": "RT-ADZ",
+      "destination": "ADZ",
+      "international": false,
+      "segment": "domestic",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "A20N",
+      "weeklyFrequencies": 4,
+      "start": null,
+      "weeklyDemandPax": 480,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · planeación de rutas",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Ruta turística a San Andrés en temporada."
+    },
+    {
+      "id": "RT-AUA",
+      "destination": "AUA",
+      "international": true,
+      "segment": "regional",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "E145",
+      "weeklyFrequencies": 3,
+      "start": null,
+      "weeklyDemandPax": 110,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · planeación de rutas",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Caribe insular con equipo regional, misma flota que PTY."
+    },
+    {
+      "id": "RT-SJO",
+      "destination": "SJO",
+      "international": true,
+      "segment": "regional",
+      "stage": "proposed",
+      "airline": null,
+      "aircraftId": "B738",
+      "weeklyFrequencies": 2,
+      "start": null,
+      "weeklyDemandPax": 150,
+      "demandIsAssumption": true,
+      "evidence": {
+        "source": "Escenario académico · planeación de rutas",
+        "date": null,
+        "confidence": "low"
+      },
+      "note": "Centroamérica directa como alternativa a la conexión en PTY."
     }
   ],
   "modernizations": [

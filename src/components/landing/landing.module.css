@@ -392,6 +392,7 @@
 .factValue {
   margin-top: var(--s-2);
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-3xl);
   font-weight: 400;
   letter-spacing: -0.04em;
@@ -623,6 +624,7 @@
 
 .paletteKbd {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-mini);
   padding: var(--s-1) var(--s-2);
   border-radius: var(--r-4);
@@ -656,6 +658,7 @@
 
 .kbdChip {
   font-family: var(--ff-mono);
+  --num-sep: -0.2;
   font-size: var(--t-mini);
   padding: var(--s-1) var(--s-2);
   border-radius: var(--r-4);

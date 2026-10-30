@@ -198,9 +198,18 @@
 }
 
 .triggerTable td {
-  font-family: var(--ff-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .triggerTable [data-active="true"] {
   background: var(--surface-3);
+}
+
+.clickRow {
+  cursor: pointer;
+  transition: background var(--d-2) var(--e-out);
+}
+
+.clickRow:hover {
+  background: var(--surface-2);
 }

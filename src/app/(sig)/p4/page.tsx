@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { calculateK3 } from "@/domain";
 import { kpiThresholds } from "@/config/thresholds";
 import { loadDashboardBundle, loadSituation } from "@/data/fixtures/load-dashboard";
-import { AerodromeDiagram } from "@/components/aero/AerodromeDiagram";
+import { AerodromeScene } from "@/components/aero/AerodromeScene";
 import { readDemoRole } from "@/application/read-demo-session";
 import { canAccessRoute } from "@/domain/access";
 import { KpiHeadline } from "@/components/kpi/KpiHeadline";
@@ -26,6 +26,7 @@ export const instant = false;
 export default async function P4Page() {
   const dict = getDictionary("es");
   const t = dict.screenBody.p4;
+  const a = dict.aerodrome;
   const role = await readDemoRole();
   const bundle = loadDashboardBundle();
   const k3 = calculateK3(bundle.capacity);
@@ -34,6 +35,7 @@ export default async function P4Page() {
     bundle.capacity;
   const headroom80 = cap * kpiThresholds.K3.greenBelow - pax;
   const headroom90 = cap * kpiThresholds.K3.redMin - pax;
+  const situation = loadSituation();
 
   return (
     <main className={styles.main}>
@@ -72,15 +74,42 @@ export default async function P4Page() {
       <section className={views.section}>
         <div className={views.sectionHead}>
           <div>
-            <h2 className={views.sectionTitle}>{dict.aerodrome.title}</h2>
+            <h2 className={views.sectionTitle}>{a.title}</h2>
             <p className={views.hint}>{t.planHint}</p>
           </div>
         </div>
-        <AerodromeDiagram
-          runways={loadSituation().infrastructure.runways}
-          terminals={loadSituation().infrastructure.terminals}
-          showProjected
+        <AerodromeScene
+          runways={situation.infrastructure.runways}
+          terminals={situation.infrastructure.terminals}
+          showConfigToolbar
+          sidecar={{
+            utilizationRatio: k3.value,
+            headroom80,
+            headroom90,
+            h1Operations: bundle.semesterH1.operations,
+            cargoOperators: bundle.cargo.operators.map((op) => ({
+              label: op.label,
+              warehouses: op.warehouses,
+            })),
+            expansionNote: a.expansionNote,
+          }}
         />
+      </section>
+
+      <section className={views.section}>
+        <div className={views.sectionHead}>
+          <h2 className={views.sectionTitle}>{a.cargo}</h2>
+          <span className={views.codeMuted}>{bundle.cargo.source}</span>
+        </div>
+        <dl className={views.facts}>
+          {bundle.cargo.operators.map((op) => (
+            <div key={op.id} className={views.fact}>
+              <dt>{op.label}</dt>
+              <dd className="num">{op.warehouses.join(" · ")}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className={views.hint}>{bundle.cargo.note}</p>
       </section>
 
       <div className={styles.dual}>

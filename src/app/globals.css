@@ -83,9 +83,10 @@
   }
 
   /* Thousands/decimal separator inside monospace figures (CountUp) */
+  /* Separator inside figures; monospace classes set --num-sep: -0.2 */
   .numSep {
     display: inline-block;
-    margin-inline: -0.2em;
+    margin-inline: calc(var(--num-sep, 0) * 1em);
   }
 
   .sr-only {

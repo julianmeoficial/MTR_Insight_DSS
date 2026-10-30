@@ -19,7 +19,7 @@ export function ScreenPlaceholder({ screen, badge = "Próximamente" }: Props) {
       </div>
       <p className={styles.dashNote}>
         Pantalla aún no implementada en profundidad. El dominio de KPIs/alertas
-        ya existe; esta vista fija el mapa de navegación del Paso 8. Enlace
+        ya existe; esta vista fija el mapa de navegación del SIG. Enlace
         disponible desde el tablero ejecutivo.
       </p>
     </article>

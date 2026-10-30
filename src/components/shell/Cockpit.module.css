@@ -12,8 +12,13 @@
   flex: 1;
   min-width: 0;
   background: var(--bg);
+  position: relative;
   overflow: auto;
   padding-bottom: 64px;
+}
+
+.main > * {
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {

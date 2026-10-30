@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, CircleCheck, CircleDashed } from "lucide-react";
 import { calculateK4 } from "@/domain";
-import { loadDashboardBundle } from "@/data/fixtures/load-dashboard";
+import { loadDashboardBundle, loadSituation } from "@/data/fixtures/load-dashboard";
+import { RoutePlanner } from "@/components/screens/RoutePlanner";
 import { readDemoRole } from "@/application/read-demo-session";
 import { canAccessRoute } from "@/domain/access";
 import { KpiHeadline } from "@/components/kpi/KpiHeadline";
@@ -25,6 +26,7 @@ export default async function P5Page() {
   const t = dict.screenBody.p5;
   const role = await readDemoRole();
   const bundle = loadDashboardBundle();
+  const situation = loadSituation();
   const k4 = calculateK4(bundle.demand);
   const { competitors, evidenceChecklist, catchment, period } = bundle.competitors;
   const doneCount = evidenceChecklist.filter((e) => e.done).length;
@@ -143,6 +145,14 @@ export default async function P5Page() {
           </Link>
         ) : null}
       </section>
+
+      <RoutePlanner
+        origin={situation.origin}
+        airports={situation.airports}
+        routes={situation.routes}
+        constraints={situation.constraints}
+        canValidate={role ? canAccessRoute(role, "/validador") : false}
+      />
 
       <footer className={views.footer}>
         <ProvenanceLine

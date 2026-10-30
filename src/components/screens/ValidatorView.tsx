@@ -46,7 +46,10 @@ import {
   type AssumptionField,
 } from "@/components/screens/validator/AssumptionsPanel";
 import { Tornado } from "@/components/screens/validator/Tornado";
-import { AerodromeDiagram } from "@/components/aero/AerodromeDiagram";
+import {
+  AerodromeScene,
+  type AerodromeSidecarData,
+} from "@/components/aero/AerodromeScene";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { formatInt, formatNumber, formatPct } from "@/lib/format";
 import { cn } from "@/lib/cn";
@@ -61,6 +64,7 @@ type Props = {
   routes: RouteOpportunity[];
   constraints: AirportConstraints;
   sources: { runway: string; capacity: string };
+  aerodromeSidecar: AerodromeSidecarData;
   initial: {
     routeId?: string;
     aircraftId?: string;
@@ -173,6 +177,7 @@ export function ValidatorView({
   routes,
   constraints,
   sources,
+  aerodromeSidecar,
   initial,
 }: Props) {
   const { dict } = usePreferences();
@@ -728,12 +733,17 @@ export function ValidatorView({
                 airport.runways.find((r) => r.id === current.runwayId)?.designator ?? ""
               }
               diagram={
-                <AerodromeDiagram
+                <AerodromeScene
                   runways={airport.runways}
                   terminals={airport.terminals}
                   showProjected={infraConfig === "expansion"}
-                  highlightRunway={current.runwayId}
-                  highlightTerminal={current.terminalId}
+                  showConfigToolbar={false}
+                  highlight={current.terminalId === "T2" ? "t2" : current.runwayId === "RWY2" ? "rwy2" : "t1"}
+                  sidecar={{
+                    ...aerodromeSidecar,
+                    utilizationRatio:
+                      current.utilizationAfter ?? aerodromeSidecar.utilizationRatio,
+                  }}
                 />
               }
             />

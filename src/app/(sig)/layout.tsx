@@ -48,7 +48,7 @@ function SigFrame({
       globalStatus={report.globalStatus}
       lastValidated={report.lastValidatedLabel}
       asOfDate={report.asOfLabel}
-      alertCount={report.alerts.length}
+      alertIds={report.alerts.map((a) => a.id)}
       dataset={{
         source: report.meta.fuente,
         version: report.meta.version,
