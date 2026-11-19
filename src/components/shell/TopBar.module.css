@@ -76,3 +76,9 @@
 .sessionLink:hover {
   color: var(--fg);
 }
+
+@media print {
+  .bar {
+    display: none !important;
+  }
+}

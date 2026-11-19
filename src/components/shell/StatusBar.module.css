@@ -68,3 +68,9 @@
 .shortcuts:hover {
   color: var(--fg);
 }
+
+@media print {
+  .bar {
+    display: none !important;
+  }
+}

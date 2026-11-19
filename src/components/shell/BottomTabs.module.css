@@ -45,3 +45,9 @@
   width: 16px;
   height: 16px;
 }
+
+@media print {
+  .tabs {
+    display: none !important;
+  }
+}

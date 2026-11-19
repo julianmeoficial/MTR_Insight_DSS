@@ -1,6 +1,8 @@
 export {
   SCREEN_PATH,
+  REPORT_GRANTS,
   allowedNavHrefs,
+  allowedReports,
   canAccessRoute,
   canExport,
   grantedScreens,
@@ -13,4 +15,4 @@ export {
   visibleOperators,
 } from "@/domain/access/access";
 
-export type { OperatorFilter } from "@/domain/access/access";
+export type { OperatorFilter, ReportGrantId } from "@/domain/access/access";

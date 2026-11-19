@@ -11,6 +11,7 @@ export const NAV_SHORTCUTS = [
   { key: "s", href: "/situacion", labelKey: "situation" },
   { key: "e", href: "/escenarios", labelKey: "scenarios" },
   { key: "v", href: "/validador", labelKey: "validator" },
+  { key: "n", href: "/reportes", labelKey: "reports" },
 ] as const;
 
 export type NavShortcut = (typeof NAV_SHORTCUTS)[number];

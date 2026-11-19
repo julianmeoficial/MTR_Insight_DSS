@@ -17,6 +17,7 @@ import {
   Compass,
   Route,
   ShieldCheck,
+  FileChartColumn,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { usePreferences } from "@/components/providers/PreferencesProvider";
@@ -44,6 +45,7 @@ type NavItem = {
     | "decisions"
     | "situation"
     | "validator"
+    | "reports"
     | "admin";
   icon: typeof LayoutDashboard;
   count?: number;
@@ -64,6 +66,7 @@ const CONTEXT_ITEMS: NavItem[] = [
 ];
 
 const DSS_ITEMS: NavItem[] = [
+  { href: "/reportes", labelKey: "reports", icon: FileChartColumn },
   { href: "/escenarios", labelKey: "scenarios", icon: Scale },
   { href: "/validador", labelKey: "validator", icon: Route },
   { href: "/decisiones", labelKey: "decisions", icon: PenLine },

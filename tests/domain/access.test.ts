@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ROLE_IDS, type RoleId } from "@/config/access-matrix";
 import {
   allowedNavHrefs,
+  allowedReports,
   canAccessRoute,
   canExport,
   grantedScreens,
@@ -51,6 +52,7 @@ describe("demo access matrix", () => {
       "/escenarios",
       "/situacion",
       "/validador",
+      "/reportes",
     ]);
     expect(allowedNavHrefs("comercial")).toContain("/alertas");
     expect(allowedNavHrefs("comercial")).not.toContain("/escenarios");
@@ -59,8 +61,9 @@ describe("demo access matrix", () => {
       "/p6",
       "/escenarios",
       "/validador",
+      "/reportes",
     ]);
-    expect(allowedNavHrefs("ti")).toEqual(["/p7", "/admin"]);
+    expect(allowedNavHrefs("ti")).toEqual(["/p7", "/reportes", "/admin"]);
     for (const href of ["/p1", "/p2", "/p3", "/p4", "/p5", "/p6"]) {
       expect(allowedNavHrefs("ti")).not.toContain(href);
     }
@@ -114,5 +117,24 @@ describe("demo access matrix", () => {
     expect(parseRoleId("admin")).toBeNull();
     expect(parseRoleId("satena")).toBe("satena");
     expect(parseRoleId("%20ti")).toBeNull();
+  });
+
+  it("grants reports by area and keeps airline accounts out", () => {
+    expect(allowedReports("gerencia_general")).toEqual([
+      "comercial",
+      "capacidad",
+      "cumplimiento",
+    ]);
+    expect(allowedReports("junta")).toHaveLength(3);
+    expect(allowedReports("comercial")).toEqual(["comercial"]);
+    expect(allowedReports("infraestructura")).toEqual(["capacidad"]);
+    expect(allowedReports("ti")).toEqual(["cumplimiento"]);
+    expect(allowedReports("satena")).toEqual([]);
+    expect(allowedReports("copa")).toEqual([]);
+    expect(canAccessRoute("comercial", "/reportes")).toBe(true);
+    expect(canAccessRoute("comercial", "/reportes/comercial")).toBe(true);
+    expect(canAccessRoute("comercial", "/reportes/capacidad")).toBe(false);
+    expect(canAccessRoute("satena", "/reportes")).toBe(false);
+    expect(canAccessRoute("gerencia_mtr", "/reportes/otro")).toBe(false);
   });
 });
