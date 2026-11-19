@@ -12,12 +12,12 @@ describe("reduced-motion support", () => {
     expect(src).toContain("matchMedia");
   });
 
-  it("ApronCanvas respects reduced motion", () => {
+  it("AerodromeCanvas respects reduced motion", () => {
     const src = readFileSync(
-      path.join(process.cwd(), "src/components/ambiance/ApronCanvas.tsx"),
+      path.join(process.cwd(), "src/components/aero/AerodromeCanvas.tsx"),
       "utf8",
     );
-    expect(src).toContain("usePrefersReducedMotion");
-    expect(src).toContain("if (!host || reduced) return");
+    expect(src).toContain("prefers-reduced-motion");
+    expect(src).toContain('if (!animate || reduced)');
   });
 });
