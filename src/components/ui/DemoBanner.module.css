@@ -19,3 +19,9 @@
 .copy {
   color: var(--fg-3);
 }
+
+@media print {
+  .banner {
+    display: none !important;
+  }
+}

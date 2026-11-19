@@ -29,6 +29,7 @@ export const es = {
     situation: "Situación actual",
     validator: "Validador de rutas",
     admin: "Administración",
+    reports: "Informes",
     groupContext: "Contexto",
   },
   hero: {
@@ -282,6 +283,12 @@ export const es = {
     scenarios: {
       title: "Escenarios",
       purpose: "Simulador, búsqueda de objetivo, tornado y comparación.",
+    },
+    reports: {
+      title: "Informes para la gerencia",
+      question: "¿Qué debe decidir la gerencia esta semana, y con qué evidencia?",
+      purpose:
+        "Tres informes de decisión: ranking comercial de rutas, capacidad y ampliación, y riesgo regulatorio y del dato.",
     },
     decisions: {
       title: "Decisiones",

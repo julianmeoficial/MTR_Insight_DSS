@@ -26,3 +26,12 @@
     padding-bottom: 0;
   }
 }
+
+@media print {
+  .frame,
+  .main {
+    display: block;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+}

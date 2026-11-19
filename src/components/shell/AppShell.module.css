@@ -6,3 +6,12 @@
   background: var(--bg);
   color: var(--fg);
 }
+
+/* Reports print as documents: the shell gives up its fixed viewport. */
+@media print {
+  .shell {
+    display: block;
+    block-size: auto;
+    overflow: visible;
+  }
+}

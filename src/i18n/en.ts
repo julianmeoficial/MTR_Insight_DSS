@@ -29,6 +29,7 @@ export const en = {
     situation: "Current situation",
     validator: "Route validator",
     admin: "Administration",
+    reports: "Reports",
     groupContext: "Context",
   },
   hero: {
@@ -278,6 +279,12 @@ export const en = {
     scenarios: {
       title: "Scenarios",
       purpose: "Simulator, goal seek, tornado and comparison.",
+    },
+    reports: {
+      title: "Management reports",
+      question: "What should management decide this week, and on what evidence?",
+      purpose:
+        "Three decision reports: route commercial ranking, capacity and expansion, and regulatory and data risk.",
     },
     decisions: {
       title: "Decisions",
